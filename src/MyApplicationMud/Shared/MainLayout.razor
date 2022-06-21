@@ -8,23 +8,22 @@
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.WbSunny" Color="Color.Inherit" OnClick="() => _isDarkMode = !_isDarkMode" Title="Farbschema wechseln" />
+        <MudToggleIconButton @bind-Toggled="@_isDarkMode"
+                             Icon="@Icons.Material.Filled.DarkMode" Color="@Color.Inherit" Title="Auf dunkles Farbschema wechseln"
+                             ToggledIcon="@Icons.Material.Filled.LightMode" ToggledColor="@Color.Inherit" ToggledTitle="Auf helles Farbschema wechseln" />
 
         <AuthorizeView>
             <Authorized>
-                <strong>Hello, @context?.User?.Identity?.Name!</strong>
+                <UserAvatar Context="@context" />
                 <form method="post" action="api/Account/Logout">
                     <AntiForgeryTokenInput />
-                    <button class="btn btn-link" type="submit">Sign out</button>
+                    <MudIconButton Title="Logout" Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" ButtonType="ButtonType.Submit" />
                 </form>
             </Authorized>
             <NotAuthorized>
-                <a href="api/Account/Login">Log in</a>
+                <MudIconButton Title="Login" Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Link="api/Account/Login" />
             </NotAuthorized>
         </AuthorizeView>
-
-        <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank" />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <MudDrawerHeader>

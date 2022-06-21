@@ -1,0 +1,31 @@
+﻿@if (Picture is not null)
+{
+    <MudAvatar Size="Size.Small" Color="Color.Primary" Image="@Picture" Alt="@UserInfo" />
+}
+else
+{
+    <MudAvatar Size="Size.Small" Color="Color.Primary" title="@UserInfo">@Initials</MudAvatar>
+}
+
+@code {
+
+    [Parameter]
+    public AuthenticationState? Context { get; set; }
+
+    public string UserInfo => $"Eingeloggt als {Context?.User?.Identity?.Name!}";
+
+    public string? ForeColor { get; set; }
+    public string? BackColor { get; set; }
+    public string? Initials { get; set; }
+    public string? Picture { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        ForeColor = Context?.User?.Claims.FirstOrDefault(m => m.Type == "xenial_forecolor")?.Value;
+        BackColor = Context?.User?.Claims.FirstOrDefault(m => m.Type == "xenial_backcolor")?.Value;
+        Initials = Context?.User?.Claims.FirstOrDefault(m => m.Type == "xenial_initials")?.Value;
+        Picture = Context?.User?.Claims.FirstOrDefault(m => m.Type == "picture")?.Value;
+
+        return base.OnInitializedAsync();
+    }
+}
