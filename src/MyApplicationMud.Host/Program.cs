@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 using MyApplicationMud.Shared.Defaults;
 
+using System.IdentityModel.Tokens.Jwt;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
@@ -21,6 +23,8 @@ services.AddAntiforgery(options =>
 services.AddHttpClient();
 services.AddOptions();
 
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -36,6 +40,30 @@ services.AddAuthentication(options =>
 
     options.SaveTokens = true;
     options.GetClaimsFromUserInfoEndpoint = true;
+
+    options.Scope.Add("openid");
+    options.Scope.Add("profile");
+    options.Scope.Add("email");
+    options.Scope.Add("xenial");
+    options.Scope.Add("address");
+    options.Scope.Add("offline_access");
+    options.MapInboundClaims = true;
+
+    options.ClaimActions.MapUniqueJsonKey("sub", "sub");
+    options.ClaimActions.MapUniqueJsonKey("email", "email");
+    options.ClaimActions.MapUniqueJsonKey("name", "name");
+    options.ClaimActions.MapUniqueJsonKey("given_name", "given_name");
+    options.ClaimActions.MapUniqueJsonKey("family_name", "family_name");
+    options.ClaimActions.MapUniqueJsonKey("picture", "picture");
+    options.ClaimActions.MapUniqueJsonKey("xenial", "xenial");
+    options.ClaimActions.MapUniqueJsonKey("xenial_forecolor", "xenial_forecolor");
+    options.ClaimActions.MapUniqueJsonKey("xenial_backcolor", "xenial_backcolor");
+    options.ClaimActions.MapUniqueJsonKey("xenial_initials", "xenial_initials");
+    options.ClaimActions.MapUniqueJsonKey("address", "address");
+    options.ClaimActions.MapUniqueJsonKey("given_name", "given_name");
+    options.ClaimActions.MapUniqueJsonKey("family_name", "family_name");
+    options.ClaimActions.MapUniqueJsonKey("name", "name");
+    options.ClaimActions.MapUniqueJsonKey("company_name", "company_name");
 });
 
 services.AddControllersWithViews(options =>

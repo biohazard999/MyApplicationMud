@@ -1,0 +1,29 @@
+@page "/profile"
+@attribute [Authorize]
+
+<section class="container has-background-primary has-text-black">
+
+    <h1 class="title">Profile</h1>
+
+    <h2 class="subtitle">Claims</h2>
+
+    <div class="content">
+        <dl>
+            @foreach (var claim in User.Claims)
+            {
+                <dt>@claim.Type</dt>
+                <dd>@claim.Value</dd>
+            }
+        </dl>
+
+        <h2 class="subtitle">Properties</h2>
+
+        <dl>
+            @foreach (var prop in (await HttpContext.AuthenticateAsync()).Properties.Items)
+            {
+                <dt>@prop.Key</dt>
+                <dd>@prop.Value</dd>
+            }
+        </dl>
+    </div>
+</section>
