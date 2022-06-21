@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C1116BC6-A42
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud", "src\MyApplicationMud\MyApplicationMud.csproj", "{FB55082A-20C8-44A4-A154-603667345413}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.Components", "src\MyApplicationMud.Components\MyApplicationMud.Components.csproj", "{9A0E98C9-9864-49A6-8A67-72E0F31476FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Components", "src\MyApplicationMud.Components\MyApplicationMud.Components.csproj", "{9A0E98C9-9864-49A6-8A67-72E0F31476FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.Host", "src\MyApplicationMud.Host\MyApplicationMud.Host.csproj", "{6EBAE701-0522-49A2-967B-D0232CE6C0FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Host", "src\MyApplicationMud.Host\MyApplicationMud.Host.csproj", "{6EBAE701-0522-49A2-967B-D0232CE6C0FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.Shared", "src\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj", "{9E4ABB44-7E01-49E0-817D-D9EA0EFAEFA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Shared", "src\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj", "{9E4ABB44-7E01-49E0-817D-D9EA0EFAEFA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
