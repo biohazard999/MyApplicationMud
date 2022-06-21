@@ -1,0 +1,129 @@
+﻿
+.loader {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-dots {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+@keyframes jump {
+    0%, 80%, 100% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+
+    40% {
+        -webkit-transform: scale(2.0);
+        transform: scale(2.0);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --main-fg-color: var(--mud-palette-text-primary, #FFF);
+        --main-bg-color: var(--mud-palette-background, #32333D);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --main-fg-color: var(--mud-palette-text-primary, #000);
+        --main-bg-color: var(--mud-palette-background, #FFF);
+    }
+}
+
+body, html {
+    color: var(--main-fg-color);
+    background-color: var(--main-bg-color);
+}
+
+
+/**
+ * ==============================================
+ * Dot Bricks
+ * ==============================================
+ */
+.dot-bricks {
+    --loader-color: #1367AC;
+    position: relative;
+    top: 8px;
+    left: -9999px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: var(--loader-color);
+    color: var(--loader-color);
+    box-shadow: 9991px -16px 0 0 var(--loader-color), 9991px 0 0 0 var(--loader-color), 10007px 0 0 0 var(--loader-color);
+    animation: dotBricks 2s infinite ease;
+}
+
+@keyframes dotBricks {
+    0% {
+        box-shadow: 9991px -16px 0 0 var(--loader-color), 9991px 0 0 0 var(--loader-color), 10007px 0 0 0 var(--loader-color);
+    }
+
+    8.333% {
+        box-shadow: 10007px -16px 0 0 var(--loader-color), 9991px 0 0 0 var(--loader-color), 10007px 0 0 0 var(--loader-color);
+    }
+
+    16.667% {
+        box-shadow: 10007px -16px 0 0 var(--loader-color), 9991px -16px 0 0 var(--loader-color), 10007px 0 0 0 var(--loader-color);
+    }
+
+    25% {
+        box-shadow: 10007px -16px 0 0 var(--loader-color), 9991px -16px 0 0 var(--loader-color), 9991px 0 0 0 var(--loader-color);
+    }
+
+    33.333% {
+        box-shadow: 10007px 0 0 0 var(--loader-color), 9991px -16px 0 0 var(--loader-color), 9991px 0 0 0 var(--loader-color);
+    }
+
+    41.667% {
+        box-shadow: 10007px 0 0 0 var(--loader-color), 10007px -16px 0 0 var(--loader-color), 9991px 0 0 0 var(--loader-color);
+    }
+
+    50% {
+        box-shadow: 10007px 0 0 0 var(--loader-color), 10007px -16px 0 0 var(--loader-color), 9991px -16px 0 0 var(--loader-color);
+    }
+
+    58.333% {
+        box-shadow: 9991px 0 0 0 var(--loader-color), 10007px -16px 0 0 var(--loader-color), 9991px -16px 0 0 var(--loader-color);
+    }
+
+    66.666% {
+        box-shadow: 9991px 0 0 0 var(--loader-color), 10007px 0 0 0 var(--loader-color), 9991px -16px 0 0 var(--loader-color);
+    }
+
+    75% {
+        box-shadow: 9991px 0 0 0 var(--loader-color), 10007px 0 0 0 var(--loader-color), 10007px -16px 0 0 var(--loader-color);
+    }
+
+    83.333% {
+        box-shadow: 9991px -16px 0 0 var(--loader-color), 10007px 0 0 0 var(--loader-color), 10007px -16px 0 0 var(--loader-color);
+    }
+
+    91.667% {
+        box-shadow: 9991px -16px 0 0 var(--loader-color), 9991px 0 0 0 var(--loader-color), 10007px -16px 0 0 var(--loader-color);
+    }
+
+    100% {
+        box-shadow: 9991px -16px 0 0 var(--loader-color), 9991px 0 0 0 var(--loader-color), 10007px 0 0 0 var(--loader-color);
+    }
+}
