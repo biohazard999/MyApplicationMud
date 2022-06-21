@@ -54,7 +54,19 @@ body, html {
     background-color: var(--main-bg-color);
 }
 
+#blazor-error-ui {
+    color: var(--main-fg-color) !important;
+    background-color: var(--main-bg-color) !important;
+    bottom: unset !important;
+    top: 0 !important;
+    height: auto;
+    text-align: center;
+    border-bottom: 1px solid #27272F;
+}
 
+    #blazor-error-ui div {
+        margin: 1rem;
+    }
 /**
  * ==============================================
  * Dot Bricks

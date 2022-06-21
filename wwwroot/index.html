@@ -13,7 +13,7 @@
 
 <body>
     <div id="app">
-        <div class="loader">
+        <div class="loader" aria-label="Ladebalken">
             <div>
                 <div>
                     <img src="fd-logo.png" alt="logo" />
@@ -28,8 +28,12 @@
         </div>
     </div>
     <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
+        <div>
+            Ein unerwarteter Fehler ist aufgetreten.
+        </div>
+        <div>
+            <a href="" class="reload mud-button-root mud-button mud-button-filled mud-button-filled-secondary mud-button-filled-size-medium mud-ripple">Neu Laden</a>
+        </div>
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
