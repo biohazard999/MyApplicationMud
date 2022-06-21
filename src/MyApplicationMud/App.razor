@@ -11,9 +11,9 @@
             </AuthorizeRouteView>
         </Found>
         <NotFound>
-            <PageTitle>Not found</PageTitle>
+            <PageTitle>Seite nicht gefunden</PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
+                <MudText Color="Color.Error" Typo="Typo.h4" Align="Align.Center" GutterBottom="true"><MudIcon Icon="@Icons.Filled.GppBad" Size="Size.Large" /> Die angeforderte Seite existiert nicht.</MudText>
             </LayoutView>
         </NotFound>
     </Router>
