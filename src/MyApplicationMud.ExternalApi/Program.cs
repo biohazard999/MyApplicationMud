@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
+using MyApplicationMud.ExternalApi.Queries;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging(l => l.AddConsole());
 
@@ -22,6 +24,13 @@ services
         };
     });
 
+services
+    .AddGraphQLServer()
+    .AddFiltering()
+    .AddSorting()
+    .AddQueryType<Query>()
+;
+
 var app = builder.Build();
 
 app.UseHttpLogging();
@@ -36,6 +45,8 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapGraphQL();
 });
 
 app.Run();
