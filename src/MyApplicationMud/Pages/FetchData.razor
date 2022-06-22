@@ -1,7 +1,6 @@
 ﻿@page "/fetchdata"
 @attribute [Authorize]
 @inject HttpClient Http
-@inject IHttpClientFactory HttpClientFactory
 @using MyApplicationMud.Shared
 
 <PageTitle>Weather forecast</PageTitle>
@@ -49,8 +48,7 @@ else
 
         try
         {
-            var client = HttpClientFactory.CreateClient("bff");
-            var result = await client.GetStringAsync("external-api/user");
+            var result = await Http.GetStringAsync("external-api/user");
             ExternalApi = result;
         }
         catch (Exception ex)

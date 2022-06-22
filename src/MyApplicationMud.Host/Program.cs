@@ -1,3 +1,7 @@
+using Duende.Bff.Yarp;
+
+using Yarp.ReverseProxy.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,51 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddBff();
+
+var reverse = builder.Services
+    .AddReverseProxy()
+    .AddTransforms<AccessTokenTransformProvider>()
+    .AddBffExtensions()
+    //.LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .LoadFromMemory(
+    new[]
+    {
+        new RouteConfig()
+        {
+            RouteId = "external-api",
+            ClusterId = "external-api",
+
+            Match = new()
+            {
+                Path = "/external-api/{**catch-all}"
+            },
+            Transforms = new List<Dictionary<string, string>>()
+            {
+                new()
+                {
+                    ["PathRemovePrefix"] = "/external-api"
+                }
+            }
+        }.WithAccessToken(Duende.Bff.TokenType.User)
+    },
+    new[]
+    {
+        new ClusterConfig
+        {
+            ClusterId = "external-api",
+
+            Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+            {
+                {
+                    "external-api", new()
+                    {
+                        Address = "https://localhost:7222/api/"
+                    }
+                },
+            }
+        }
+    })
+;
 
 builder.Services.AddAuthentication(options =>
 {
@@ -53,6 +102,8 @@ else
     app.UseHsts();
 }
 
+app.UseHttpLogging();
+
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
@@ -65,6 +116,8 @@ app.UseBff();
 app.UseAuthorization();
 
 app.MapBffManagementEndpoints();
+
+app.MapBffReverseProxy(false);
 
 app.MapRazorPages();
 

@@ -24,6 +24,8 @@ services
 
 var app = builder.Build();
 
+app.UseHttpLogging();
+
 app.UseHttpsRedirection();
 
 app.UseRouting();
