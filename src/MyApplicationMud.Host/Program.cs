@@ -15,45 +15,45 @@ var reverse = builder.Services
     .AddReverseProxy()
     .AddTransforms<AccessTokenTransformProvider>()
     .AddBffExtensions()
-    //.LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
-    .LoadFromMemory(
-    new[]
-    {
-        new RouteConfig()
-        {
-            RouteId = "external-api",
-            ClusterId = "external-api",
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    //.LoadFromMemory(
+    //new[]
+    //{
+    //    new RouteConfig()
+    //    {
+    //        RouteId = "external-api",
+    //        ClusterId = "external-api",
 
-            Match = new()
-            {
-                Path = "/external-api/{**catch-all}"
-            },
-            Transforms = new List<Dictionary<string, string>>()
-            {
-                new()
-                {
-                    ["PathRemovePrefix"] = "/external-api"
-                }
-            }
-        }.WithAccessToken(Duende.Bff.TokenType.User)
-    },
-    new[]
-    {
-        new ClusterConfig
-        {
-            ClusterId = "external-api",
+    //        Match = new()
+    //        {
+    //            Path = "/external-api/{**catch-all}"
+    //        },
+    //        Transforms = new List<Dictionary<string, string>>()
+    //        {
+    //            new()
+    //            {
+    //                ["PathRemovePrefix"] = "/external-api"
+    //            }
+    //        }
+    //    }.WithAccessToken(Duende.Bff.TokenType.User)
+    //},
+    //new[]
+    //{
+    //    new ClusterConfig
+    //    {
+    //        ClusterId = "external-api",
 
-            Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
-            {
-                {
-                    "external-api", new()
-                    {
-                        Address = "https://localhost:7222/api/"
-                    }
-                },
-            }
-        }
-    })
+    //        Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+    //        {
+    //            {
+    //                "external-api", new()
+    //                {
+    //                    Address = "https://localhost:7222/api/"
+    //                }
+    //            },
+    //        }
+    //    }
+    //})
 ;
 
 builder.Services.AddAuthentication(options =>
