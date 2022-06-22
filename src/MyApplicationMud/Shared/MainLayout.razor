@@ -14,13 +14,10 @@
         <AuthorizeView>
             <Authorized>
                 <UserAvatar Context="@context" />
-                <form method="post" action="api/Account/Logout">
-                    <AntiForgeryTokenInput />
-                    <MudIconButton Title="Logout" Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" ButtonType="ButtonType.Submit" />
-                </form>
+                <UserLogout Context="@context" />
             </Authorized>
             <NotAuthorized>
-                <MudIconButton Title="Login" Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Link="api/Account/Login" />
+                <MudIconButton Title="Login" Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Link="bff/login" />
             </NotAuthorized>
         </AuthorizeView>
     </MudAppBar>

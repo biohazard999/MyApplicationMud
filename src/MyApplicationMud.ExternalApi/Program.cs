@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddLogging(l => l.AddConsole());
 
 var services = builder.Services;
 var configuration = builder.Configuration;
 var env = builder.Environment;
+
 
 services.AddControllers();
 services.AddAuthorization();

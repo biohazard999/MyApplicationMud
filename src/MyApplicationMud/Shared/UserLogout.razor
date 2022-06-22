@@ -1,0 +1,17 @@
+﻿
+<MudIconButton Title="Logout" Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Link="@LogoutUrl" />
+
+@code {
+
+    [Parameter]
+    public AuthenticationState? Context { get; set; }
+
+    public string? LogoutUrl { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        LogoutUrl = Context?.User?.Claims.FirstOrDefault(m => m.Type == "bff:logout_url")?.Value;
+
+        return base.OnInitializedAsync();
+    }
+}

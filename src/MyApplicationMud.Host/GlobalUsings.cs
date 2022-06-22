@@ -2,9 +2,6 @@
 global using System.Security.Claims;
 
 global using MyApplicationMud.Host;
-global using MyApplicationMud.Host.Services;
-global using MyApplicationMud.Shared.Authorization;
-global using MyApplicationMud.Shared.Defaults;
 
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authentication.Cookies;

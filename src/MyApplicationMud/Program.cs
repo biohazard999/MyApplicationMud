@@ -1,43 +1,27 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MyApplicationMud;
+
 using MudBlazor.Services;
-using Microsoft.AspNetCore.Components.Authorization;
+
+using MyApplicationMud;
 using MyApplicationMud.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using MyApplicationMud.Shared.Defaults;
-using System.Net.Http.Headers;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-
-var services = builder.Services;
-
-services.AddOptions();
-services.AddAuthorizationCore();
-services.TryAddSingleton<AuthenticationStateProvider, HostAuthenticationStateProvider>();
-services.TryAddSingleton(sp => (HostAuthenticationStateProvider)sp.GetRequiredService<AuthenticationStateProvider>());
-services.AddTransient<AuthorizedHandler>();
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+// authentication state plumbing
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, BffAuthenticationStateProvider>();
 
+// HTTP client configuration
+builder.Services.AddTransient<AntiforgeryHandler>();
 
-services.AddHttpClient("default", client =>
-{
-    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-});
-
-services.AddHttpClient(AuthDefaults.AuthorizedClientName, client =>
-{
-    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-}).AddHttpMessageHandler<AuthorizedHandler>();
-
-services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("default"));
-services.AddTransient<IAntiforgeryHttpClientFactory, AntiforgeryHttpClientFactory>();
+builder.Services.AddHttpClient("backend", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+    .AddHttpMessageHandler<AntiforgeryHandler>();
+builder.Services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("backend"));
 
 builder.Services.AddMudServices();
 

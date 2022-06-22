@@ -1,12 +1,17 @@
 ﻿@page "/fetchdata"
 @attribute [Authorize]
 @inject HttpClient Http
+@inject IHttpClientFactory HttpClientFactory
 @using MyApplicationMud.Shared
 
 <PageTitle>Weather forecast</PageTitle>
 
+<MudText Typo="Typo.h3" GutterBottom="true">External Api (BFF)</MudText>
+<MudText Class="mb-8">@ExternalApi</MudText>
+
 <MudText Typo="Typo.h3" GutterBottom="true">Weather forecast</MudText>
 <MudText Class="mb-8">This component demonstrates fetching data from the server.</MudText>
+
 @if (forecasts == null)
 {
     <MudProgressCircular Color="Color.Default" Indeterminate="true" />
@@ -36,10 +41,24 @@ else
 @code {
     private WeatherForecast[]? forecasts;
 
+    private string? ExternalApi = "Not Called";
+
     protected override async Task OnInitializedAsync()
     {
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+
+        try
+        {
+            var client = HttpClientFactory.CreateClient("bff");
+            var result = await client.GetStringAsync("external-api/user");
+            ExternalApi = result;
+        }
+        catch (Exception ex)
+        {
+            ExternalApi = ex.ToString();
+        }
     }
+
     public class WeatherForecast
     {
         public DateTime Date { get; set; }
