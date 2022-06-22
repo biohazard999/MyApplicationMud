@@ -14,4 +14,6 @@ global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+global using IdentityModel;
+global using IdentityModel.Client;
 

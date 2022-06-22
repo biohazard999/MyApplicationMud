@@ -4,6 +4,20 @@
 <section class="container has-background-primary has-text-black">
 
     <h1 class="title">Profile</h1>
+    <h2 class="subtitle">Access Token</h2>
+    <p>@await HttpContext.GetTokenAsync("access_token")</p>
+
+    @{
+        var token = await HttpContext.GetTokenAsync("access_token");
+        var httpclient = new HttpClient();
+        httpclient.SetBearerToken(token);
+
+        var response = await httpclient.GetStringAsync("https://localhost:7222/api/user");
+
+    }
+    
+    <h2 class="subtitle">External Api</h2>
+    <p>@response</p>
 
     <h2 class="subtitle">Claims</h2>
 
@@ -15,7 +29,6 @@
                 <dd>@claim.Value</dd>
             }
         </dl>
-
         <h2 class="subtitle">Properties</h2>
 
         <dl>

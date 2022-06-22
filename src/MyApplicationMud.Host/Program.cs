@@ -47,6 +47,7 @@ services.AddAuthentication(options =>
     options.Scope.Add("xenial");
     options.Scope.Add("address");
     options.Scope.Add("offline_access");
+    options.Scope.Add("https://localhost:7222");
     options.MapInboundClaims = true;
 
     options.ClaimActions.MapUniqueJsonKey("sub", "sub");
