@@ -22,7 +22,7 @@ public class FakeData
             new Book(
                 f.UniqueIndex,
                 f.Hacker.Phrase(),
-                new(f.Image.PicsumUrl(width: 480, height: 640)),
+                f.Image.PicsumUrl(width: 480, height: 640),
                 f.PickRandom(authors)
             )
         );
@@ -34,7 +34,7 @@ public class FakeData
 
     internal static IList<Book> books = new List<Book>()
     {
-        new Book(1, "C# in depth", new("https://images-na.ssl-images-amazon.com/images/I/71aQeDLFSfL.jpg"), new(1, "Jon Skeet")),
+        new Book(1, "C# in depth", "https://images-na.ssl-images-amazon.com/images/I/71aQeDLFSfL.jpg", new(1, "Jon Skeet")),
     }.Concat(bookFaker.Generate(100)).ToList();
 }
 
@@ -63,7 +63,7 @@ public class Query
 
 public record ServerInfo([GraphQLDescription("Returns the server time in UTC")] DateTime ServerTime);
 
-public record Book([ID] int Id, string Title, Uri Image, Author Author);
+public record Book([ID] int Id, string Title, string Image, Author Author);
 public record Author([ID] int Id, string Name);
 
 public record UserInfo(string Name, IList<UserClaim> Claims);

@@ -1,0 +1,6 @@
+﻿query GetBooksListView {
+	items: books {
+		id
+		title
+	}
+}

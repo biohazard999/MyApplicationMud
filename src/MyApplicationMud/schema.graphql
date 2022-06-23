@@ -2,15 +2,108 @@
   query: Query
 }
 
+enum ApplyPolicy {
+  BEFORE_RESOLVER
+  AFTER_RESOLVER
+}
+
 type Query {
+  serverInfo: ServerInfo!
+  user: UserInfo!
   book: Book!
+  books(where: BookFilterInput order: [BookSortInput!]): [Book!]!
+}
+
+input BookFilterInput {
+  and: [BookFilterInput!]
+  or: [BookFilterInput!]
+  id: ComparableInt32OperationFilterInput
+  title: StringOperationFilterInput
+  image: StringOperationFilterInput
+  author: AuthorFilterInput
+}
+
+input BookSortInput {
+  id: SortEnumType
+  title: SortEnumType
+  image: SortEnumType
+  author: AuthorSortInput
+}
+
+input ComparableInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int!]
+  nin: [Int!]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}
+
+input AuthorFilterInput {
+  and: [AuthorFilterInput!]
+  or: [AuthorFilterInput!]
+  id: ComparableInt32OperationFilterInput
+  name: StringOperationFilterInput
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+input AuthorSortInput {
+  id: SortEnumType
+  name: SortEnumType
+}
+
+type ServerInfo {
+  serverTime: DateTime!
+}
+
+type UserInfo {
+  name: String!
+  claims: [UserClaim!]!
 }
 
 type Book {
+  id: Int!
   title: String!
+  image: String!
   author: Author!
 }
 
 type Author {
+  id: Int!
   name: String!
 }
+
+type UserClaim {
+  key: String!
+  value: String!
+}
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime
+
+directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the resolver shall be executed.By default the resolver is executed after the policy has determined that the current user is allowed to access the field." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on SCHEMA | OBJECT | FIELD_DEFINITION

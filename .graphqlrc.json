@@ -1,0 +1,12 @@
+{
+  "projects": [
+    {
+      "schema": [
+        "src/MyApplicationMud/schema.graphql"
+      ],
+      "documents": [
+        "src/MyApplicationMud/**/*.graphql"
+      ]
+    }
+  ]
+}

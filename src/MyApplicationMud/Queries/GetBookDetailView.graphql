@@ -1,0 +1,6 @@
+﻿query GetBooksDetailView {
+	details: book {
+		id
+		title
+	}
+}
