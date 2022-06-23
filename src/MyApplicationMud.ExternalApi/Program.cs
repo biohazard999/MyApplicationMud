@@ -26,6 +26,7 @@ services
 
 services
     .AddGraphQLServer()
+    .AddAuthorization()
     .AddFiltering()
     .AddSorting()
     .AddQueryType<Query>()
