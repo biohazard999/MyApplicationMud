@@ -29,6 +29,7 @@ services
     .AddGraphQLServer()
     .AddHttpRequestInterceptor<HttpRequestInterceptor>()
     .AddAuthorization()
+    .AddProjections()
     .AddFiltering()
     .AddSorting()
     .AddQueryType<Query>()
