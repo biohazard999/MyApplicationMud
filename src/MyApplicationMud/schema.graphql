@@ -17,7 +17,7 @@ type Query {
 }
 
 type Mutations {
-  editBook(book: BookInput!): Book!
+  editBook(bookId: Int! book: EditBookInput!): Book!
 }
 
 input BookFilterInput {
@@ -104,16 +104,9 @@ type Author {
   name: String!
 }
 
-input BookInput {
-  id: Int!
+input EditBookInput {
   title: String!
-  image: String!
-  author: AuthorInput!
-}
-
-input AuthorInput {
-  id: Int!
-  name: String!
+  authorId: Int!
 }
 
 "The `DateTime` scalar represents an ISO-8601 compliant date time type."

@@ -2,7 +2,7 @@
 @inject MyApplicationMudClient Client
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="my-16">
-    @if (Details == null)
+    @if (Input == null || Details == null)
     {
         <MudCard Outlined="true">
             <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100px" />
@@ -21,21 +21,21 @@
     {
         <MudCard Outlined="true">
             <MudCardHeader>
-                <MudText>@Details.Details.Title</MudText>
+                <MudText>@Input.Title</MudText>
             </MudCardHeader>
             <MudCardMedia Image="@Details.Details.Image" />
             <MudCardContent>
-                <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-                    <MudTextField Value="@Details.Details.Title" T="string" Label="Title" Required="true" RequiredError="Title is required!" />
-                    <MudSelect Value="@Details.Details.Author" T="IAuthorInfo" Label="Author" AnchorOrigin="Origin.BottomCenter" RequiredError="Author is required" !>
+                <MudForm Model="@Input" @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                    <MudTextField @bind-Value="Input.Title" Label="Title" Required="true" RequiredError="Title is required!" />
+                    <MudSelect @bind-Value="Input.AuthorId" Label="Author" AnchorOrigin="Origin.BottomCenter" RequiredError="Author is required">
                         @foreach (var author in Details.Authors)
                         {
-                            <MudSelectItem Value="@(author)" />
+                        <MudSelectItem Value="@author.Id">@author.Name</MudSelectItem>
                         }
-                    </MudSelect>
-                </MudForm>
-            </MudCardContent>
-        </MudCard>
+                </MudSelect>
+            </MudForm>
+        </MudCardContent>
+    </MudCard>
     }
 </MudContainer>
 @code {
@@ -49,9 +49,20 @@
 
     public IGetBooksDetailViewResult? Details { get; set; }
 
+    public EditBookInput? Input { get; set; }
+
     protected async override Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        Details = (await Client.GetBooksDetailView.ExecuteAsync(Id)).Data;
+
+        Details = (await Client.GetBooksDetailView.ExecuteAsync(Id)).Data!;
+        Input = new()
+        {
+            AuthorId = Details.Details.Author.Id,
+            Title = Details.Details.Title
+        };
+
+        //Client.UpdateBook.ExecuteAsync()
+
     }
 }

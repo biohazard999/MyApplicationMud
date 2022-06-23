@@ -12,6 +12,21 @@
 	}
 }
 
+mutation UpdateBook($bookId: Int!, $book: EditBookInput!) {
+	editBook(bookId: $bookId, book: $book) {
+		...BookInfo
+	}
+}
+
+fragment BookInfo on Book {
+	id
+	title
+	image
+	author {
+		...AuthorInfo
+	}
+}
+
 fragment AuthorInfo on Author {
 	id,
 	name

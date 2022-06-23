@@ -65,16 +65,19 @@ public class Query
 
 public class Mutations
 {
-    public Book EditBook(Book book)
+    public Book EditBook(int bookId, EditBook book)
     {
-        var b = FakeData.books.First(m => m.Id == book.Id);
+        var b = FakeData.books.First(m => m.Id == bookId);
 
         var index = FakeData.books.IndexOf(b);
         FakeData.books.RemoveAt(index);
-        FakeData.books.Insert(index, book);
-        return book;
+        var editBook = new Book(bookId, book.Title, b.Image, FakeData.authors.First(m => m.Id == book.AuthorId));
+        FakeData.books.Insert(index, editBook);
+        return editBook;
     }
 }
+
+public record EditBook(string Title, int AuthorId);
 
 public record ServerInfo([GraphQLDescription("Returns the server time in UTC")] DateTime ServerTime);
 

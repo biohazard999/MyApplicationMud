@@ -11,6 +11,8 @@ namespace MyApplicationMud.GraphQL
     {
         global::MyApplicationMud.GraphQL.IGetBooksDetailViewQuery GetBooksDetailView { get; }
 
+        global::MyApplicationMud.GraphQL.IUpdateBookMutation UpdateBook { get; }
+
         global::MyApplicationMud.GraphQL.IGetBooksListViewQuery GetBooksListView { get; }
     }
 }

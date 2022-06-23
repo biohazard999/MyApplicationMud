@@ -16,7 +16,7 @@
       "emitGeneratedCode": true,
       "razorComponents": false,
       "records": {
-        "inputs": true,
+        "inputs": false,
         "entities": true
       },
       "transportProfiles": [
