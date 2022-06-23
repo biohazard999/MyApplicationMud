@@ -6,6 +6,7 @@ using MudBlazor.Services;
 
 using MyApplicationMud;
 using MyApplicationMud.Services;
+using MyApplicationMud.GraphQL;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -19,8 +20,17 @@ builder.Services.AddScoped<AuthenticationStateProvider, BffAuthenticationStatePr
 // HTTP client configuration
 builder.Services.AddTransient<AntiforgeryHandler>();
 
-builder.Services.AddHttpClient("backend", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+builder.Services
+    .AddHttpClient("backend", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
     .AddHttpMessageHandler<AntiforgeryHandler>();
+
+builder.Services
+    .AddMyApplicationMudClient()
+    .ConfigureHttpClient(client =>
+    {
+        client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}external-graphql");
+    });
+
 builder.Services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("backend"));
 
 builder.Services.AddMudServices();

@@ -13,7 +13,7 @@
       "requestStrategy": "Default",
       "outputDirectoryName": "Generated",
       "noStore": false,
-      "emitGeneratedCode": false,
+      "emitGeneratedCode": true,
       "razorComponents": false,
       "records": {
         "inputs": true,

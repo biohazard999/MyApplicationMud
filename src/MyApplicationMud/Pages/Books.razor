@@ -1,0 +1,111 @@
+﻿@page "/books"
+@inject MyApplicationMudClient Client
+@implements IDisposable
+
+<PageTitle>Books</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Books</MudText>
+
+@if (error != null)
+{
+    <MudText Typo="Typo.h6" GutterBottom="true">Errors have occured</MudText>
+
+    <MudText>@error?.ToString()</MudText>
+}
+else
+{
+    if (errors.Count > 0)
+    {
+        <MudText Typo="Typo.h6" GutterBottom="true">Errors have occured</MudText>
+
+        foreach (var er in errors)
+        {
+            <MudText>@er.Exception?.ToString()</MudText>
+        }
+    }
+    else
+    {
+        @if (items.Count <= 0)
+        {
+            <MudGrid>
+                @for (var i = 0; i <= 10; i++)
+                {
+                    <MudItem>
+                        <MudCard Outlined="true">
+                            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100px" />
+                            <MudCardContent>
+                                <MudSkeleton Width="30%" Height="42px;" />
+                                <MudSkeleton Width="80%" />
+                                <MudSkeleton Width="100%" />
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
+                                <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+        else
+        {
+            <MudText Typo="Typo.h6" GutterBottom="true">Items @items.Count</MudText>
+            <MudGrid>
+                @foreach (var item in items)
+                {
+                    <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
+                        <MudCard Outlined="true" Style="height:100%">
+                            <MudHidden Breakpoint="Breakpoint.SmAndDown" >
+                                <MudCardMedia Image="@item.Image" />
+                            </MudHidden>
+                            <MudCardContent>
+                                <MudText>@item.Title</MudText>
+                                <MudText Typo="Typo.body2">@item.Author.Name</MudText>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
+                                <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+    }
+}
+
+@code {
+    private Exception? error;
+    private List<IGetBooksListView_Items> items = new();
+    private List<IClientError> errors = new();
+    private IDisposable? storeSession;
+
+    protected override void OnInitialized()
+    {
+        storeSession = Client
+            .GetBooksListView
+            .Watch(StrawberryShake.ExecutionStrategy.CacheFirst)
+            .Catch((Exception e) =>
+            {
+                error = e;
+                return Observable.Empty<IOperationResult<IGetBooksListViewResult>>();
+            })
+            .Subscribe(result =>
+            {
+                if (result.Errors.Count > 0)
+                {
+                    errors = result.Errors.ToList();
+                }
+                else
+                {
+                    items = result.Data!.Items.ToList();
+                }
+                StateHasChanged();
+            });
+    }
+
+    void IDisposable.Dispose()
+    {
+        storeSession?.Dispose();
+    }
+}
