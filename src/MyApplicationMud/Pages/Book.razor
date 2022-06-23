@@ -1,5 +1,6 @@
 ﻿@page "/book/{Id:int}"
 @inject MyApplicationMudClient Client
+@inject NavigationManager Navigation
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="my-16">
     @if (Input == null || Details == null)
@@ -35,6 +36,9 @@
                 </MudSelect>
             </MudForm>
         </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Speichern</MudButton>
+        </MudCardActions>
     </MudCard>
     }
 </MudContainer>
@@ -57,12 +61,15 @@
 
         Details = (await Client.GetBooksDetailView.ExecuteAsync(Id)).Data!;
         Input = new()
-        {
-            AuthorId = Details.Details.Author.Id,
-            Title = Details.Details.Title
-        };
+            {
+                AuthorId = Details.Details.Author.Id,
+                Title = Details.Details.Title
+            };
+    }
 
-        //Client.UpdateBook.ExecuteAsync()
-
+    public async Task Submit()
+    {
+        await Client.UpdateBook.ExecuteAsync(Id, Input!);
+        Navigation.NavigateTo("books");
     }
 }
