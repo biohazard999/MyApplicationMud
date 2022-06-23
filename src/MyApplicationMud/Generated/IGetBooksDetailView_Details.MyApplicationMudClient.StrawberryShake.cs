@@ -9,5 +9,9 @@ namespace MyApplicationMud.GraphQL
         public global::System.Int32 Id { get; }
 
         public global::System.String Title { get; }
+
+        public global::System.String Image { get; }
+
+        public global::MyApplicationMud.GraphQL.IGetBooksDetailView_Details_Author Author { get; }
     }
 }

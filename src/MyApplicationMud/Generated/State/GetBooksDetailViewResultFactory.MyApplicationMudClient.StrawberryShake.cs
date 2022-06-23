@@ -8,10 +8,12 @@ namespace MyApplicationMud.GraphQL.State
     {
         private readonly global::StrawberryShake.IEntityStore _entityStore;
         private readonly global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.BookEntity, GetBooksDetailView_Details_Book> _getBooksDetailView_Details_BookFromBookEntityMapper;
-        public GetBooksDetailViewResultFactory(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.BookEntity, GetBooksDetailView_Details_Book> getBooksDetailView_Details_BookFromBookEntityMapper)
+        private readonly global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.AuthorEntity, GetBooksDetailView_Authors_Author> _getBooksDetailView_Authors_AuthorFromAuthorEntityMapper;
+        public GetBooksDetailViewResultFactory(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.BookEntity, GetBooksDetailView_Details_Book> getBooksDetailView_Details_BookFromBookEntityMapper, global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.AuthorEntity, GetBooksDetailView_Authors_Author> getBooksDetailView_Authors_AuthorFromAuthorEntityMapper)
         {
             _entityStore = entityStore ?? throw new global::System.ArgumentNullException(nameof(entityStore));
             _getBooksDetailView_Details_BookFromBookEntityMapper = getBooksDetailView_Details_BookFromBookEntityMapper ?? throw new global::System.ArgumentNullException(nameof(getBooksDetailView_Details_BookFromBookEntityMapper));
+            _getBooksDetailView_Authors_AuthorFromAuthorEntityMapper = getBooksDetailView_Authors_AuthorFromAuthorEntityMapper ?? throw new global::System.ArgumentNullException(nameof(getBooksDetailView_Authors_AuthorFromAuthorEntityMapper));
         }
 
         global::System.Type global::StrawberryShake.IOperationResultDataFactory.ResultType => typeof(global::MyApplicationMud.GraphQL.IGetBooksDetailViewResult);
@@ -24,7 +26,7 @@ namespace MyApplicationMud.GraphQL.State
 
             if (dataInfo is GetBooksDetailViewResultInfo info)
             {
-                return new GetBooksDetailViewResult(MapNonNullableIGetBooksDetailView_Details(info.Details, snapshot));
+                return new GetBooksDetailViewResult(MapNonNullableIGetBooksDetailView_Details(info.Details, snapshot), MapNonNullableIGetBooksDetailView_AuthorsNonNullableArray(info.Authors, snapshot));
             }
 
             throw new global::System.ArgumentException("GetBooksDetailViewResultInfo expected.");
@@ -35,6 +37,32 @@ namespace MyApplicationMud.GraphQL.State
             if (entityId.Name.Equals("Book", global::System.StringComparison.Ordinal))
             {
                 return _getBooksDetailView_Details_BookFromBookEntityMapper.Map(snapshot.GetEntity<global::MyApplicationMud.GraphQL.State.BookEntity>(entityId) ?? throw new global::StrawberryShake.GraphQLClientException());
+            }
+
+            throw new global::System.NotSupportedException();
+        }
+
+        private global::System.Collections.Generic.IReadOnlyList<global::MyApplicationMud.GraphQL.IGetBooksDetailView_Authors> MapNonNullableIGetBooksDetailView_AuthorsNonNullableArray(global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId>? list, global::StrawberryShake.IEntityStoreSnapshot snapshot)
+        {
+            if (list is null)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            var authors = new global::System.Collections.Generic.List<global::MyApplicationMud.GraphQL.IGetBooksDetailView_Authors>();
+            foreach (global::StrawberryShake.EntityId child in list)
+            {
+                authors.Add(MapNonNullableIGetBooksDetailView_Authors(child, snapshot));
+            }
+
+            return authors;
+        }
+
+        private global::MyApplicationMud.GraphQL.IGetBooksDetailView_Authors MapNonNullableIGetBooksDetailView_Authors(global::StrawberryShake.EntityId entityId, global::StrawberryShake.IEntityStoreSnapshot snapshot)
+        {
+            if (entityId.Name.Equals("Author", global::System.StringComparison.Ordinal))
+            {
+                return _getBooksDetailView_Authors_AuthorFromAuthorEntityMapper.Map(snapshot.GetEntity<global::MyApplicationMud.GraphQL.State.AuthorEntity>(entityId) ?? throw new global::StrawberryShake.GraphQLClientException());
             }
 
             throw new global::System.NotSupportedException();

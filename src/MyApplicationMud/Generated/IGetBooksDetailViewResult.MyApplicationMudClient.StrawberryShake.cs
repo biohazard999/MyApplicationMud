@@ -7,5 +7,7 @@ namespace MyApplicationMud.GraphQL
     public partial interface IGetBooksDetailViewResult
     {
         public global::MyApplicationMud.GraphQL.IGetBooksDetailView_Details Details { get; }
+
+        public global::System.Collections.Generic.IReadOnlyList<global::MyApplicationMud.GraphQL.IGetBooksDetailView_Authors> Authors { get; }
     }
 }

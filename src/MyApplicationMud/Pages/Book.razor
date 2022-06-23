@@ -1,0 +1,57 @@
+﻿@page "/book/{Id:int}"
+@inject MyApplicationMudClient Client
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="my-16">
+    @if (Details == null)
+    {
+        <MudCard Outlined="true">
+            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100px" />
+            <MudCardContent>
+                <MudSkeleton Width="30%" Height="42px;" />
+                <MudSkeleton Width="80%" />
+                <MudSkeleton Width="100%" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
+                <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+            </MudCardActions>
+        </MudCard>
+    }
+    else
+    {
+        <MudCard Outlined="true">
+            <MudCardHeader>
+                <MudText>@Details.Details.Title</MudText>
+            </MudCardHeader>
+            <MudCardMedia Image="@Details.Details.Image" />
+            <MudCardContent>
+                <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                    <MudTextField Value="@Details.Details.Title" T="string" Label="Title" Required="true" RequiredError="Title is required!" />
+                    <MudSelect Value="@Details.Details.Author" T="IAuthorInfo" Label="Author" AnchorOrigin="Origin.BottomCenter" RequiredError="Author is required" !>
+                        @foreach (var author in Details.Authors)
+                        {
+                            <MudSelectItem Value="@(author)" />
+                        }
+                    </MudSelect>
+                </MudForm>
+            </MudCardContent>
+        </MudCard>
+    }
+</MudContainer>
+@code {
+
+    bool success;
+    string[] errors = { };
+    MudForm? form;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    public IGetBooksDetailViewResult? Details { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        Details = (await Client.GetBooksDetailView.ExecuteAsync(Id)).Data;
+    }
+}

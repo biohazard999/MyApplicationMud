@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Host", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Shared", "src\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj", "{9E4ABB44-7E01-49E0-817D-D9EA0EFAEFA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.ExternalApi", "src\MyApplicationMud.ExternalApi\MyApplicationMud.ExternalApi.csproj", "{0303A42B-2DF3-4C9A-9D26-3620E5470B62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.ExternalApi", "src\MyApplicationMud.ExternalApi\MyApplicationMud.ExternalApi.csproj", "{0303A42B-2DF3-4C9A-9D26-3620E5470B62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

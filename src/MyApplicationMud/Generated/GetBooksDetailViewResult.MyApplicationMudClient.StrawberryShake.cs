@@ -6,12 +6,15 @@ namespace MyApplicationMud.GraphQL
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
     public partial class GetBooksDetailViewResult : global::System.IEquatable<GetBooksDetailViewResult>, IGetBooksDetailViewResult
     {
-        public GetBooksDetailViewResult(global::MyApplicationMud.GraphQL.IGetBooksDetailView_Details details)
+        public GetBooksDetailViewResult(global::MyApplicationMud.GraphQL.IGetBooksDetailView_Details details, global::System.Collections.Generic.IReadOnlyList<global::MyApplicationMud.GraphQL.IGetBooksDetailView_Authors> authors)
         {
             Details = details;
+            Authors = authors;
         }
 
         public global::MyApplicationMud.GraphQL.IGetBooksDetailView_Details Details { get; }
+
+        public global::System.Collections.Generic.IReadOnlyList<global::MyApplicationMud.GraphQL.IGetBooksDetailView_Authors> Authors { get; }
 
         public virtual global::System.Boolean Equals(GetBooksDetailViewResult? other)
         {
@@ -30,7 +33,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return (Details.Equals(other.Details));
+            return (Details.Equals(other.Details)) && global::StrawberryShake.Helper.ComparisonHelper.SequenceEqual(Authors, other.Authors);
         }
 
         public override global::System.Boolean Equals(global::System.Object? obj)
@@ -59,6 +62,11 @@ namespace MyApplicationMud.GraphQL
             {
                 int hash = 5;
                 hash ^= 397 * Details.GetHashCode();
+                foreach (var Authors_elm in Authors)
+                {
+                    hash ^= 397 * Authors_elm.GetHashCode();
+                }
+
                 return hash;
             }
         }

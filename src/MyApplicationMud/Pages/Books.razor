@@ -55,7 +55,7 @@ else
                 {
                     <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
                         <MudCard Outlined="true" Style="height:100%">
-                            <MudHidden Breakpoint="Breakpoint.SmAndDown" >
+                            <MudHidden Breakpoint="Breakpoint.SmAndDown">
                                 <MudCardMedia Image="@item.Image" />
                             </MudHidden>
                             <MudCardContent>
@@ -63,8 +63,7 @@ else
                                 <MudText Typo="Typo.body2">@item.Author.Name</MudText>
                             </MudCardContent>
                             <MudCardActions>
-                                <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
-                                <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+                                 <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"book/{item.Id}")" >Edit</MudButton>
                             </MudCardActions>
                         </MudCard>
                     </MudItem>

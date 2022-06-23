@@ -1,6 +1,18 @@
-﻿query GetBooksDetailView {
-	details: book {
+﻿query GetBooksDetailView($id: Int!) {
+	details: book(id: $id) {
 		id
 		title
+		image
+		author {
+			...AuthorInfo
+		}
 	}
+	authors: authors {
+		...AuthorInfo
+	}
+}
+
+fragment AuthorInfo on Author {
+	id,
+	name
 }

@@ -150,11 +150,11 @@ namespace MyApplicationMud.GraphQL.State
             {
                 if (session.CurrentSnapshot.TryGetEntity(entityId, out global::MyApplicationMud.GraphQL.State.AuthorEntity? entity))
                 {
-                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.AuthorEntity(DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "name"))));
+                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.AuthorEntity(entity.Id, DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "name"))));
                 }
                 else
                 {
-                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.AuthorEntity(DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "name"))));
+                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.AuthorEntity(default !, DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "name"))));
                 }
 
                 return entityId;

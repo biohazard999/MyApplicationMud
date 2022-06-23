@@ -33,6 +33,7 @@ services
     .AddFiltering()
     .AddSorting()
     .AddQueryType<Query>()
+    .AddMutationType<Mutations>()
 ;
 
 var app = builder.Build();

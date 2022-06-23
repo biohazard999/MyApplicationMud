@@ -6,22 +6,42 @@ namespace MyApplicationMud.GraphQL
     /// <summary>
     /// Represents the operation service of the GetBooksDetailView GraphQL operation
     /// <code>
-    /// query GetBooksDetailView {
-    ///   details: book {
+    /// query GetBooksDetailView($id: Int!) {
+    ///   details: book(id: $id) {
     ///     __typename
     ///     id
     ///     title
+    ///     image
+    ///     author {
+    ///       __typename
+    ///       ... AuthorInfo
+    ///       ... on Author {
+    ///         id
+    ///       }
+    ///     }
     ///     ... on Book {
     ///       id
     ///     }
     ///   }
+    ///   authors: authors {
+    ///     __typename
+    ///     ... AuthorInfo
+    ///     ... on Author {
+    ///       id
+    ///     }
+    ///   }
+    /// }
+    /// 
+    /// fragment AuthorInfo on Author {
+    ///   id
+    ///   name
     /// }
     /// </code>
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
     public partial interface IGetBooksDetailViewQuery : global::StrawberryShake.IOperationRequestFactory
     {
-        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IGetBooksDetailViewResult>> ExecuteAsync(global::System.Threading.CancellationToken cancellationToken = default);
-        global::System.IObservable<global::StrawberryShake.IOperationResult<IGetBooksDetailViewResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null);
+        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IGetBooksDetailViewResult>> ExecuteAsync(global::System.Int32 id, global::System.Threading.CancellationToken cancellationToken = default);
+        global::System.IObservable<global::StrawberryShake.IOperationResult<IGetBooksDetailViewResult>> Watch(global::System.Int32 id, global::StrawberryShake.ExecutionStrategy? strategy = null);
     }
 }

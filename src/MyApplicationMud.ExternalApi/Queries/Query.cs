@@ -49,9 +49,8 @@ public class Query
         return new(name, claims);
     }
 
-
-    public Book GetBook()
-        => FakeData.books.First();
+    public Book GetBook(int id)
+        => FakeData.books.First(b => b.Id == id);
 
     //[UsePaging]
     //[UseProjection]
@@ -59,6 +58,22 @@ public class Query
     [UseSorting]
     public IQueryable<Book> GetBooks()
         => FakeData.books.AsQueryable();
+
+    public IQueryable<Author> GetAuthors()
+        => FakeData.authors.AsQueryable();
+}
+
+public class Mutations
+{
+    public Book EditBook(Book book)
+    {
+        var b = FakeData.books.First(m => m.Id == book.Id);
+
+        var index = FakeData.books.IndexOf(b);
+        FakeData.books.RemoveAt(index);
+        FakeData.books.Insert(index, book);
+        return book;
+    }
 }
 
 public record ServerInfo([GraphQLDescription("Returns the server time in UTC")] DateTime ServerTime);

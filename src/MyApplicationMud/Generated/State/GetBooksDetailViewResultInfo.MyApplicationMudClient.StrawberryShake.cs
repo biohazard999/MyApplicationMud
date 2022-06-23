@@ -8,20 +8,23 @@ namespace MyApplicationMud.GraphQL.State
     {
         private readonly global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> _entityIds;
         private readonly global::System.UInt64 _version;
-        public GetBooksDetailViewResultInfo(global::StrawberryShake.EntityId details, global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> entityIds, global::System.UInt64 version)
+        public GetBooksDetailViewResultInfo(global::StrawberryShake.EntityId details, global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId> authors, global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> entityIds, global::System.UInt64 version)
         {
             Details = details;
+            Authors = authors;
             _entityIds = entityIds ?? throw new global::System.ArgumentNullException(nameof(entityIds));
             _version = version;
         }
 
         public global::StrawberryShake.EntityId Details { get; }
 
+        public global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId> Authors { get; }
+
         public global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> EntityIds => _entityIds;
         public global::System.UInt64 Version => _version;
         public global::StrawberryShake.IOperationResultDataInfo WithVersion(global::System.UInt64 version)
         {
-            return new GetBooksDetailViewResultInfo(Details, _entityIds, version);
+            return new GetBooksDetailViewResultInfo(Details, Authors, _entityIds, version);
         }
     }
 }
