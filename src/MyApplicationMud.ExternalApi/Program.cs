@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 using MyApplicationMud.ExternalApi.Queries;
+using MyApplicationMud.ExternalApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging(l => l.AddConsole());
@@ -26,6 +27,7 @@ services
 
 services
     .AddGraphQLServer()
+    .AddHttpRequestInterceptor<HttpRequestInterceptor>()
     .AddAuthorization()
     .AddFiltering()
     .AddSorting()
