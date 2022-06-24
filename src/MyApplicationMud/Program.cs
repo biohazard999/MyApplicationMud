@@ -29,6 +29,13 @@ builder.Services
     .ConfigureHttpClient(client =>
     {
         client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}external-graphql");
+    })
+    .ConfigureWebSocketClient(client =>
+    {
+        //var uri = new Uri(builder.HostEnvironment.BaseAddress);
+        //var websocketUri = $"wss://{uri.Authority}/ws-external-graphql";
+        //client.Uri = new Uri(websocketUri);
+        client.Uri = new Uri("wss://localhost:7222/graphql");
     });
 
 builder.Services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("backend"));

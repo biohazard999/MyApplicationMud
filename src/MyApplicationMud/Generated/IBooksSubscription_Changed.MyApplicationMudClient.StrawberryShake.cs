@@ -4,7 +4,7 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial interface IGetBooksListView_Items : IBookListInfo
+    public partial interface IBooksSubscription_Changed : IBookListInfo
     {
     }
 }

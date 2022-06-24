@@ -6,11 +6,18 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">Books</MudText>
 
+<MudText Typo="Typo.h4" GutterBottom="true">Last Changed @LastChanged</MudText>
+
 @if (error != null)
 {
     <MudText Typo="Typo.h6" GutterBottom="true">Errors have occured</MudText>
 
     <MudText>@error?.ToString()</MudText>
+
+    @if (error?.InnerException != null)
+    {
+        <MudText>@error.InnerException.ToString()</MudText>
+    }
 }
 else
 {
@@ -21,6 +28,11 @@ else
         foreach (var er in errors)
         {
             <MudText>@er.Exception?.ToString()</MudText>
+
+            @if (er.Exception?.InnerException != null)
+            {
+                <MudText>@er.Exception.InnerException.ToString()</MudText>
+            }
         }
     }
     else
@@ -63,7 +75,7 @@ else
                                 <MudText Typo="Typo.body2">@item.Author.Name</MudText>
                             </MudCardContent>
                             <MudCardActions>
-                                 <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"book/{item.Id}")" >Edit</MudButton>
+                                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"book/{item.Id}")">Edit</MudButton>
                             </MudCardActions>
                         </MudCard>
                     </MudItem>
@@ -78,6 +90,9 @@ else
     private List<IGetBooksListView_Items> items = new();
     private List<IClientError> errors = new();
     private IDisposable? storeSession;
+    private IDisposable? subscriptionSession;
+
+    public int LastChanged { get; set; } = 0;
 
     protected override void OnInitialized()
     {
@@ -101,10 +116,34 @@ else
                 }
                 StateHasChanged();
             });
+
+        subscriptionSession = Client
+            .BooksSubscription
+            .Watch(ExecutionStrategy.NetworkOnly)
+            .Catch((Exception e) =>
+            {
+                error = e;
+                return Observable.Empty<IOperationResult<IBooksSubscriptionResult>>();
+            })
+            .Subscribe(result =>
+            {
+                if (result.Errors.Count > 0)
+                {
+                    errors = result.Errors.ToList();
+                }
+                else
+                {
+                    LastChanged = result.Data!.Changed.Id;
+                    Console.WriteLine($"{result.Data!.Changed.Id}");
+                }
+
+                StateHasChanged();
+            });
     }
 
     void IDisposable.Dispose()
     {
         storeSession?.Dispose();
+        subscriptionSession.Dispose();
     }
 }

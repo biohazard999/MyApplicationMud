@@ -25,6 +25,8 @@ services
         };
     });
 
+services.AddInMemorySubscriptions();
+
 services
     .AddGraphQLServer()
     .AddHttpRequestInterceptor<HttpRequestInterceptor>()
@@ -34,10 +36,12 @@ services
     .AddSorting()
     .AddQueryType<Query>()
     .AddMutationType<Mutations>()
+    .AddSubscriptionType<Subscriptions>()
 ;
 
 var app = builder.Build();
 
+app.UseWebSockets();
 app.UseHttpLogging();
 
 app.UseHttpsRedirection();
@@ -46,6 +50,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.UseEndpoints(endpoints =>
 {

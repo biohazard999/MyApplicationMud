@@ -4,10 +4,10 @@
 namespace MyApplicationMud.GraphQL
 {
     /// <summary>
-    /// Represents the operation service of the GetBooksListView GraphQL operation
+    /// Represents the operation service of the BooksSubscription GraphQL operation
     /// <code>
-    /// query GetBooksListView {
-    ///   items: books {
+    /// subscription BooksSubscription {
+    ///   changed: bookChanged {
     ///     __typename
     ///     ... BookListInfo
     ///     ... on Book {
@@ -31,22 +31,16 @@ namespace MyApplicationMud.GraphQL
     /// </code>
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class GetBooksListViewQuery : global::MyApplicationMud.GraphQL.IGetBooksListViewQuery
+    public partial class BooksSubscriptionSubscription : global::MyApplicationMud.GraphQL.IBooksSubscriptionSubscription
     {
-        private readonly global::StrawberryShake.IOperationExecutor<IGetBooksListViewResult> _operationExecutor;
-        public GetBooksListViewQuery(global::StrawberryShake.IOperationExecutor<IGetBooksListViewResult> operationExecutor)
+        private readonly global::StrawberryShake.IOperationExecutor<IBooksSubscriptionResult> _operationExecutor;
+        public BooksSubscriptionSubscription(global::StrawberryShake.IOperationExecutor<IBooksSubscriptionResult> operationExecutor)
         {
             _operationExecutor = operationExecutor ?? throw new global::System.ArgumentNullException(nameof(operationExecutor));
         }
 
-        global::System.Type global::StrawberryShake.IOperationRequestFactory.ResultType => typeof(IGetBooksListViewResult);
-        public async global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IGetBooksListViewResult>> ExecuteAsync(global::System.Threading.CancellationToken cancellationToken = default)
-        {
-            var request = CreateRequest();
-            return await _operationExecutor.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
-        }
-
-        public global::System.IObservable<global::StrawberryShake.IOperationResult<IGetBooksListViewResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null)
+        global::System.Type global::StrawberryShake.IOperationRequestFactory.ResultType => typeof(IBooksSubscriptionResult);
+        public global::System.IObservable<global::StrawberryShake.IOperationResult<IBooksSubscriptionResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null)
         {
             var request = CreateRequest();
             return _operationExecutor.Watch(request, strategy);
@@ -59,7 +53,7 @@ namespace MyApplicationMud.GraphQL
 
         private global::StrawberryShake.OperationRequest CreateRequest(global::System.Collections.Generic.IReadOnlyDictionary<global::System.String, global::System.Object?>? variables)
         {
-            return new global::StrawberryShake.OperationRequest(id: GetBooksListViewQueryDocument.Instance.Hash.Value, name: "GetBooksListView", document: GetBooksListViewQueryDocument.Instance, strategy: global::StrawberryShake.RequestStrategy.Default);
+            return new global::StrawberryShake.OperationRequest(id: BooksSubscriptionSubscriptionDocument.Instance.Hash.Value, name: "BooksSubscription", document: BooksSubscriptionSubscriptionDocument.Instance, strategy: global::StrawberryShake.RequestStrategy.Default);
         }
 
         global::StrawberryShake.OperationRequest global::StrawberryShake.IOperationRequestFactory.Create(global::System.Collections.Generic.IReadOnlyDictionary<global::System.String, global::System.Object?>? variables)

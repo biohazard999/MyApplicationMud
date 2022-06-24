@@ -1,6 +1,7 @@
 ﻿using HotChocolate.AspNetCore.Authorization;
 using System.Security.Claims;
 using Bogus;
+using HotChocolate.Subscriptions;
 
 namespace MyApplicationMud.ExternalApi.Queries;
 
@@ -65,7 +66,7 @@ public class Query
 
 public class Mutations
 {
-    public Book EditBook(int bookId, EditBook book)
+    public async Task<Book> EditBook(int bookId, EditBook book, [Service] ITopicEventSender sender)
     {
         var b = FakeData.books.First(m => m.Id == bookId);
 
@@ -73,8 +74,17 @@ public class Mutations
         FakeData.books.RemoveAt(index);
         var editBook = new Book(bookId, book.Title, b.Image, FakeData.authors.First(m => m.Id == book.AuthorId));
         FakeData.books.Insert(index, editBook);
+
+        await sender.SendAsync(nameof(Subscriptions.BookChanged), editBook);
+
         return editBook;
     }
+}
+
+public class Subscriptions
+{
+    [Subscribe]
+    public Book BookChanged([EventMessage] Book book) => book;
 }
 
 public record EditBook(string Title, int AuthorId);

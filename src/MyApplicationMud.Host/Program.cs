@@ -102,6 +102,7 @@ else
     app.UseHsts();
 }
 
+app.UseWebSockets();
 app.UseHttpLogging();
 
 app.UseHttpsRedirection();

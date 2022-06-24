@@ -1,6 +1,7 @@
 ﻿schema {
   query: Query
   mutation: Mutations
+  subscription: Subscriptions
 }
 
 enum ApplyPolicy {
@@ -18,6 +19,10 @@ type Query {
 
 type Mutations {
   editBook(bookId: Int! book: EditBookInput!): Book!
+}
+
+type Subscriptions {
+  bookChanged: Book!
 }
 
 input BookFilterInput {
@@ -83,6 +88,13 @@ input AuthorSortInput {
   name: SortEnumType
 }
 
+type Book {
+  id: Int!
+  title: String!
+  image: String!
+  author: Author!
+}
+
 type UserInfo {
   name: String!
   claims: [UserClaim!]!
@@ -90,13 +102,6 @@ type UserInfo {
 
 type ServerInfo {
   serverTime: DateTime!
-}
-
-type Book {
-  id: Int!
-  title: String!
-  image: String!
-  author: Author!
 }
 
 type Author {

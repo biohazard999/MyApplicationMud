@@ -4,10 +4,10 @@
 namespace MyApplicationMud.GraphQL
 {
     /// <summary>
-    /// Represents the operation service of the GetBooksListView GraphQL operation
+    /// Represents the operation service of the BooksSubscription GraphQL operation
     /// <code>
-    /// query GetBooksListView {
-    ///   items: books {
+    /// subscription BooksSubscription {
+    ///   changed: bookChanged {
     ///     __typename
     ///     ... BookListInfo
     ///     ... on Book {
@@ -31,9 +31,8 @@ namespace MyApplicationMud.GraphQL
     /// </code>
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial interface IGetBooksListViewQuery : global::StrawberryShake.IOperationRequestFactory
+    public partial interface IBooksSubscriptionSubscription : global::StrawberryShake.IOperationRequestFactory
     {
-        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IGetBooksListViewResult>> ExecuteAsync(global::System.Threading.CancellationToken cancellationToken = default);
-        global::System.IObservable<global::StrawberryShake.IOperationResult<IGetBooksListViewResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null);
+        global::System.IObservable<global::StrawberryShake.IOperationResult<IBooksSubscriptionResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null);
     }
 }

@@ -1,10 +1,20 @@
 ﻿query GetBooksListView {
 	items: books {
-		id
-		title,
-		image,
-		author {
-			name
-		}
+		...BookListInfo
+	}
+}
+
+subscription BooksSubscription {
+	changed: bookChanged {
+		...BookListInfo		
+	}  
+}
+
+fragment BookListInfo on Book {
+	id
+	title,
+	image,
+	author {
+		name
 	}
 }
