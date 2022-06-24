@@ -32,10 +32,10 @@ builder.Services
     })
     .ConfigureWebSocketClient(client =>
     {
-        //var uri = new Uri(builder.HostEnvironment.BaseAddress);
-        //var websocketUri = $"wss://{uri.Authority}/ws-external-graphql";
-        //client.Uri = new Uri(websocketUri);
-        client.Uri = new Uri("wss://localhost:7222/graphql");
+        var uri = new Uri(builder.HostEnvironment.BaseAddress);
+        var websocketUri = $"wss://{uri.Authority}/ws-external-graphql";
+        client.Uri = new Uri(websocketUri);
+        client.ConnectionInterceptor = new AntiforgeryWebsocketConnectionInterceptor();
     });
 
 builder.Services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("backend"));
