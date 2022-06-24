@@ -7,6 +7,7 @@ using MudBlazor.Services;
 using MyApplicationMud;
 using MyApplicationMud.Services;
 using MyApplicationMud.GraphQL;
+using StrawberryShake;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -25,7 +26,7 @@ builder.Services
     .AddHttpMessageHandler<AntiforgeryHandler>();
 
 builder.Services
-    .AddMyApplicationMudClient()
+    .AddMyApplicationMudClient(ExecutionStrategy.CacheFirst)
     .ConfigureHttpClient(client =>
     {
         client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}external-graphql");
