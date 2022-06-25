@@ -1,7 +1,6 @@
 ﻿using HotChocolate.AspNetCore.Authorization;
 using System.Security.Claims;
 using Bogus;
-using HotChocolate.Subscriptions;
 
 namespace MyApplicationMud.ExternalApi.Queries;
 
@@ -10,7 +9,7 @@ public class FakeData
     //Repeatable values for bogus
     static FakeData() => Randomizer.Seed = new Random(8675309);
 
-    static Faker<Author> authorFaker = new Faker<Author>()
+    internal static Faker<Author> authorFaker = new Faker<Author>()
          .CustomInstantiator(f =>
             new Author(
                 f.UniqueIndex,
@@ -18,7 +17,7 @@ public class FakeData
             )
         );
 
-    static Faker<Book> bookFaker = new Faker<Book>()
+    internal static Faker<Book> bookFaker = new Faker<Book>()
         .CustomInstantiator(f =>
             new Book(
                 f.UniqueIndex,
@@ -64,30 +63,7 @@ public class Query
         => FakeData.authors.AsQueryable();
 }
 
-public class Mutations
-{
-    public async Task<Book> EditBook(int bookId, EditBook book, [Service] ITopicEventSender sender)
-    {
-        var b = FakeData.books.First(m => m.Id == bookId);
-
-        var index = FakeData.books.IndexOf(b);
-        FakeData.books.RemoveAt(index);
-        var editBook = new Book(bookId, book.Title, b.Image, FakeData.authors.First(m => m.Id == book.AuthorId));
-        FakeData.books.Insert(index, editBook);
-
-        await sender.SendAsync(nameof(Subscriptions.BookChanged), editBook);
-
-        return editBook;
-    }
-}
-
-public class Subscriptions
-{
-    [Subscribe]
-    public Book BookChanged([EventMessage] Book book) => book;
-}
-
-public record EditBook(string Title, int AuthorId);
+public record BookModel(string Title, int AuthorId);
 
 public record ServerInfo([GraphQLDescription("Returns the server time in UTC")] DateTime ServerTime);
 

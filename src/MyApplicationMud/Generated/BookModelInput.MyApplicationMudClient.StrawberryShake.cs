@@ -4,7 +4,7 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class EditBookInput : global::MyApplicationMud.GraphQL.State.IEditBookInputInfo, global::System.IEquatable<EditBookInput>
+    public partial class BookModelInput : global::MyApplicationMud.GraphQL.State.IBookModelInputInfo, global::System.IEquatable<BookModelInput>
     {
         public override global::System.Boolean Equals(global::System.Object? obj)
         {
@@ -23,10 +23,10 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return Equals((EditBookInput)obj);
+            return Equals((BookModelInput)obj);
         }
 
-        public virtual global::System.Boolean Equals(EditBookInput? other)
+        public virtual global::System.Boolean Equals(BookModelInput? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -71,7 +71,7 @@ namespace MyApplicationMud.GraphQL
             }
         }
 
-        global::System.Boolean global::MyApplicationMud.GraphQL.State.IEditBookInputInfo.IsTitleSet => _set_title;
+        global::System.Boolean global::MyApplicationMud.GraphQL.State.IBookModelInputInfo.IsTitleSet => _set_title;
         public global::System.Int32 AuthorId
         {
             get => _value_authorId;
@@ -82,6 +82,6 @@ namespace MyApplicationMud.GraphQL
             }
         }
 
-        global::System.Boolean global::MyApplicationMud.GraphQL.State.IEditBookInputInfo.IsAuthorIdSet => _set_authorId;
+        global::System.Boolean global::MyApplicationMud.GraphQL.State.IBookModelInputInfo.IsAuthorIdSet => _set_authorId;
     }
 }

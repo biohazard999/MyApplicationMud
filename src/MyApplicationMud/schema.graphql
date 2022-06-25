@@ -18,11 +18,15 @@ type Query {
 }
 
 type Mutations {
-  editBook(bookId: Int! book: EditBookInput!): Book!
+  editBook(bookId: Int! book: BookModelInput!): Book!
+  addBook(book: BookModelInput!): Book!
+  deleteBook(bookId: Int!): Boolean!
 }
 
 type Subscriptions {
   bookChanged: Book!
+  bookAdded: Book!
+  bookDeleted: Book!
 }
 
 input BookFilterInput {
@@ -109,7 +113,7 @@ type Author {
   name: String!
 }
 
-input EditBookInput {
+input BookModelInput {
   title: String!
   authorId: Int!
 }

@@ -13,6 +13,10 @@ namespace MyApplicationMud.GraphQL
 
         global::MyApplicationMud.GraphQL.IUpdateBookMutation UpdateBook { get; }
 
+        global::MyApplicationMud.GraphQL.IAddBookMutation AddBook { get; }
+
+        global::MyApplicationMud.GraphQL.IDeleteBookMutation DeleteBook { get; }
+
         global::MyApplicationMud.GraphQL.IGetBooksListViewQuery GetBooksListView { get; }
 
         global::MyApplicationMud.GraphQL.IBooksSubscriptionSubscription BooksSubscription { get; }

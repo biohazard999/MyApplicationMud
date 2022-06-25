@@ -1,0 +1,17 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: myapplicationmud
+services:
+- name: myapplicationmud-host
+  project: src/MyApplicationMud.Host/MyApplicationMud.Host.csproj
+  bindings:
+  - protocol: https
+- name: myapplicationmud-externalapi
+  project: src/MyApplicationMud.ExternalApi/MyApplicationMud.ExternalApi.csproj
+  bindings:
+  - port: 7222
+    protocol: https

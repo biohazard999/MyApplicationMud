@@ -7,7 +7,7 @@
 subscription BooksSubscription {
 	changed: bookChanged {
 		...BookListInfo		
-	}  
+	}
 }
 
 fragment BookListInfo on Book {

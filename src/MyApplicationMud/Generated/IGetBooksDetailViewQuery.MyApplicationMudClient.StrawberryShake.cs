@@ -9,21 +9,25 @@ namespace MyApplicationMud.GraphQL
     /// query GetBooksDetailView($id: Int!) {
     ///   details: book(id: $id) {
     ///     __typename
-    ///     id
-    ///     title
-    ///     image
-    ///     author {
-    ///       __typename
-    ///       ... AuthorInfo
-    ///       ... on Author {
-    ///         id
-    ///       }
-    ///     }
+    ///     ... BookInfo
     ///     ... on Book {
     ///       id
     ///     }
     ///   }
     ///   authors: authors {
+    ///     __typename
+    ///     ... AuthorInfo
+    ///     ... on Author {
+    ///       id
+    ///     }
+    ///   }
+    /// }
+    /// 
+    /// fragment BookInfo on Book {
+    ///   id
+    ///   title
+    ///   image
+    ///   author {
     ///     __typename
     ///     ... AuthorInfo
     ///     ... on Author {

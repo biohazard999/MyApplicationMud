@@ -4,11 +4,11 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class EditBookInputInputValueFormatter : global::StrawberryShake.Serialization.IInputObjectFormatter
+    public partial class BookModelInputInputValueFormatter : global::StrawberryShake.Serialization.IInputObjectFormatter
     {
         private global::StrawberryShake.Serialization.IInputValueFormatter _stringFormatter = default !;
         private global::StrawberryShake.Serialization.IInputValueFormatter _intFormatter = default !;
-        public global::System.String TypeName => "EditBookInput";
+        public global::System.String TypeName => "BookModelInput";
         public void Initialize(global::StrawberryShake.Serialization.ISerializerResolver serializerResolver)
         {
             _stringFormatter = serializerResolver.GetInputValueFormatter("String");
@@ -22,8 +22,8 @@ namespace MyApplicationMud.GraphQL
                 return null;
             }
 
-            var input = runtimeValue as global::MyApplicationMud.GraphQL.EditBookInput;
-            var inputInfo = runtimeValue as global::MyApplicationMud.GraphQL.State.IEditBookInputInfo;
+            var input = runtimeValue as global::MyApplicationMud.GraphQL.BookModelInput;
+            var inputInfo = runtimeValue as global::MyApplicationMud.GraphQL.State.IBookModelInputInfo;
             if (input is null || inputInfo is null)
             {
                 throw new global::System.ArgumentException(nameof(runtimeValue));

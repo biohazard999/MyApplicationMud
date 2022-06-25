@@ -4,25 +4,19 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class UpdateBook_EditBook_Book : global::System.IEquatable<UpdateBook_EditBook_Book>, IUpdateBook_EditBook_Book
+    public partial class AddBook_AddBook_Author_Author : global::System.IEquatable<AddBook_AddBook_Author_Author>, IAddBook_AddBook_Author_Author
     {
-        public UpdateBook_EditBook_Book(global::System.Int32 id, global::System.String title, global::System.String image, global::MyApplicationMud.GraphQL.IGetBooksDetailView_Details_Author author)
+        public AddBook_AddBook_Author_Author(global::System.Int32 id, global::System.String name)
         {
             Id = id;
-            Title = title;
-            Image = image;
-            Author = author;
+            Name = name;
         }
 
         public global::System.Int32 Id { get; }
 
-        public global::System.String Title { get; }
+        public global::System.String Name { get; }
 
-        public global::System.String Image { get; }
-
-        public global::MyApplicationMud.GraphQL.IGetBooksDetailView_Details_Author Author { get; }
-
-        public virtual global::System.Boolean Equals(UpdateBook_EditBook_Book? other)
+        public virtual global::System.Boolean Equals(AddBook_AddBook_Author_Author? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -39,7 +33,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return (Id == other.Id) && Title.Equals(other.Title) && Image.Equals(other.Image) && Author.Equals(other.Author);
+            return (Id == other.Id) && Name.Equals(other.Name);
         }
 
         public override global::System.Boolean Equals(global::System.Object? obj)
@@ -59,7 +53,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return Equals((UpdateBook_EditBook_Book)obj);
+            return Equals((AddBook_AddBook_Author_Author)obj);
         }
 
         public override global::System.Int32 GetHashCode()
@@ -68,9 +62,7 @@ namespace MyApplicationMud.GraphQL
             {
                 int hash = 5;
                 hash ^= 397 * Id.GetHashCode();
-                hash ^= 397 * Title.GetHashCode();
-                hash ^= 397 * Image.GetHashCode();
-                hash ^= 397 * Author.GetHashCode();
+                hash ^= 397 * Name.GetHashCode();
                 return hash;
             }
         }

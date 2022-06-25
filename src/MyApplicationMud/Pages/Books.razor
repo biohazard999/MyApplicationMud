@@ -7,6 +7,8 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">Books</MudText>
 
+<MudFab Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Material.Filled.Add" Label="Neu" Style="position: fixed; bottom: 2rem; right: 2rem;" />
+
 <MudText Typo="Typo.h4" GutterBottom="true">Last Changed @LastChanged</MudText>
 
 @if (error != null)
@@ -145,6 +147,6 @@ else
     void IDisposable.Dispose()
     {
         storeSession?.Dispose();
-        subscriptionSession.Dispose();
+        subscriptionSession?.Dispose();
     }
 }

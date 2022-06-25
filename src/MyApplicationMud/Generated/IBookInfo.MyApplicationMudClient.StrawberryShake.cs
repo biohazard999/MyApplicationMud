@@ -12,6 +12,6 @@ namespace MyApplicationMud.GraphQL
 
         public global::System.String Image { get; }
 
-        public global::MyApplicationMud.GraphQL.IUpdateBook_EditBook_Author Author { get; }
+        public global::MyApplicationMud.GraphQL.IGetBooksDetailView_Details_Author Author { get; }
     }
 }

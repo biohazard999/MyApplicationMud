@@ -1,21 +1,26 @@
 ﻿query GetBooksDetailView($id: Int!) {
 	details: book(id: $id) {
-		id
-		title
-		image
-		author {
-			...AuthorInfo
-		}
+		...BookInfo
 	}
 	authors: authors {
 		...AuthorInfo
 	}
 }
 
-mutation UpdateBook($bookId: Int!, $book: EditBookInput!) {
+mutation UpdateBook($bookId: Int!, $book: BookModelInput!) {
 	editBook(bookId: $bookId, book: $book) {
 		...BookInfo
 	}
+}
+
+mutation AddBook($book: BookModelInput!) {
+	addBook(book: $book) {
+		...BookInfo
+	}
+}
+
+mutation DeleteBook($bookId: Int!) {
+	deleteBook(bookId: $bookId)
 }
 
 fragment BookInfo on Book {
