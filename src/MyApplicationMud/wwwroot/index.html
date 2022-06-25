@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <iframe id="bff-silent-login"></iframe>
     <div id="app">
         <div class="loader" aria-label="Ladebalken">
             <div>
@@ -38,6 +39,15 @@
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <script>
+        document.querySelector('#bff-silent-login').src = '/bff/silent-login';
+        window.addEventListener("message", e => {
+            if (e.data && e.data.source === 'bff-silent-login' && e.data.isLoggedIn) {
+                // we now have a user logged in silently, so reload this window
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
 
 </html>
