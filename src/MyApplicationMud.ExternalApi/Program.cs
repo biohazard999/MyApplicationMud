@@ -29,6 +29,7 @@ services.AddInMemorySubscriptions();
 
 services
     .AddGraphQLServer()
+    .AddDefaultTransactionScopeHandler()
     .AddHttpRequestInterceptor<HttpRequestInterceptor>()
     .AddAuthorization()
     .AddProjections()
