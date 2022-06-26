@@ -16,8 +16,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddFluxor(configuration =>
 {
     configuration.ScanAssemblies(typeof(CounterState).Assembly);
+
 #if DEBUG
-    configuration.UseReduxDevTools();
+    configuration.UseReduxDevTools(devtools =>
+    {
+        devtools.EnableStackTrace();
+    });
 #endif
 });
 

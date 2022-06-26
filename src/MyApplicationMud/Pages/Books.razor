@@ -1,159 +1,93 @@
 ﻿@page "/books"
 @attribute [Authorize]
-@inject MyApplicationMudClient Client
-@implements IDisposable
+@inherits FluxorComponent
+@inject IState<BooksState> State
+@inject IDispatcher Dispatcher
 
 <PageTitle>Books</PageTitle>
-
 <MudText Typo="Typo.h3" GutterBottom="true">Books</MudText>
 
-<MudFab Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Material.Filled.Add" Label="Neu" Style="position: fixed; bottom: 2rem; right: 2rem;" />
+<div style="position: fixed; bottom: 2rem; right: 2rem;">
+    <MudFab Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Material.Filled.Refresh" Label="Aktualisieren" OnClick="() => Dispatcher.Dispatch(new RefreshBooksAction())" />
+    <MudFab Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Material.Filled.Add" Label="Neu" />
+</div>
 
-<MudText Typo="Typo.h4" GutterBottom="true">Last Changed @LastChanged</MudText>
+@if (State.Value.IsLoading)
+{
+    <MudOverlay DarkBackground="true" Visible="true"></MudOverlay>
+    <MudGrid>
+        @for (var i = 0; i <= 10; i++)
+        {
+            <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
+                <MudCard Outlined="true">
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100px" />
+                    <MudCardContent>
+                        <MudSkeleton Width="30%" Height="42px;" />
+                        <MudSkeleton Width="80%" />
+                        <MudSkeleton Width="100%" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
+                        <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+}
 
-@if (error != null)
+@if (State.Value.HasErrors)
 {
     <MudText Typo="Typo.h6" GutterBottom="true">Errors have occured</MudText>
 
-    <MudText>@error?.ToString()</MudText>
-
-    @if (error?.InnerException != null)
+    @foreach (var error in State.Value.Errors)
     {
-        <MudText>@error.InnerException.ToString()</MudText>
+        <MudText>@error.ToString()</MudText>
+
+        @if (error.Exception != null)
+        {
+            <MudText>@error.Exception.ToString()</MudText>
+        }
     }
+
 }
-else
+
+@if (!State.Value.IsLoading)
 {
-    if (errors.Count > 0)
-    {
-        <MudText Typo="Typo.h6" GutterBottom="true">Errors have occured</MudText>
-
-        foreach (var er in errors)
+    <MudGrid>
+        @foreach (var item in State.Value.Items)
         {
-            <MudText>@er.Exception?.ToString()</MudText>
-
-            @if (er.Exception?.InnerException != null)
-            {
-                <MudText>@er.Exception.InnerException.ToString()</MudText>
-            }
+            <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
+                <MudCard Outlined="true" Style="height:100%;">
+                    <MudCardHeader>
+                        <CardHeaderAvatar />
+                        <CardHeaderContent />
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                        <MudCardMedia Image="@item.Image" />
+                    </MudHidden>
+                    <MudCardContent>
+                        <MudText>@item.Title</MudText>
+                        <MudText Typo="Typo.body2">@item.Author.Name</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        @{
+                            var url = $"book/{item.Id}";
+                        }
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@url">Edit</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
         }
-    }
-    else
-    {
-        @if (items.Count <= 0)
-        {
-            <MudGrid>
-                @for (var i = 0; i <= 10; i++)
-                {
-                    <MudItem>
-                        <MudCard Outlined="true">
-                            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100px" />
-                            <MudCardContent>
-                                <MudSkeleton Width="30%" Height="42px;" />
-                                <MudSkeleton Width="80%" />
-                                <MudSkeleton Width="100%" />
-                            </MudCardContent>
-                            <MudCardActions>
-                                <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
-                                <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
-                            </MudCardActions>
-                        </MudCard>
-                    </MudItem>
-                }
-            </MudGrid>
-        }
-        else
-        {
-            <MudText Typo="Typo.h6" GutterBottom="true">Items @items.Count</MudText>
-            <MudGrid>
-                @foreach (var item in items)
-                {
-                    <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
-                        <MudCard Outlined="true" Style="height:100%">
-                            <MudCardHeader>
-                                <CardHeaderAvatar />
-                                <CardHeaderContent />
-                                <CardHeaderActions>
-                                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
-                                </CardHeaderActions>
-                            </MudCardHeader>
-                            <MudHidden Breakpoint="Breakpoint.SmAndDown">
-                                <MudCardMedia Image="@item.Image" />
-                            </MudHidden>
-                            <MudCardContent>
-                                <MudText>@item.Title</MudText>
-                                <MudText Typo="Typo.body2">@item.Author.Name</MudText>
-                            </MudCardContent>
-                            <MudCardActions>
-                                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"book/{item.Id}")">Edit</MudButton>
-                            </MudCardActions>
-                        </MudCard>
-                    </MudItem>
-                }
-            </MudGrid>
-        }
-    }
+    </MudGrid>
 }
-
 @code {
-    private Exception? error;
-    private List<IGetBooksListView_Items> items = new();
-    private List<IClientError> errors = new();
-    private IDisposable? storeSession;
-    private IDisposable? subscriptionSession;
-
-    public int LastChanged { get; set; } = 0;
-
     protected override void OnInitialized()
     {
-        storeSession = Client
-            .GetBooksListView
-            .Watch(StrawberryShake.ExecutionStrategy.CacheFirst)
-            .Catch((Exception e) =>
-            {
-                error = e;
-                return Observable.Empty<IOperationResult<IGetBooksListViewResult>>();
-            })
-            .Subscribe(result =>
-            {
-                if (result.Errors.Count > 0)
-                {
-                    errors = result.Errors.ToList();
-                }
-                else
-                {
-                    items = result.Data!.Items.ToList();
-                }
-                StateHasChanged();
-            });
-
-        subscriptionSession = Client
-            .BooksSubscription
-            .Watch(ExecutionStrategy.NetworkOnly)
-            .Catch((Exception e) =>
-            {
-                error = e;
-                return Observable.Empty<IOperationResult<IBooksSubscriptionResult>>();
-            })
-            .Subscribe(result =>
-            {
-                if (result.Errors.Count > 0)
-                {
-                    errors = result.Errors.ToList();
-                }
-                else
-                {
-                    LastChanged = result.Data!.Changed.Id;
-                    Console.WriteLine($"{result.Data!.Changed.Id}");
-                }
-
-                StateHasChanged();
-            });
-    }
-
-    void IDisposable.Dispose()
-    {
-        storeSession?.Dispose();
-        subscriptionSession?.Dispose();
+        base.OnInitialized();
+        Dispatcher.Dispatch(new RefreshBooksAction());
     }
 }

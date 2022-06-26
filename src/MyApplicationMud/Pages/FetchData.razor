@@ -2,6 +2,9 @@
 @attribute [Authorize]
 @inject HttpClient Http
 @using MyApplicationMud.Shared
+@inject IState<WeatherState> State;
+@inject IDispatcher Dispatcher;
+@inherits FluxorComponent
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -11,13 +14,33 @@
 <MudText Typo="Typo.h3" GutterBottom="true">Weather forecast</MudText>
 <MudText Class="mb-8">This component demonstrates fetching data from the server.</MudText>
 
-@if (forecasts == null)
+@if (State.Value.IsLoading)
 {
-    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+      <MudOverlay Visible="true" DarkBackground="true">
+        <MudGrid>
+            @for (var i = 0; i <= 10; i++)
+            {
+                <MudItem>
+                    <MudCard Outlined="true">
+                        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100px" />
+                        <MudCardContent>
+                            <MudSkeleton Width="30%" Height="42px;" />
+                            <MudSkeleton Width="80%" />
+                            <MudSkeleton Width="100%" />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
+                            <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    </MudOverlay>
 }
 else
 {
-    <MudTable Items="forecasts" Hover="true" SortLabel="Sort By" Elevation="0">
+    <MudTable Items="State.Value.Forecasts" Hover="true" SortLabel="Sort By" Elevation="0">
         <HeaderContent>
             <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<WeatherForecast, object>(x=>x.Date)">Date</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<WeatherForecast, object>(x=>x.TemperatureC)">Temp. (C)</MudTableSortLabel></MudTh>
@@ -42,19 +65,11 @@ else
 
     private string? ExternalApi = "Not Called";
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-
-        try
-        {
-            var result = await Http.GetStringAsync("external-api/user");
-            ExternalApi = result;
-        }
-        catch (Exception ex)
-        {
-            ExternalApi = ex.ToString();
-        }
+        base.OnInitialized();
+        
+        Dispatcher.Dispatch(new FetchDataAction());
     }
 
     public class WeatherForecast
