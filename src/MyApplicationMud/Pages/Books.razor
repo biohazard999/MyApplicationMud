@@ -70,6 +70,13 @@ else
                 {
                     <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
                         <MudCard Outlined="true" Style="height:100%">
+                            <MudCardHeader>
+                                <CardHeaderAvatar />
+                                <CardHeaderContent />
+                                <CardHeaderActions>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                                </CardHeaderActions>
+                            </MudCardHeader>
                             <MudHidden Breakpoint="Breakpoint.SmAndDown">
                                 <MudCardMedia Image="@item.Image" />
                             </MudHidden>

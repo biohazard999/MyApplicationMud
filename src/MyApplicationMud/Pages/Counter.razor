@@ -1,4 +1,7 @@
-﻿@page "/counter"
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@page "/counter"
+@inject IState<CounterState> State
+@inject IDispatcher Dispatcher
 
 <PageTitle>Counter</PageTitle>
 
@@ -8,10 +11,10 @@
 
 
 @code {
-    private int currentCount = 0;
+    private int currentCount => State.Value.Count;
 
     private void IncrementCount()
     {
-        currentCount++;
+        Dispatcher.Dispatch(new IncrementCounterAction());
     }
 }

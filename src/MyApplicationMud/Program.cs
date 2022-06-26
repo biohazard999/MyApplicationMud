@@ -8,8 +8,18 @@ using MyApplicationMud;
 using MyApplicationMud.Services;
 using MyApplicationMud.GraphQL;
 using StrawberryShake;
+using Fluxor;
+using MyApplicationMud.Store;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+builder.Services.AddFluxor(configuration =>
+{
+    configuration.ScanAssemblies(typeof(CounterState).Assembly);
+#if DEBUG
+    configuration.UseReduxDevTools();
+#endif
+});
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
