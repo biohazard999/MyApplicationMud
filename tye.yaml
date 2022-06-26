@@ -10,6 +10,7 @@ services:
   project: src/MyApplicationMud.Host/MyApplicationMud.Host.csproj
   bindings:
   - protocol: https
+  - port: 5001
 - name: myapplicationmud-externalapi
   project: src/MyApplicationMud.ExternalApi/MyApplicationMud.ExternalApi.csproj
   bindings:

@@ -1,8 +1,10 @@
-﻿<MudCard>
-    <MudCardHeader Class="d-flex justify-center" >
-        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Bitte warten, Sie werden angemeldet...</MudText>
-    </MudCardHeader>
-    <MudCardContent Class="d-flex justify-center">
-        <MudProgressCircular Color="Color.Success" Indeterminate="true" />
-    </MudCardContent>
-</MudCard>
+﻿<MudOverlay Visible="true" DarkBackground="true">
+    <MudCard>
+        <MudCardHeader Class="d-flex justify-center">
+            <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Bitte warten, Sie werden angemeldet...</MudText>
+        </MudCardHeader>
+        <MudCardContent Class="d-flex justify-center">
+            <MudProgressCircular Color="Color.Success" Indeterminate="true" />
+        </MudCardContent>
+    </MudCard>
+</MudOverlay>

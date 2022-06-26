@@ -1,10 +1,10 @@
-﻿@if (Picture is not null)
+﻿@if (!string.IsNullOrEmpty(Picture))
 {
     <MudAvatar Size="Size.Small" Color="Color.Primary" Image="@Picture" Alt="@UserInfo" />
 }
 else
 {
-    <MudAvatar Size="Size.Small" Color="Color.Primary" title="@UserInfo">@Initials</MudAvatar>
+    <MudAvatar Size="Size.Small" Color="Color.Secondary" title="@UserInfo">@Initials</MudAvatar>
 }
 
 @code {
