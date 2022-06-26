@@ -45,7 +45,7 @@ public record DeleteBookAction(int BookId);
 
 public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
 {
-    IList<IDisposable> Sessions = new List<IDisposable>();
+    IDisposable? Subscription;
     public IMyApplicationMudClient Client { get; }
     public ISnackbar Snackbar { get; set; }
 
@@ -67,7 +67,7 @@ public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
             Snackbar.Add("Daten wurden aktualisiert", Severity.Success);
         }
 
-        Sessions.Add(Client
+        Subscription = Client
            .BooksChangedSubscription
            .Watch(ExecutionStrategy.CacheAndNetwork)
            .Catch((Exception e) =>
@@ -80,56 +80,22 @@ public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
                dispatcher.Dispatch(new BooksLoadedWithClientErrorsAction(result.Errors));
                if (result.Data is not null)
                {
-                   dispatcher.Dispatch(new BookChangedAction(result.Data.Changed));
-                   Snackbar.Add("Daten wurden aktualisiert", Severity.Success);
-               }
-           }));
+                   var action = result.Data.Changed.Type switch
+                   {
+                       ChangeType.Added => (object)new BookAddedAction(result.Data.Changed.Book),
+                       ChangeType.Modified => (object)new BookChangedAction(result.Data.Changed.Book),
+                       ChangeType.Deleted => (object)new BookDeletedAction(result.Data.Changed.Book.Id),
+                       ChangeType val => throw new ArgumentOutOfRangeException(nameof(ChangeType), val, "Unknown Change Type")
+                   };
 
-        Sessions.Add(Client
-           .BooksAddedSubscription
-           .Watch(ExecutionStrategy.CacheAndNetwork)
-           .Catch((Exception e) =>
-           {
-               dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(e));
-               return Observable.Empty<IOperationResult<IBooksAddedSubscriptionResult>>();
-           })
-           .Subscribe(result =>
-           {
-               dispatcher.Dispatch(new BooksLoadedWithClientErrorsAction(result.Errors));
-               if (result.Data is not null)
-               {
-                   dispatcher.Dispatch(new BookAddedAction(result.Data.Added));
+                   dispatcher.Dispatch(action);
                    Snackbar.Add("Daten wurden aktualisiert", Severity.Success);
                }
-           }));
-
-        Sessions.Add(Client
-           .BooksDeletedSubscription
-           .Watch(ExecutionStrategy.CacheAndNetwork)
-           .Catch((Exception e) =>
-           {
-               dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(e));
-               return Observable.Empty<IOperationResult<IBooksDeletedSubscriptionResult>>();
-           })
-           .Subscribe(result =>
-           {
-               dispatcher.Dispatch(new BooksLoadedWithClientErrorsAction(result.Errors));
-               if (result.Data is not null)
-               {
-                   dispatcher.Dispatch(new BookDeletedAction(result.Data.Deleted.Id));
-                   Snackbar.Add("Daten wurden aktualisiert", Severity.Success);
-               }
-           }));
+           });
     }
 
     public void Dispose()
-    {
-        foreach (var disposable in Sessions)
-        {
-            disposable.Dispose();
-        }
-        Sessions.Clear();
-    }
+        => Subscription?.Dispose();
 }
 
 public record AddBookAction();
@@ -267,7 +233,7 @@ public record BookEffects(IMyApplicationMudClient Client, IDialogService DialogS
         var dialog = DialogService.Show<BooksDialog>("Neues Buch", new DialogOptions()
         {
             CloseOnEscapeKey = true,
-            Position = DialogPosition.TopLeft,
+            Position = DialogPosition.TopCenter,
             MaxWidth = MaxWidth.Medium,
             FullWidth = true
         });
@@ -293,7 +259,7 @@ public record BookEffects(IMyApplicationMudClient Client, IDialogService DialogS
         var dialog = DialogService.Show<BooksDialog>("Buch bearbeiten", new DialogOptions()
         {
             CloseOnEscapeKey = true,
-            Position = DialogPosition.TopLeft,
+            Position = DialogPosition.TopCenter,
             MaxWidth = MaxWidth.Medium,
             FullWidth = true
         });
@@ -319,7 +285,12 @@ public record BookEffects(IMyApplicationMudClient Client, IDialogService DialogS
         }
         else
         {
-            var result = await Client.AddBook.ExecuteAsync(action.BookModel);
+            //TODO: strawberry shake does not format body correctly
+            var result = await Client.AddBook.ExecuteAsync(new BookModelInput
+            {
+                Title = action.BookModel.Title,
+                AuthorId = action.BookModel.AuthorId
+            });
             try
             {
                 result.EnsureNoErrors();

@@ -9,6 +9,7 @@ namespace MyApplicationMud.GraphQL.State
         private readonly global::StrawberryShake.IEntityStore _entityStore;
         private readonly global::StrawberryShake.IEntityIdSerializer _idSerializer;
         private readonly global::StrawberryShake.IOperationResultDataFactory<global::MyApplicationMud.GraphQL.IBooksChangedSubscriptionResult> _resultDataFactory;
+        private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::MyApplicationMud.GraphQL.ChangeType> _changeTypeParser;
         private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.Int32, global::System.Int32> _intParser;
         private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.String> _stringParser;
         public BooksChangedSubscriptionBuilder(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityIdSerializer idSerializer, global::StrawberryShake.IOperationResultDataFactory<global::MyApplicationMud.GraphQL.IBooksChangedSubscriptionResult> resultDataFactory, global::StrawberryShake.Serialization.ISerializerResolver serializerResolver)
@@ -16,6 +17,7 @@ namespace MyApplicationMud.GraphQL.State
             _entityStore = entityStore ?? throw new global::System.ArgumentNullException(nameof(entityStore));
             _idSerializer = idSerializer ?? throw new global::System.ArgumentNullException(nameof(idSerializer));
             _resultDataFactory = resultDataFactory ?? throw new global::System.ArgumentNullException(nameof(resultDataFactory));
+            _changeTypeParser = serializerResolver.GetLeafValueParser<global::System.String, global::MyApplicationMud.GraphQL.ChangeType>("ChangeType") ?? throw new global::System.ArgumentException("No serializer for type `ChangeType` found.");
             _intParser = serializerResolver.GetLeafValueParser<global::System.Int32, global::System.Int32>("Int") ?? throw new global::System.ArgumentException("No serializer for type `Int` found.");
             _stringParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.String>("String") ?? throw new global::System.ArgumentException("No serializer for type `String` found.");
         }
@@ -65,17 +67,43 @@ namespace MyApplicationMud.GraphQL.State
         {
             var entityIds = new global::System.Collections.Generic.HashSet<global::StrawberryShake.EntityId>();
             global::StrawberryShake.IEntityStoreSnapshot snapshot = default !;
-            global::StrawberryShake.EntityId changedId = default !;
+            global::MyApplicationMud.GraphQL.State.BookChangedPayloadData changedId = default !;
             _entityStore.Update(session =>
             {
-                changedId = UpdateNonNullableIBooksChangedSubscription_ChangedEntity(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "changed"), entityIds);
+                changedId = DeserializeNonNullableIBooksChangedSubscription_Changed(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "changed"), entityIds);
                 snapshot = session.CurrentSnapshot;
             });
             var resultInfo = new BooksChangedSubscriptionResultInfo(changedId, entityIds, snapshot.Version);
             return (_resultDataFactory.Create(resultInfo), resultInfo);
         }
 
-        private global::StrawberryShake.EntityId UpdateNonNullableIBooksChangedSubscription_ChangedEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
+        private global::MyApplicationMud.GraphQL.State.BookChangedPayloadData DeserializeNonNullableIBooksChangedSubscription_Changed(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            var typename = obj.Value.GetProperty("__typename").GetString();
+            if (typename?.Equals("BookChangedPayload", global::System.StringComparison.Ordinal) ?? false)
+            {
+                return new global::MyApplicationMud.GraphQL.State.BookChangedPayloadData(typename, type: DeserializeNonNullableChangeType(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "type")), book: UpdateNonNullableIBooksChangedSubscription_Changed_BookEntity(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "book"), entityIds));
+            }
+
+            throw new global::System.NotSupportedException();
+        }
+
+        private global::MyApplicationMud.GraphQL.ChangeType DeserializeNonNullableChangeType(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            return _changeTypeParser.Parse(obj.Value.GetString()!);
+        }
+
+        private global::StrawberryShake.EntityId UpdateNonNullableIBooksChangedSubscription_Changed_BookEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
         {
             if (!obj.HasValue)
             {

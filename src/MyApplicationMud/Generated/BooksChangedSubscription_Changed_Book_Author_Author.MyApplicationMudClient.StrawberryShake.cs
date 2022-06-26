@@ -4,16 +4,16 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class BooksAddedSubscriptionResult : global::System.IEquatable<BooksAddedSubscriptionResult>, IBooksAddedSubscriptionResult
+    public partial class BooksChangedSubscription_Changed_Book_Author_Author : global::System.IEquatable<BooksChangedSubscription_Changed_Book_Author_Author>, IBooksChangedSubscription_Changed_Book_Author_Author
     {
-        public BooksAddedSubscriptionResult(global::MyApplicationMud.GraphQL.IBooksAddedSubscription_Added added)
+        public BooksChangedSubscription_Changed_Book_Author_Author(global::System.String name)
         {
-            Added = added;
+            Name = name;
         }
 
-        public global::MyApplicationMud.GraphQL.IBooksAddedSubscription_Added Added { get; }
+        public global::System.String Name { get; }
 
-        public virtual global::System.Boolean Equals(BooksAddedSubscriptionResult? other)
+        public virtual global::System.Boolean Equals(BooksChangedSubscription_Changed_Book_Author_Author? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -30,7 +30,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return (Added.Equals(other.Added));
+            return (Name.Equals(other.Name));
         }
 
         public override global::System.Boolean Equals(global::System.Object? obj)
@@ -50,7 +50,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return Equals((BooksAddedSubscriptionResult)obj);
+            return Equals((BooksChangedSubscription_Changed_Book_Author_Author)obj);
         }
 
         public override global::System.Int32 GetHashCode()
@@ -58,7 +58,7 @@ namespace MyApplicationMud.GraphQL
             unchecked
             {
                 int hash = 5;
-                hash ^= 397 * Added.GetHashCode();
+                hash ^= 397 * Name.GetHashCode();
                 return hash;
             }
         }

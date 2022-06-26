@@ -28,7 +28,7 @@ public class Query
         => FakeData.authors.AsQueryable();
 }
 
-public record BookModel(string Title, int AuthorId);
+public record BookModel(string Title, [ID(nameof(Author))]int AuthorId);
 
 public record ServerInfo([GraphQLDescription("Returns the server time in UTC")] DateTime ServerTime);
 

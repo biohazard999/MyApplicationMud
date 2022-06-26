@@ -13,7 +13,7 @@ public class Mutations
         var editBook = new Book(bookId, book.Title, b.Image, FakeData.authors.First(m => m.Id == book.AuthorId));
         FakeData.books.Insert(index, editBook);
 
-        await sender.SendAsync(nameof(Subscriptions.BookChanged), editBook);
+        await sender.SendAsync(nameof(Subscriptions.BookChanged), new BookChangedPayload(editBook, ChangeType.Modified));
 
         return editBook;
     }
@@ -25,21 +25,21 @@ public class Mutations
             Title = book.Title,
             Author = FakeData.authors.First(m => m.Id == book.AuthorId)
         };
-        
+
         FakeData.books.Add(newBook);
 
-        await sender.SendAsync(nameof(Subscriptions.BookAdded), newBook);
+        await sender.SendAsync(nameof(Subscriptions.BookChanged), new BookChangedPayload(newBook, ChangeType.Added));
 
         return newBook;
     }
 
-    public async Task<bool> DeleteBook([ID(nameof(Book))]int bookId, [Service] ITopicEventSender sender)
+    public async Task<bool> DeleteBook([ID(nameof(Book))] int bookId, [Service] ITopicEventSender sender)
     {
         var bookDeleted = FakeData.books.First(m => m.Id == bookId);
 
         FakeData.books.Remove(bookDeleted);
 
-        await sender.SendAsync(nameof(Subscriptions.BookDeleted), bookDeleted);
+        await sender.SendAsync(nameof(Subscriptions.BookChanged), new BookChangedPayload(bookDeleted, ChangeType.Modified));
 
         return true;
     }

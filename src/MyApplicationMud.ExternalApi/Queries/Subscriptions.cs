@@ -3,11 +3,14 @@
 public class Subscriptions
 {
     [Subscribe]
-    public Book BookChanged([EventMessage] Book book) => book;
+    public BookChangedPayload BookChanged([EventMessage] BookChangedPayload book) => book;
+}
 
-    [Subscribe]
-    public Book BookAdded([EventMessage] Book book) => book;
+public record BookChangedPayload(Book book, ChangeType Type);
 
-    [Subscribe]
-    public Book BookDeleted([EventMessage] Book book) => book;
+public enum ChangeType
+{
+    Added,
+    Modified,
+    Deleted
 }

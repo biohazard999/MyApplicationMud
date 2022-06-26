@@ -4,16 +4,19 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class BooksChangedSubscription_Changed_Author_Author : global::System.IEquatable<BooksChangedSubscription_Changed_Author_Author>, IBooksChangedSubscription_Changed_Author_Author
+    public partial class BooksChangedSubscription_Changed_BookChangedPayload : global::System.IEquatable<BooksChangedSubscription_Changed_BookChangedPayload>, IBooksChangedSubscription_Changed_BookChangedPayload
     {
-        public BooksChangedSubscription_Changed_Author_Author(global::System.String name)
+        public BooksChangedSubscription_Changed_BookChangedPayload(global::MyApplicationMud.GraphQL.ChangeType type, global::MyApplicationMud.GraphQL.IBooksChangedSubscription_Changed_Book book)
         {
-            Name = name;
+            Type = type;
+            Book = book;
         }
 
-        public global::System.String Name { get; }
+        public global::MyApplicationMud.GraphQL.ChangeType Type { get; }
 
-        public virtual global::System.Boolean Equals(BooksChangedSubscription_Changed_Author_Author? other)
+        public global::MyApplicationMud.GraphQL.IBooksChangedSubscription_Changed_Book Book { get; }
+
+        public virtual global::System.Boolean Equals(BooksChangedSubscription_Changed_BookChangedPayload? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -30,7 +33,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return (Name.Equals(other.Name));
+            return (Type.Equals(other.Type)) && Book.Equals(other.Book);
         }
 
         public override global::System.Boolean Equals(global::System.Object? obj)
@@ -50,7 +53,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return Equals((BooksChangedSubscription_Changed_Author_Author)obj);
+            return Equals((BooksChangedSubscription_Changed_BookChangedPayload)obj);
         }
 
         public override global::System.Int32 GetHashCode()
@@ -58,7 +61,8 @@ namespace MyApplicationMud.GraphQL
             unchecked
             {
                 int hash = 5;
-                hash ^= 397 * Name.GetHashCode();
+                hash ^= 397 * Type.GetHashCode();
+                hash ^= 397 * Book.GetHashCode();
                 return hash;
             }
         }

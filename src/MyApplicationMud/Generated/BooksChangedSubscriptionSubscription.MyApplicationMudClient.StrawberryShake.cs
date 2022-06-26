@@ -9,9 +9,13 @@ namespace MyApplicationMud.GraphQL
     /// subscription BooksChangedSubscription {
     ///   changed: bookChanged {
     ///     __typename
-    ///     ... BookListInfo
-    ///     ... on Book {
-    ///       id
+    ///     type
+    ///     book {
+    ///       __typename
+    ///       ... BookListInfo
+    ///       ... on Book {
+    ///         id
+    ///       }
     ///     }
     ///   }
     /// }

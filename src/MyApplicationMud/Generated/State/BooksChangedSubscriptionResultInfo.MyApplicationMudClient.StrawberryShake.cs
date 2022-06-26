@@ -8,14 +8,14 @@ namespace MyApplicationMud.GraphQL.State
     {
         private readonly global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> _entityIds;
         private readonly global::System.UInt64 _version;
-        public BooksChangedSubscriptionResultInfo(global::StrawberryShake.EntityId changed, global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> entityIds, global::System.UInt64 version)
+        public BooksChangedSubscriptionResultInfo(global::MyApplicationMud.GraphQL.State.BookChangedPayloadData changed, global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> entityIds, global::System.UInt64 version)
         {
             Changed = changed;
             _entityIds = entityIds ?? throw new global::System.ArgumentNullException(nameof(entityIds));
             _version = version;
         }
 
-        public global::StrawberryShake.EntityId Changed { get; }
+        public global::MyApplicationMud.GraphQL.State.BookChangedPayloadData Changed { get; }
 
         public global::System.Collections.Generic.IReadOnlyCollection<global::StrawberryShake.EntityId> EntityIds => _entityIds;
         public global::System.UInt64 Version => _version;
