@@ -32,12 +32,17 @@ services
     .AddDefaultTransactionScopeHandler()
     .AddHttpRequestInterceptor<HttpRequestInterceptor>()
     .AddAuthorization()
+    .AddInMemorySubscriptions()
     .AddProjections()
     .AddFiltering()
     .AddSorting()
     .AddQueryType<Query>()
     .AddMutationType<Mutations>()
     .AddSubscriptionType<Subscriptions>()
+
+    //TODO: Relay
+    //.AddGlobalObjectIdentification()
+    //.AddQueryFieldToMutationPayloads()
 ;
 
 var app = builder.Build();

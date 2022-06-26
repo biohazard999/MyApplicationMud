@@ -4,9 +4,9 @@
 namespace MyApplicationMud.GraphQL
 {
     /// <summary>
-    /// Represents the operation service of the BooksSubscription GraphQL operation
+    /// Represents the operation service of the BooksChangedSubscription GraphQL operation
     /// <code>
-    /// subscription BooksSubscription {
+    /// subscription BooksChangedSubscription {
     ///   changed: bookChanged {
     ///     __typename
     ///     ... BookListInfo
@@ -31,16 +31,16 @@ namespace MyApplicationMud.GraphQL
     /// </code>
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class BooksSubscriptionSubscription : global::MyApplicationMud.GraphQL.IBooksSubscriptionSubscription
+    public partial class BooksChangedSubscriptionSubscription : global::MyApplicationMud.GraphQL.IBooksChangedSubscriptionSubscription
     {
-        private readonly global::StrawberryShake.IOperationExecutor<IBooksSubscriptionResult> _operationExecutor;
-        public BooksSubscriptionSubscription(global::StrawberryShake.IOperationExecutor<IBooksSubscriptionResult> operationExecutor)
+        private readonly global::StrawberryShake.IOperationExecutor<IBooksChangedSubscriptionResult> _operationExecutor;
+        public BooksChangedSubscriptionSubscription(global::StrawberryShake.IOperationExecutor<IBooksChangedSubscriptionResult> operationExecutor)
         {
             _operationExecutor = operationExecutor ?? throw new global::System.ArgumentNullException(nameof(operationExecutor));
         }
 
-        global::System.Type global::StrawberryShake.IOperationRequestFactory.ResultType => typeof(IBooksSubscriptionResult);
-        public global::System.IObservable<global::StrawberryShake.IOperationResult<IBooksSubscriptionResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null)
+        global::System.Type global::StrawberryShake.IOperationRequestFactory.ResultType => typeof(IBooksChangedSubscriptionResult);
+        public global::System.IObservable<global::StrawberryShake.IOperationResult<IBooksChangedSubscriptionResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null)
         {
             var request = CreateRequest();
             return _operationExecutor.Watch(request, strategy);
@@ -53,7 +53,7 @@ namespace MyApplicationMud.GraphQL
 
         private global::StrawberryShake.OperationRequest CreateRequest(global::System.Collections.Generic.IReadOnlyDictionary<global::System.String, global::System.Object?>? variables)
         {
-            return new global::StrawberryShake.OperationRequest(id: BooksSubscriptionSubscriptionDocument.Instance.Hash.Value, name: "BooksSubscription", document: BooksSubscriptionSubscriptionDocument.Instance, strategy: global::StrawberryShake.RequestStrategy.Default);
+            return new global::StrawberryShake.OperationRequest(id: BooksChangedSubscriptionSubscriptionDocument.Instance.Hash.Value, name: "BooksChangedSubscription", document: BooksChangedSubscriptionSubscriptionDocument.Instance, strategy: global::StrawberryShake.RequestStrategy.Default);
         }
 
         global::StrawberryShake.OperationRequest global::StrawberryShake.IOperationRequestFactory.Create(global::System.Collections.Generic.IReadOnlyDictionary<global::System.String, global::System.Object?>? variables)

@@ -1,0 +1,27 @@
+﻿@inject IState<BooksState> State
+@inject IDispatcher Dispatcher
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@State.Value.EditBook">
+            <MudTextField @bind-Value="State.Value.EditBook.Title" Label="Title" Required="true" RequiredError="Title is required!" />
+            <MudSelect @bind-Value="State.Value.EditBook.AuthorId" Label="Author" AnchorOrigin="Origin.BottomCenter" RequiredError="Author is required">
+                @foreach (var author in State.Value.Authors)
+                {
+                    <MudSelectItem Value="@author.Id">@author.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Abbrechen</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Speichern</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = default!;
+
+    void Submit() => Dispatcher.Dispatch(new SaveBookAction(State.Value.BookId, State.Value.EditBook));
+    void Cancel() => Dispatcher.Dispatch(new CloseDialogAction(State.Value.CurrentDialog));
+}

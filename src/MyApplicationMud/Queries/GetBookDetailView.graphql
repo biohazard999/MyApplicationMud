@@ -7,7 +7,13 @@
 	}
 }
 
-mutation UpdateBook($bookId: Int!, $book: BookModelInput!) {
+query GetBookAuthors {	
+	authors: authors {
+		...AuthorInfo
+	}
+}
+
+mutation UpdateBook($bookId: ID!, $book: BookModelInput!) {
 	editBook(bookId: $bookId, book: $book) {
 		...BookInfo
 	}
@@ -19,7 +25,7 @@ mutation AddBook($book: BookModelInput!) {
 	}
 }
 
-mutation DeleteBook($bookId: Int!) {
+mutation DeleteBook($bookId: ID!) {
 	deleteBook(bookId: $bookId)
 }
 

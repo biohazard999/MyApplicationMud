@@ -4,14 +4,14 @@
 namespace MyApplicationMud.GraphQL.State
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class BooksSubscriptionBuilder : global::StrawberryShake.IOperationResultBuilder<global::System.Text.Json.JsonDocument, global::MyApplicationMud.GraphQL.IBooksSubscriptionResult>
+    public partial class GetBookAuthorsBuilder : global::StrawberryShake.IOperationResultBuilder<global::System.Text.Json.JsonDocument, global::MyApplicationMud.GraphQL.IGetBookAuthorsResult>
     {
         private readonly global::StrawberryShake.IEntityStore _entityStore;
         private readonly global::StrawberryShake.IEntityIdSerializer _idSerializer;
-        private readonly global::StrawberryShake.IOperationResultDataFactory<global::MyApplicationMud.GraphQL.IBooksSubscriptionResult> _resultDataFactory;
+        private readonly global::StrawberryShake.IOperationResultDataFactory<global::MyApplicationMud.GraphQL.IGetBookAuthorsResult> _resultDataFactory;
         private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.Int32, global::System.Int32> _intParser;
         private readonly global::StrawberryShake.Serialization.ILeafValueParser<global::System.String, global::System.String> _stringParser;
-        public BooksSubscriptionBuilder(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityIdSerializer idSerializer, global::StrawberryShake.IOperationResultDataFactory<global::MyApplicationMud.GraphQL.IBooksSubscriptionResult> resultDataFactory, global::StrawberryShake.Serialization.ISerializerResolver serializerResolver)
+        public GetBookAuthorsBuilder(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityIdSerializer idSerializer, global::StrawberryShake.IOperationResultDataFactory<global::MyApplicationMud.GraphQL.IGetBookAuthorsResult> resultDataFactory, global::StrawberryShake.Serialization.ISerializerResolver serializerResolver)
         {
             _entityStore = entityStore ?? throw new global::System.ArgumentNullException(nameof(entityStore));
             _idSerializer = idSerializer ?? throw new global::System.ArgumentNullException(nameof(idSerializer));
@@ -20,9 +20,9 @@ namespace MyApplicationMud.GraphQL.State
             _stringParser = serializerResolver.GetLeafValueParser<global::System.String, global::System.String>("String") ?? throw new global::System.ArgumentException("No serializer for type `String` found.");
         }
 
-        public global::StrawberryShake.IOperationResult<IBooksSubscriptionResult> Build(global::StrawberryShake.Response<global::System.Text.Json.JsonDocument> response)
+        public global::StrawberryShake.IOperationResult<IGetBookAuthorsResult> Build(global::StrawberryShake.Response<global::System.Text.Json.JsonDocument> response)
         {
-            (IBooksSubscriptionResult Result, BooksSubscriptionResultInfo Info)? data = null;
+            (IGetBookAuthorsResult Result, GetBookAuthorsResultInfo Info)? data = null;
             global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.IClientError>? errors = null;
             if (response.Exception is null)
             {
@@ -58,24 +58,40 @@ namespace MyApplicationMud.GraphQL.State
                 }
             }
 
-            return new global::StrawberryShake.OperationResult<IBooksSubscriptionResult>(data?.Result, data?.Info, _resultDataFactory, errors);
+            return new global::StrawberryShake.OperationResult<IGetBookAuthorsResult>(data?.Result, data?.Info, _resultDataFactory, errors);
         }
 
-        private (IBooksSubscriptionResult, BooksSubscriptionResultInfo) BuildData(global::System.Text.Json.JsonElement obj)
+        private (IGetBookAuthorsResult, GetBookAuthorsResultInfo) BuildData(global::System.Text.Json.JsonElement obj)
         {
             var entityIds = new global::System.Collections.Generic.HashSet<global::StrawberryShake.EntityId>();
             global::StrawberryShake.IEntityStoreSnapshot snapshot = default !;
-            global::StrawberryShake.EntityId changedId = default !;
+            global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId> authorsId = default !;
             _entityStore.Update(session =>
             {
-                changedId = UpdateNonNullableIBooksSubscription_ChangedEntity(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "changed"), entityIds);
+                authorsId = UpdateNonNullableIGetBookAuthors_AuthorsEntityNonNullableArray(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "authors"), entityIds);
                 snapshot = session.CurrentSnapshot;
             });
-            var resultInfo = new BooksSubscriptionResultInfo(changedId, entityIds, snapshot.Version);
+            var resultInfo = new GetBookAuthorsResultInfo(authorsId, entityIds, snapshot.Version);
             return (_resultDataFactory.Create(resultInfo), resultInfo);
         }
 
-        private global::StrawberryShake.EntityId UpdateNonNullableIBooksSubscription_ChangedEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
+        private global::System.Collections.Generic.IReadOnlyList<global::StrawberryShake.EntityId> UpdateNonNullableIGetBookAuthors_AuthorsEntityNonNullableArray(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            var authors = new global::System.Collections.Generic.List<global::StrawberryShake.EntityId>();
+            foreach (global::System.Text.Json.JsonElement child in obj.Value.EnumerateArray())
+            {
+                authors.Add(UpdateNonNullableIGetBookAuthors_AuthorsEntity(session, child, entityIds));
+            }
+
+            return authors;
+        }
+
+        private global::StrawberryShake.EntityId UpdateNonNullableIGetBookAuthors_AuthorsEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
         {
             if (!obj.HasValue)
             {
@@ -84,15 +100,15 @@ namespace MyApplicationMud.GraphQL.State
 
             global::StrawberryShake.EntityId entityId = _idSerializer.Parse(obj.Value);
             entityIds.Add(entityId);
-            if (entityId.Name.Equals("Book", global::System.StringComparison.Ordinal))
+            if (entityId.Name.Equals("Author", global::System.StringComparison.Ordinal))
             {
-                if (session.CurrentSnapshot.TryGetEntity(entityId, out global::MyApplicationMud.GraphQL.State.BookEntity? entity))
+                if (session.CurrentSnapshot.TryGetEntity(entityId, out global::MyApplicationMud.GraphQL.State.AuthorEntity? entity))
                 {
-                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.BookEntity(DeserializeNonNullableInt32(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "id")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "title")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "image")), UpdateNonNullableIGetBooksListView_Items_AuthorEntity(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "author"), entityIds)));
+                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.AuthorEntity(DeserializeNonNullableInt32(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "id")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "name"))));
                 }
                 else
                 {
-                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.BookEntity(DeserializeNonNullableInt32(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "id")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "title")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "image")), UpdateNonNullableIGetBooksListView_Items_AuthorEntity(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "author"), entityIds)));
+                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.AuthorEntity(DeserializeNonNullableInt32(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "id")), DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "name"))));
                 }
 
                 return entityId;
@@ -119,32 +135,6 @@ namespace MyApplicationMud.GraphQL.State
             }
 
             return _stringParser.Parse(obj.Value.GetString()!);
-        }
-
-        private global::StrawberryShake.EntityId UpdateNonNullableIGetBooksListView_Items_AuthorEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
-        {
-            if (!obj.HasValue)
-            {
-                throw new global::System.ArgumentNullException();
-            }
-
-            global::StrawberryShake.EntityId entityId = _idSerializer.Parse(obj.Value);
-            entityIds.Add(entityId);
-            if (entityId.Name.Equals("Author", global::System.StringComparison.Ordinal))
-            {
-                if (session.CurrentSnapshot.TryGetEntity(entityId, out global::MyApplicationMud.GraphQL.State.AuthorEntity? entity))
-                {
-                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.AuthorEntity(entity.Id, DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "name"))));
-                }
-                else
-                {
-                    session.SetEntity(entityId, new global::MyApplicationMud.GraphQL.State.AuthorEntity(default !, DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "name"))));
-                }
-
-                return entityId;
-            }
-
-            throw new global::System.NotSupportedException();
         }
     }
 }

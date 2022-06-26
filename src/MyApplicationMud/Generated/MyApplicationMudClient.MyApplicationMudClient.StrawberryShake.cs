@@ -10,27 +10,36 @@ namespace MyApplicationMud.GraphQL
     public partial class MyApplicationMudClient : global::MyApplicationMud.GraphQL.IMyApplicationMudClient
     {
         private readonly global::MyApplicationMud.GraphQL.IGetBooksDetailViewQuery _getBooksDetailView;
+        private readonly global::MyApplicationMud.GraphQL.IGetBookAuthorsQuery _getBookAuthors;
         private readonly global::MyApplicationMud.GraphQL.IUpdateBookMutation _updateBook;
         private readonly global::MyApplicationMud.GraphQL.IAddBookMutation _addBook;
         private readonly global::MyApplicationMud.GraphQL.IDeleteBookMutation _deleteBook;
         private readonly global::MyApplicationMud.GraphQL.IGetBooksListViewQuery _getBooksListView;
-        private readonly global::MyApplicationMud.GraphQL.IBooksSubscriptionSubscription _booksSubscription;
-        public MyApplicationMudClient(global::MyApplicationMud.GraphQL.IGetBooksDetailViewQuery getBooksDetailView, global::MyApplicationMud.GraphQL.IUpdateBookMutation updateBook, global::MyApplicationMud.GraphQL.IAddBookMutation addBook, global::MyApplicationMud.GraphQL.IDeleteBookMutation deleteBook, global::MyApplicationMud.GraphQL.IGetBooksListViewQuery getBooksListView, global::MyApplicationMud.GraphQL.IBooksSubscriptionSubscription booksSubscription)
+        private readonly global::MyApplicationMud.GraphQL.IBooksChangedSubscriptionSubscription _booksChangedSubscription;
+        private readonly global::MyApplicationMud.GraphQL.IBooksAddedSubscriptionSubscription _booksAddedSubscription;
+        private readonly global::MyApplicationMud.GraphQL.IBooksDeletedSubscriptionSubscription _booksDeletedSubscription;
+        public MyApplicationMudClient(global::MyApplicationMud.GraphQL.IGetBooksDetailViewQuery getBooksDetailView, global::MyApplicationMud.GraphQL.IGetBookAuthorsQuery getBookAuthors, global::MyApplicationMud.GraphQL.IUpdateBookMutation updateBook, global::MyApplicationMud.GraphQL.IAddBookMutation addBook, global::MyApplicationMud.GraphQL.IDeleteBookMutation deleteBook, global::MyApplicationMud.GraphQL.IGetBooksListViewQuery getBooksListView, global::MyApplicationMud.GraphQL.IBooksChangedSubscriptionSubscription booksChangedSubscription, global::MyApplicationMud.GraphQL.IBooksAddedSubscriptionSubscription booksAddedSubscription, global::MyApplicationMud.GraphQL.IBooksDeletedSubscriptionSubscription booksDeletedSubscription)
         {
             _getBooksDetailView = getBooksDetailView ?? throw new global::System.ArgumentNullException(nameof(getBooksDetailView));
+            _getBookAuthors = getBookAuthors ?? throw new global::System.ArgumentNullException(nameof(getBookAuthors));
             _updateBook = updateBook ?? throw new global::System.ArgumentNullException(nameof(updateBook));
             _addBook = addBook ?? throw new global::System.ArgumentNullException(nameof(addBook));
             _deleteBook = deleteBook ?? throw new global::System.ArgumentNullException(nameof(deleteBook));
             _getBooksListView = getBooksListView ?? throw new global::System.ArgumentNullException(nameof(getBooksListView));
-            _booksSubscription = booksSubscription ?? throw new global::System.ArgumentNullException(nameof(booksSubscription));
+            _booksChangedSubscription = booksChangedSubscription ?? throw new global::System.ArgumentNullException(nameof(booksChangedSubscription));
+            _booksAddedSubscription = booksAddedSubscription ?? throw new global::System.ArgumentNullException(nameof(booksAddedSubscription));
+            _booksDeletedSubscription = booksDeletedSubscription ?? throw new global::System.ArgumentNullException(nameof(booksDeletedSubscription));
         }
 
         public static global::System.String ClientName => "MyApplicationMudClient";
         public global::MyApplicationMud.GraphQL.IGetBooksDetailViewQuery GetBooksDetailView => _getBooksDetailView;
+        public global::MyApplicationMud.GraphQL.IGetBookAuthorsQuery GetBookAuthors => _getBookAuthors;
         public global::MyApplicationMud.GraphQL.IUpdateBookMutation UpdateBook => _updateBook;
         public global::MyApplicationMud.GraphQL.IAddBookMutation AddBook => _addBook;
         public global::MyApplicationMud.GraphQL.IDeleteBookMutation DeleteBook => _deleteBook;
         public global::MyApplicationMud.GraphQL.IGetBooksListViewQuery GetBooksListView => _getBooksListView;
-        public global::MyApplicationMud.GraphQL.IBooksSubscriptionSubscription BooksSubscription => _booksSubscription;
+        public global::MyApplicationMud.GraphQL.IBooksChangedSubscriptionSubscription BooksChangedSubscription => _booksChangedSubscription;
+        public global::MyApplicationMud.GraphQL.IBooksAddedSubscriptionSubscription BooksAddedSubscription => _booksAddedSubscription;
+        public global::MyApplicationMud.GraphQL.IBooksDeletedSubscriptionSubscription BooksDeletedSubscription => _booksDeletedSubscription;
     }
 }

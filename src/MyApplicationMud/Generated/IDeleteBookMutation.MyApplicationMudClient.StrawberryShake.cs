@@ -6,7 +6,7 @@ namespace MyApplicationMud.GraphQL
     /// <summary>
     /// Represents the operation service of the DeleteBook GraphQL operation
     /// <code>
-    /// mutation DeleteBook($bookId: Int!) {
+    /// mutation DeleteBook($bookId: ID!) {
     ///   deleteBook(bookId: $bookId)
     /// }
     /// </code>
@@ -14,7 +14,7 @@ namespace MyApplicationMud.GraphQL
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
     public partial interface IDeleteBookMutation : global::StrawberryShake.IOperationRequestFactory
     {
-        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IDeleteBookResult>> ExecuteAsync(global::System.Int32 bookId, global::System.Threading.CancellationToken cancellationToken = default);
-        global::System.IObservable<global::StrawberryShake.IOperationResult<IDeleteBookResult>> Watch(global::System.Int32 bookId, global::StrawberryShake.ExecutionStrategy? strategy = null);
+        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IDeleteBookResult>> ExecuteAsync(global::System.String bookId, global::System.Threading.CancellationToken cancellationToken = default);
+        global::System.IObservable<global::StrawberryShake.IOperationResult<IDeleteBookResult>> Watch(global::System.String bookId, global::StrawberryShake.ExecutionStrategy? strategy = null);
     }
 }

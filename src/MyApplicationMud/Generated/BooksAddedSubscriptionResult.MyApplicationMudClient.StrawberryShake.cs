@@ -4,16 +4,16 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class BooksSubscriptionResult : global::System.IEquatable<BooksSubscriptionResult>, IBooksSubscriptionResult
+    public partial class BooksAddedSubscriptionResult : global::System.IEquatable<BooksAddedSubscriptionResult>, IBooksAddedSubscriptionResult
     {
-        public BooksSubscriptionResult(global::MyApplicationMud.GraphQL.IBooksSubscription_Changed changed)
+        public BooksAddedSubscriptionResult(global::MyApplicationMud.GraphQL.IBooksAddedSubscription_Added added)
         {
-            Changed = changed;
+            Added = added;
         }
 
-        public global::MyApplicationMud.GraphQL.IBooksSubscription_Changed Changed { get; }
+        public global::MyApplicationMud.GraphQL.IBooksAddedSubscription_Added Added { get; }
 
-        public virtual global::System.Boolean Equals(BooksSubscriptionResult? other)
+        public virtual global::System.Boolean Equals(BooksAddedSubscriptionResult? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -30,7 +30,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return (Changed.Equals(other.Changed));
+            return (Added.Equals(other.Added));
         }
 
         public override global::System.Boolean Equals(global::System.Object? obj)
@@ -50,7 +50,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return Equals((BooksSubscriptionResult)obj);
+            return Equals((BooksAddedSubscriptionResult)obj);
         }
 
         public override global::System.Int32 GetHashCode()
@@ -58,7 +58,7 @@ namespace MyApplicationMud.GraphQL
             unchecked
             {
                 int hash = 5;
-                hash ^= 397 * Changed.GetHashCode();
+                hash ^= 397 * Added.GetHashCode();
                 return hash;
             }
         }

@@ -4,7 +4,7 @@ namespace MyApplicationMud.ExternalApi.Queries;
 
 public class Mutations
 {
-    public async Task<Book> EditBook(int bookId, BookModel book, [Service] ITopicEventSender sender)
+    public async Task<Book> EditBook([ID(nameof(Book))] int bookId, BookModel book, [Service] ITopicEventSender sender)
     {
         var b = FakeData.books.First(m => m.Id == bookId);
 
@@ -28,19 +28,17 @@ public class Mutations
         
         FakeData.books.Add(newBook);
 
-        await sender.SendAsync(nameof(Subscriptions.BookChanged), newBook);
         await sender.SendAsync(nameof(Subscriptions.BookAdded), newBook);
 
         return newBook;
     }
 
-    public async Task<bool> DeleteBook(int bookId, [Service] ITopicEventSender sender)
+    public async Task<bool> DeleteBook([ID(nameof(Book))]int bookId, [Service] ITopicEventSender sender)
     {
         var bookDeleted = FakeData.books.First(m => m.Id == bookId);
 
         FakeData.books.Remove(bookDeleted);
 
-        await sender.SendAsync(nameof(Subscriptions.BookChanged), bookDeleted);
         await sender.SendAsync(nameof(Subscriptions.BookDeleted), bookDeleted);
 
         return true;

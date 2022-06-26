@@ -11,6 +11,8 @@ namespace MyApplicationMud.GraphQL
     {
         global::MyApplicationMud.GraphQL.IGetBooksDetailViewQuery GetBooksDetailView { get; }
 
+        global::MyApplicationMud.GraphQL.IGetBookAuthorsQuery GetBookAuthors { get; }
+
         global::MyApplicationMud.GraphQL.IUpdateBookMutation UpdateBook { get; }
 
         global::MyApplicationMud.GraphQL.IAddBookMutation AddBook { get; }
@@ -19,6 +21,10 @@ namespace MyApplicationMud.GraphQL
 
         global::MyApplicationMud.GraphQL.IGetBooksListViewQuery GetBooksListView { get; }
 
-        global::MyApplicationMud.GraphQL.IBooksSubscriptionSubscription BooksSubscription { get; }
+        global::MyApplicationMud.GraphQL.IBooksChangedSubscriptionSubscription BooksChangedSubscription { get; }
+
+        global::MyApplicationMud.GraphQL.IBooksAddedSubscriptionSubscription BooksAddedSubscription { get; }
+
+        global::MyApplicationMud.GraphQL.IBooksDeletedSubscriptionSubscription BooksDeletedSubscription { get; }
     }
 }

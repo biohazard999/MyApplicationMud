@@ -4,8 +4,20 @@
 	}
 }
 
-subscription BooksSubscription {
+subscription BooksChangedSubscription {
 	changed: bookChanged {
+		...BookListInfo		
+	}
+}
+
+subscription BooksAddedSubscription {
+	added: bookAdded {
+		...BookListInfo		
+	}
+}
+
+subscription BooksDeletedSubscription {
+	deleted: bookDeleted {
 		...BookListInfo		
 	}
 }

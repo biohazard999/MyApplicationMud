@@ -70,7 +70,7 @@
 
     public async Task Submit()
     {
-        await Client.UpdateBook.ExecuteAsync(Id, Input!);
+        await Client.UpdateBook.ExecuteAsync(Id.ToString(), Input!);
         Navigation.NavigateTo("books");
     }
 }

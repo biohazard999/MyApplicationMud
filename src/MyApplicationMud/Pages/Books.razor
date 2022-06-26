@@ -5,11 +5,11 @@
 @inject IDispatcher Dispatcher
 
 <PageTitle>Books</PageTitle>
-<MudText Typo="Typo.h3" GutterBottom="true">Books</MudText>
+<MudText Typo="Typo.h3" GutterBottom="true">Books (@State.Value.Items.Count)</MudText>
 
 <div style="position: fixed; bottom: 2rem; right: 2rem;">
     <MudFab Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Material.Filled.Refresh" Label="Aktualisieren" OnClick="() => Dispatcher.Dispatch(new RefreshBooksAction())" />
-    <MudFab Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Material.Filled.Add" Label="Neu" />
+    <MudFab Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Material.Filled.Add" Label="Neu" OnClick="() => Dispatcher.Dispatch(new AddBookAction())" />
 </div>
 
 @if (State.Value.IsLoading)
@@ -74,10 +74,8 @@
                         <MudText Typo="Typo.body2">@item.Author.Name</MudText>
                     </MudCardContent>
                     <MudCardActions>
-                        @{
-                            var url = $"book/{item.Id}";
-                        }
-                        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@url">Edit</MudButton>
+                        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dispatcher.Dispatch(new DeleteBookAction(item.Id))">Löschen</MudButton>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => Dispatcher.Dispatch(new EditBookAction(item.Id))">Bearbeiten</MudButton>
                     </MudCardActions>
                 </MudCard>
             </MudItem>

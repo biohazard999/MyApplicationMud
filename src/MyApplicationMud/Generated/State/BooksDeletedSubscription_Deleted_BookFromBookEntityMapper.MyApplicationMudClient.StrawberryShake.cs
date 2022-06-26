@@ -4,24 +4,24 @@
 namespace MyApplicationMud.GraphQL.State
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class BooksSubscription_Changed_BookFromBookEntityMapper : global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.BookEntity, BooksSubscription_Changed_Book>
+    public partial class BooksDeletedSubscription_Deleted_BookFromBookEntityMapper : global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.BookEntity, BooksDeletedSubscription_Deleted_Book>
     {
         private readonly global::StrawberryShake.IEntityStore _entityStore;
         private readonly global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.AuthorEntity, GetBooksListView_Items_Author_Author> _getBooksListView_Items_Author_AuthorFromAuthorEntityMapper;
-        public BooksSubscription_Changed_BookFromBookEntityMapper(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.AuthorEntity, GetBooksListView_Items_Author_Author> getBooksListView_Items_Author_AuthorFromAuthorEntityMapper)
+        public BooksDeletedSubscription_Deleted_BookFromBookEntityMapper(global::StrawberryShake.IEntityStore entityStore, global::StrawberryShake.IEntityMapper<global::MyApplicationMud.GraphQL.State.AuthorEntity, GetBooksListView_Items_Author_Author> getBooksListView_Items_Author_AuthorFromAuthorEntityMapper)
         {
             _entityStore = entityStore ?? throw new global::System.ArgumentNullException(nameof(entityStore));
             _getBooksListView_Items_Author_AuthorFromAuthorEntityMapper = getBooksListView_Items_Author_AuthorFromAuthorEntityMapper ?? throw new global::System.ArgumentNullException(nameof(getBooksListView_Items_Author_AuthorFromAuthorEntityMapper));
         }
 
-        public BooksSubscription_Changed_Book Map(global::MyApplicationMud.GraphQL.State.BookEntity entity, global::StrawberryShake.IEntityStoreSnapshot? snapshot = null)
+        public BooksDeletedSubscription_Deleted_Book Map(global::MyApplicationMud.GraphQL.State.BookEntity entity, global::StrawberryShake.IEntityStoreSnapshot? snapshot = null)
         {
             if (snapshot is null)
             {
                 snapshot = _entityStore.CurrentSnapshot;
             }
 
-            return new BooksSubscription_Changed_Book(entity.Id, entity.Title, entity.Image, MapNonNullableIGetBooksListView_Items_Author(entity.Author, snapshot));
+            return new BooksDeletedSubscription_Deleted_Book(entity.Id, entity.Title, entity.Image, MapNonNullableIGetBooksListView_Items_Author(entity.Author, snapshot));
         }
 
         private global::MyApplicationMud.GraphQL.IGetBooksListView_Items_Author MapNonNullableIGetBooksListView_Items_Author(global::StrawberryShake.EntityId entityId, global::StrawberryShake.IEntityStoreSnapshot snapshot)

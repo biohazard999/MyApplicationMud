@@ -27,5 +27,5 @@ public class FakeData
 
     internal static IList<Author> authors = authorFaker.Generate(10).ToList();
 
-    internal static IList<Book> books = bookFaker.Generate(100).ToList();
+    internal static IList<Book> books = bookFaker.Generate(50).ToList();
 }

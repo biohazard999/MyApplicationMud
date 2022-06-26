@@ -6,7 +6,7 @@ namespace MyApplicationMud.GraphQL
     /// <summary>
     /// Represents the operation service of the DeleteBook GraphQL operation
     /// <code>
-    /// mutation DeleteBook($bookId: Int!) {
+    /// mutation DeleteBook($bookId: ID!) {
     ///   deleteBook(bookId: $bookId)
     /// }
     /// </code>
@@ -15,27 +15,27 @@ namespace MyApplicationMud.GraphQL
     public partial class DeleteBookMutation : global::MyApplicationMud.GraphQL.IDeleteBookMutation
     {
         private readonly global::StrawberryShake.IOperationExecutor<IDeleteBookResult> _operationExecutor;
-        private readonly global::StrawberryShake.Serialization.IInputValueFormatter _intFormatter;
+        private readonly global::StrawberryShake.Serialization.IInputValueFormatter _iDFormatter;
         public DeleteBookMutation(global::StrawberryShake.IOperationExecutor<IDeleteBookResult> operationExecutor, global::StrawberryShake.Serialization.ISerializerResolver serializerResolver)
         {
             _operationExecutor = operationExecutor ?? throw new global::System.ArgumentNullException(nameof(operationExecutor));
-            _intFormatter = serializerResolver.GetInputValueFormatter("Int");
+            _iDFormatter = serializerResolver.GetInputValueFormatter("ID");
         }
 
         global::System.Type global::StrawberryShake.IOperationRequestFactory.ResultType => typeof(IDeleteBookResult);
-        public async global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IDeleteBookResult>> ExecuteAsync(global::System.Int32 bookId, global::System.Threading.CancellationToken cancellationToken = default)
+        public async global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IDeleteBookResult>> ExecuteAsync(global::System.String bookId, global::System.Threading.CancellationToken cancellationToken = default)
         {
             var request = CreateRequest(bookId);
             return await _operationExecutor.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
-        public global::System.IObservable<global::StrawberryShake.IOperationResult<IDeleteBookResult>> Watch(global::System.Int32 bookId, global::StrawberryShake.ExecutionStrategy? strategy = null)
+        public global::System.IObservable<global::StrawberryShake.IOperationResult<IDeleteBookResult>> Watch(global::System.String bookId, global::StrawberryShake.ExecutionStrategy? strategy = null)
         {
             var request = CreateRequest(bookId);
             return _operationExecutor.Watch(request, strategy);
         }
 
-        private global::StrawberryShake.OperationRequest CreateRequest(global::System.Int32 bookId)
+        private global::StrawberryShake.OperationRequest CreateRequest(global::System.String bookId)
         {
             var variables = new global::System.Collections.Generic.Dictionary<global::System.String, global::System.Object?>();
             variables.Add("bookId", FormatBookId(bookId));
@@ -47,9 +47,14 @@ namespace MyApplicationMud.GraphQL
             return new global::StrawberryShake.OperationRequest(id: DeleteBookMutationDocument.Instance.Hash.Value, name: "DeleteBook", document: DeleteBookMutationDocument.Instance, strategy: global::StrawberryShake.RequestStrategy.Default, variables: variables);
         }
 
-        private global::System.Object? FormatBookId(global::System.Int32 value)
+        private global::System.Object? FormatBookId(global::System.String value)
         {
-            return _intFormatter.Format(value);
+            if (value is null)
+            {
+                throw new global::System.ArgumentNullException(nameof(value));
+            }
+
+            return _iDFormatter.Format(value);
         }
 
         global::StrawberryShake.OperationRequest global::StrawberryShake.IOperationRequestFactory.Create(global::System.Collections.Generic.IReadOnlyDictionary<global::System.String, global::System.Object?>? variables)

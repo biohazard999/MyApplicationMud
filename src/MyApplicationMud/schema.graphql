@@ -18,9 +18,9 @@ type Query {
 }
 
 type Mutations {
-  editBook(bookId: Int! book: BookModelInput!): Book!
+  editBook(bookId: ID! book: BookModelInput!): Book!
   addBook(book: BookModelInput!): Book!
-  deleteBook(bookId: Int!): Boolean!
+  deleteBook(bookId: ID!): Boolean!
 }
 
 type Subscriptions {

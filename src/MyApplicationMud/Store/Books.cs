@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using MyApplicationMud.Shared;
+using System.Reactive.Linq;
 
 namespace MyApplicationMud.Store;
 
@@ -6,8 +7,15 @@ public record BooksState
 {
     public bool IsLoading { get; init; }
     public bool HasErrors => Errors.Any();
-    public IList<IGetBooksListView_Items> Items { get; init; } = new List<IGetBooksListView_Items>();
+    public IList<IBookListInfo> Items { get; init; } = new List<IBookListInfo>();
     public IEnumerable<IClientError> Errors { get; init; } = Enumerable.Empty<IClientError>();
+
+    public int? BookId { get; init; }
+    public BookModelInput? EditBook { get; init; }
+
+    public IEnumerable<IAuthorInfo> Authors { get; init; } = Array.Empty<IAuthorInfo>();
+
+    public DialogReference? CurrentDialog { get; init; }
 }
 
 public class BooksFeature : Feature<BooksState>
@@ -22,50 +30,116 @@ public class BooksFeature : Feature<BooksState>
 }
 
 public record BooksLoadingAction();
+public record BookChangedAction(IBookListInfo Book);
+public record BookAddedAction(IBookListInfo Book);
+public record BookDeletedAction(int BookId);
 
 public record RefreshBooksAction();
 
-public record BooksLoadedAction(IEnumerable<IGetBooksListView_Items> Items);
+public record BooksLoadedAction(IEnumerable<IBookListInfo> Items);
 
 public record BooksLoadedWithClientErrorsAction(IEnumerable<IClientError> Errors);
 
+public record SaveBookAction(int? BookId, BookModelInput BookModel);
+public record DeleteBookAction(int BookId);
+
 public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
 {
-    IDisposable? Session;
+    IList<IDisposable> Sessions = new List<IDisposable>();
     public IMyApplicationMudClient Client { get; }
     public ISnackbar Snackbar { get; set; }
 
     public RefreshBooksEffect(IMyApplicationMudClient Client, ISnackbar Snackbar)
         => (this.Client, this.Snackbar) = (Client, Snackbar);
 
-    public override Task HandleAsync(RefreshBooksAction action, IDispatcher dispatcher)
+    public async override Task HandleAsync(RefreshBooksAction action, IDispatcher dispatcher)
     {
-        Session?.Dispose();
+        Dispose();
 
-        Session = Client
+        var result = await Client
            .GetBooksListView
-           .Watch(ExecutionStrategy.CacheFirst)
+           .ExecuteAsync();
+
+        dispatcher.Dispatch(new BooksLoadedWithClientErrorsAction(result.Errors));
+        if (result.Data is not null)
+        {
+            dispatcher.Dispatch(new BooksLoadedAction(result.Data.Items));
+            Snackbar.Add("Daten wurden aktualisiert", Severity.Success);
+        }
+
+        Sessions.Add(Client
+           .BooksChangedSubscription
+           .Watch(ExecutionStrategy.CacheAndNetwork)
            .Catch((Exception e) =>
            {
                dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(e));
-               return Observable.Empty<IOperationResult<IGetBooksListViewResult>>();
+               return Observable.Empty<IOperationResult<IBooksChangedSubscriptionResult>>();
            })
            .Subscribe(result =>
            {
                dispatcher.Dispatch(new BooksLoadedWithClientErrorsAction(result.Errors));
                if (result.Data is not null)
                {
-                   dispatcher.Dispatch(new BooksLoadedAction(result.Data.Items));
+                   dispatcher.Dispatch(new BookChangedAction(result.Data.Changed));
                    Snackbar.Add("Daten wurden aktualisiert", Severity.Success);
                }
-           });
+           }));
 
-        return Task.CompletedTask;
+        Sessions.Add(Client
+           .BooksAddedSubscription
+           .Watch(ExecutionStrategy.CacheAndNetwork)
+           .Catch((Exception e) =>
+           {
+               dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(e));
+               return Observable.Empty<IOperationResult<IBooksAddedSubscriptionResult>>();
+           })
+           .Subscribe(result =>
+           {
+               dispatcher.Dispatch(new BooksLoadedWithClientErrorsAction(result.Errors));
+               if (result.Data is not null)
+               {
+                   dispatcher.Dispatch(new BookAddedAction(result.Data.Added));
+                   Snackbar.Add("Daten wurden aktualisiert", Severity.Success);
+               }
+           }));
+
+        Sessions.Add(Client
+           .BooksDeletedSubscription
+           .Watch(ExecutionStrategy.CacheAndNetwork)
+           .Catch((Exception e) =>
+           {
+               dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(e));
+               return Observable.Empty<IOperationResult<IBooksDeletedSubscriptionResult>>();
+           })
+           .Subscribe(result =>
+           {
+               dispatcher.Dispatch(new BooksLoadedWithClientErrorsAction(result.Errors));
+               if (result.Data is not null)
+               {
+                   dispatcher.Dispatch(new BookDeletedAction(result.Data.Deleted.Id));
+                   Snackbar.Add("Daten wurden aktualisiert", Severity.Success);
+               }
+           }));
     }
 
     public void Dispose()
-        => Session?.Dispose();
+    {
+        foreach (var disposable in Sessions)
+        {
+            disposable.Dispose();
+        }
+        Sessions.Clear();
+    }
 }
+
+public record AddBookAction();
+public record EditBookAction(int BookId);
+public record EditBookFetchedAction(int BookId, BookModelInput BookModel);
+
+public record AuthorsFetchedAction(IEnumerable<IAuthorInfo> Authors);
+public record ShowDialogAction(DialogReference DialogReference);
+public record CloseDialogAction(DialogReference DialogReference);
+public record RemoveDialogAction();
 
 public static class BooksReducer
 {
@@ -98,4 +172,182 @@ public static class BooksReducer
             IsLoading = false,
             Errors = booksLoadedWithClientErrorsAction.Errors
         };
+
+    [ReducerMethod(typeof(AddBookAction))]
+    public static BooksState AddBookReducer(BooksState booksState)
+        => booksState with
+        {
+            EditBook = new BookModelInput()
+        };
+
+    [ReducerMethod]
+    public static BooksState BookChangedReducer(BooksState state, BookChangedAction action)
+    {
+        var oldBook = state.Items.FirstOrDefault(m => m.Id == action.Book.Id);
+        if (oldBook is not null)
+        {
+            var items = state.Items.ToList();
+            var index = items.IndexOf(oldBook);
+            items.Insert(index, action.Book);
+            items.Remove(oldBook);
+            return state with { Items = items };
+        }
+        return state;
+    }
+
+    [ReducerMethod]
+    public static BooksState BookAddedReducer(BooksState state, BookAddedAction action)
+    {
+        var oldBook = state.Items.FirstOrDefault(m => m.Id == action.Book.Id);
+        if (oldBook is null)
+        {
+            var items = state.Items.ToList();
+            items.Add(action.Book);
+            return state with { Items = items };
+        }
+        return state;
+    }
+
+    [ReducerMethod]
+    public static BooksState BookAddedReducer(BooksState state, BookDeletedAction action)
+    {
+        var oldBook = state.Items.FirstOrDefault(m => m.Id == action.BookId);
+        if (oldBook is not null)
+        {
+            var items = state.Items.ToList();
+            items.Remove(oldBook);
+            return state with { Items = items };
+        }
+        return state;
+    }
+
+    [ReducerMethod]
+    public static BooksState AuthorsFetechedReducer(BooksState state, AuthorsFetchedAction action)
+        => state with { Authors = action.Authors };
+
+    [ReducerMethod]
+    public static BooksState EditBookFetchedReducer(BooksState state, EditBookFetchedAction action)
+        => state with { BookId = action.BookId, EditBook = action.BookModel };
+
+
+    [ReducerMethod]
+    public static BooksState ShowDialogReducer(BooksState state, ShowDialogAction action)
+        => state with { CurrentDialog = action.DialogReference };
+
+    [ReducerMethod(typeof(RemoveDialogAction))]
+    public static BooksState RemoveDialogReducer(BooksState state)
+        => state with { CurrentDialog = null };
+
+    [ReducerMethod(typeof(CloseDialogAction))]
+    public static BooksState ShowDialogReducer(BooksState state)
+        => state with { CurrentDialog = null, BookId = null, EditBook = null };
+}
+
+public record BookEffects(IMyApplicationMudClient Client, IDialogService DialogService, IState<BooksState> State)
+{
+    [EffectMethod]
+    public Task HandleCloseDialogEffect(CloseDialogAction action, IDispatcher dispatcher)
+    {
+        DialogService.Close(action.DialogReference);
+        dispatcher.Dispatch(new RemoveDialogAction());
+
+        return Task.CompletedTask;
+    }
+
+    [EffectMethod(typeof(AddBookAction))]
+    public async Task HandleAddBookAction(IDispatcher dispatcher)
+    {
+        var authors = await Client.GetBookAuthors.ExecuteAsync();
+
+        if (authors.IsSuccessResult() && authors.Data is not null)
+        {
+            dispatcher.Dispatch(new AuthorsFetchedAction(authors.Data.Authors));
+        }
+
+        var dialog = DialogService.Show<BooksDialog>("Neues Buch", new DialogOptions()
+        {
+            CloseOnEscapeKey = true,
+            Position = DialogPosition.TopLeft,
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = true
+        });
+
+        dispatcher.Dispatch(new ShowDialogAction((DialogReference)dialog));
+    }
+
+    [EffectMethod]
+    public async Task HandleEditBookAction(EditBookAction action, IDispatcher dispatcher)
+    {
+        var authors = await Client.GetBooksDetailView.ExecuteAsync(action.BookId);
+
+        if (authors.IsSuccessResult() && authors.Data is not null)
+        {
+            dispatcher.Dispatch(new AuthorsFetchedAction(authors.Data.Authors));
+            dispatcher.Dispatch(new EditBookFetchedAction(authors.Data.Details.Id, new BookModelInput()
+            {
+                AuthorId = authors.Data.Details.Author.Id,
+                Title = authors.Data.Details.Title
+            }));
+        }
+
+        var dialog = DialogService.Show<BooksDialog>("Buch bearbeiten", new DialogOptions()
+        {
+            CloseOnEscapeKey = true,
+            Position = DialogPosition.TopLeft,
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = true
+        });
+
+        dispatcher.Dispatch(new ShowDialogAction((DialogReference)dialog));
+    }
+
+    [EffectMethod]
+    public async Task HandleSaveBookAction(SaveBookAction action, IDispatcher dispatcher)
+    {
+        if (action.BookId.HasValue)
+        {
+            var result = await Client.UpdateBook.ExecuteAsync(action.BookId.Value.ToString(), action.BookModel);
+            try
+            {
+                result.EnsureNoErrors();
+            }
+            catch (Exception ex)
+            {
+
+                dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(ex));
+            }
+        }
+        else
+        {
+            var result = await Client.AddBook.ExecuteAsync(action.BookModel);
+            try
+            {
+                result.EnsureNoErrors();
+            }
+            catch (Exception ex)
+            {
+
+                dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(ex));
+            }
+        }
+
+        dispatcher.Dispatch(new CloseDialogAction(State.Value.CurrentDialog!));
+    }
+
+    [EffectMethod]
+    public async Task HandleDeleteBookAction(DeleteBookAction action, IDispatcher dispatcher)
+    {
+        var result = await Client.DeleteBook.ExecuteAsync(action.BookId.ToString());
+        try
+        {
+            result.EnsureNoErrors();
+        }
+        catch (Exception ex)
+        {
+            dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(ex));
+        }
+
+        dispatcher.Dispatch(new BookDeletedAction(action.BookId));
+    }
+
 }
