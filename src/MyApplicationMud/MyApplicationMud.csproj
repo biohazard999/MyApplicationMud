@@ -12,6 +12,7 @@
 		<PackageReference Include="FluentValidation" Version="11.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.4" PrivateAssets="all" />
 		<PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.4.0" />
+		<PackageReference Include="MudBlazor.Markdown" Version="0.0.10" />
 	</ItemGroup>
 	
 	<ItemGroup>

@@ -72,7 +72,7 @@ public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
            .Watch(ExecutionStrategy.CacheAndNetwork)
            .Catch((Exception e) =>
            {
-               dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(e));
+               dispatcher.Dispatch(new UnexpectedExceptionAction(e));
                return Observable.Empty<IOperationResult<IBooksChangedSubscriptionResult>>();
            })
            .Subscribe(result =>
@@ -280,7 +280,7 @@ public record BookEffects(IMyApplicationMudClient Client, IDialogService DialogS
             catch (Exception ex)
             {
 
-                dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(ex));
+                dispatcher.Dispatch(new UnexpectedExceptionAction(ex));
             }
         }
         else
@@ -298,7 +298,7 @@ public record BookEffects(IMyApplicationMudClient Client, IDialogService DialogS
             catch (Exception ex)
             {
 
-                dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(ex));
+                dispatcher.Dispatch(new UnexpectedExceptionAction(ex));
             }
         }
 
@@ -315,7 +315,7 @@ public record BookEffects(IMyApplicationMudClient Client, IDialogService DialogS
         }
         catch (Exception ex)
         {
-            dispatcher.Dispatch(new UnexpectedExceptionExceptionAction(ex));
+            dispatcher.Dispatch(new UnexpectedExceptionAction(ex));
         }
 
         dispatcher.Dispatch(new BookDeletedAction(action.BookId));

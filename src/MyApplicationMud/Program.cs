@@ -56,5 +56,6 @@ builder.Services
 builder.Services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("backend"));
 
 builder.Services.AddMudServices();
+builder.Services.AddMudMarkdownServices();
 
 await builder.Build().RunAsync();

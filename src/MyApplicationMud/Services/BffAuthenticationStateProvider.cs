@@ -31,7 +31,7 @@ public class BffAuthenticationStateProvider : AuthenticationStateProvider
         // checks periodically for a session state change and fires event
         // this causes a round trip to the server
         // adjust the period accordingly if that feature is needed
-        if (user.Identity.IsAuthenticated)
+        if (user.Identity?.IsAuthenticated == true)
         {
             _logger.LogInformation("starting background check..");
             Timer? timer = null;
@@ -39,11 +39,14 @@ public class BffAuthenticationStateProvider : AuthenticationStateProvider
             timer = new Timer(async _ =>
             {
                 var currentUser = await GetUser(false);
-                if (currentUser.Identity.IsAuthenticated == false)
+                if (currentUser.Identity?.IsAuthenticated == false)
                 {
                     _logger.LogInformation("user logged out");
                     NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(currentUser)));
-                    await timer.DisposeAsync();
+                    if (timer is not null)
+                    {
+                        await timer.DisposeAsync();
+                    }
                 }
             }, null, 1000, 5000);
         }
