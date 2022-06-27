@@ -16,17 +16,24 @@
             <MudPaper @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass" Height="300px" Outlined="true" Class="@DragClass">
                 @if (!Clearing)
                 {
-                    <InputFile OnChange="OnInputFileChanged" multiple class="absolute mud-width-full mud-height-full overflow-hidden z-2" style="opacity:0;" />
+                    <InputFile id="fileInput" OnChange="OnInputFileChanged" class="absolute mud-width-full mud-height-full overflow-hidden z-2" style="opacity:0;" />
                 }
-                <MudText Typo="Typo.h6">Drag and drop files here or click</MudText>
-                @foreach (var file in fileNames)
+                @if (@State.Value.BookImage is not null)
                 {
-                    <MudChip Color="Color.Dark" Text="@file" />
+                    <MudImage ObjectFit="ObjectFit.Contain" Height="200" Width="400" Src="@State.Value.BookImage" />
+                }
+                else
+                {
+                    <MudText Typo="Typo.h6">Drag and drop files here or click</MudText>
                 }
             </MudPaper>
             <MudToolBar DisableGutters="true" Class="gap-4">
-                <MudButton OnClick="Upload" Disabled="@(!fileNames.Any())" Color="Color.Primary" Variant="Variant.Filled">Upload</MudButton>
-                <MudButton OnClick="Clear" Disabled="@(!fileNames.Any())" Color="Color.Error" Variant="Variant.Filled">Clear</MudButton>
+                <MudIconButton HtmlTag="label"
+                               Color="Color.Info"
+                               Icon="@Icons.Filled.PhotoCamera"
+                               for="fileInput">
+                </MudIconButton>
+                <MudButton OnClick="Clear" Disabled="file == null" Color="Color.Error" Variant="Variant.Filled">Clear</MudButton>
             </MudToolBar>
         </MudForm>
     </DialogContent>
@@ -41,22 +48,25 @@
     private bool Clearing = false;
     private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
     private string DragClass = DefaultDragClass;
-    private List<string> fileNames = new List<string>();
+    private IBrowserFile? file;
 
-    private void OnInputFileChanged(InputFileChangeEventArgs e)
+    private async void OnInputFileChanged(InputFileChangeEventArgs e)
     {
         ClearDragClass();
-        var files = e.GetMultipleFiles();
-        foreach (var file in files)
-        {
-            fileNames.Add(file.Name);
-        }
+        file = e.File;
+        using var ms = new MemoryStream();
+        using var stream = file.OpenReadStream();
+        await stream.CopyToAsync(ms);
+        var format = "image/png";
+        var imageDataUrl = $"data:{format};base64,{Convert.ToBase64String(ms.ToArray())}";
+        Dispatcher.Dispatch(new SetBookImageAction(imageDataUrl));
+        StateHasChanged();
     }
 
     private async Task Clear()
     {
         Clearing = true;
-        fileNames.Clear();
+        file = null;
         ClearDragClass();
         await Task.Delay(100);
         Clearing = false;
@@ -82,6 +92,6 @@
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; } = default!;
 
-    void Submit() => Dispatcher.Dispatch(new SaveBookAction(State.Value.BookId, State.Value.EditBook!));
+    void Submit() => Dispatcher.Dispatch(new SaveBookAction(State.Value.BookId, State.Value.EditBook!, file?.OpenReadStream()));
     void Cancel() => Dispatcher.Dispatch(new CloseDialogAction(State.Value.CurrentDialog!));
 }

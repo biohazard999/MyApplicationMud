@@ -11,6 +11,8 @@ public record BooksState
     public IEnumerable<IClientError> Errors { get; init; } = Enumerable.Empty<IClientError>();
 
     public int? BookId { get; init; }
+
+    public string? BookImage { get; init; }
     public BookModelInput? EditBook { get; init; }
 
     public IEnumerable<IAuthorInfo> Authors { get; init; } = Array.Empty<IAuthorInfo>();
@@ -100,7 +102,7 @@ public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
 
 public record AddBookAction();
 public record EditBookAction(int BookId);
-public record EditBookFetchedAction(int BookId, BookModelInput BookModel);
+public record EditBookFetchedAction(int BookId, BookModelInput BookModel, string? BookImage = null);
 
 public record AuthorsFetchedAction(IEnumerable<IAuthorInfo> Authors);
 public record ShowDialogAction(DialogReference DialogReference);
@@ -193,8 +195,7 @@ public static class BooksReducer
 
     [ReducerMethod]
     public static BooksState EditBookFetchedReducer(BooksState state, EditBookFetchedAction action)
-        => state with { BookId = action.BookId, EditBook = action.BookModel };
-
+        => state with { BookId = action.BookId, EditBook = action.BookModel, BookImage = action.BookImage };
 
     [ReducerMethod]
     public static BooksState ShowDialogReducer(BooksState state, ShowDialogAction action)
@@ -206,8 +207,14 @@ public static class BooksReducer
 
     [ReducerMethod(typeof(CloseDialogAction))]
     public static BooksState ShowDialogReducer(BooksState state)
-        => state with { CurrentDialog = null, BookId = null, EditBook = null };
+        => state with { CurrentDialog = null, BookId = null, EditBook = null, BookImage = null };
+
+    [ReducerMethod]
+    public static BooksState SetBookImageReducer(BooksState state, SetBookImageAction action)
+        => state with { BookImage = action.BookImage };
 }
+
+public record SetBookImageAction(string? BookImage);
 
 public record BookEffects(
     IMyApplicationMudClient Client,
@@ -254,11 +261,14 @@ public record BookEffects(
         if (authors.IsSuccessResult() && authors.Data is not null)
         {
             dispatcher.Dispatch(new AuthorsFetchedAction(authors.Data.Authors));
+
+
+
             dispatcher.Dispatch(new EditBookFetchedAction(authors.Data.Details.Id, new BookModelInput()
             {
                 AuthorId = authors.Data.Details.Author.Id,
                 Title = authors.Data.Details.Title
-            }));
+            }, authors.Data.Details.Image));
         }
 
         var dialog = DialogService.Show<BooksDialog>("Buch bearbeiten", new DialogOptions()
@@ -275,6 +285,8 @@ public record BookEffects(
     [EffectMethod]
     public async Task HandleSaveBookAction(SaveBookAction action, IDispatcher dispatcher)
     {
+        int? bookId = action.BookId;
+
         if (action.BookId.HasValue)
         {
             var result = await Client.UpdateBook.ExecuteAsync(action.BookId.Value.ToString(), action.BookModel);
@@ -295,6 +307,10 @@ public record BookEffects(
                 Title = action.BookModel.Title,
                 AuthorId = action.BookModel.AuthorId
             });
+            if (result.Data is not null)
+            {
+                bookId = result.Data.AddBook.Id;
+            }
             try
             {
                 result.EnsureNoErrors();
@@ -316,7 +332,7 @@ public record BookEffects(
         {
             using var form = new MultipartFormDataContent();
 
-            form.Add(new StringContent("{ \"query\": \"mutation UploadPicture($file: Upload!) { setBookImage(bookId: " + action.BookId + ", file: $file) { id } }\", \"variables\": { \"file\": null } }"), "operations");
+            form.Add(new StringContent("{ \"query\": \"mutation UploadPicture($file: Upload!) { setBookImage(bookId: " + bookId + ", file: $file) { id } }\", \"variables\": { \"file\": null } }"), "operations");
             form.Add(new StringContent("{ \"0\": [\"variables.file\"] }"), "map");
             form.Add(new StreamContent(action.PictureStream), "0", "file.png");
 
