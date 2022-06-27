@@ -44,4 +44,23 @@ public class Mutations
 
         return true;
     }
+
+    public async Task<Book> SetBookImage([ID(nameof(Book))] int bookId, IFile file, [Service] ITopicEventSender sender)
+    {
+        var book = FakeData.books.First(m => m.Id == bookId);
+
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        var format = "image/png";
+        var imageDataUrl = $"data:{format};base64,{Convert.ToBase64String(ms.ToArray())}";
+
+        var index = FakeData.books.IndexOf(book);
+        FakeData.books.RemoveAt(index);
+        var editBook = book with { Image = imageDataUrl };
+        FakeData.books.Insert(index, editBook);
+
+        await sender.SendAsync(nameof(Subscriptions.BookChanged), new BookChangedPayload(editBook, ChangeType.Modified));
+
+        return editBook;
+    }
 }

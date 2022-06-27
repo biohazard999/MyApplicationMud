@@ -29,6 +29,15 @@ mutation DeleteBook($bookId: ID!) {
 	deleteBook(bookId: $bookId)
 }
 
+## TODO: Multipart
+## Waiting for https://github.com/ChilliCream/hotchocolate/issues/3312
+## Multipart Spec is supported by Server: https://github.com/jaydenseric/graphql-multipart-request-spec
+#mutation UploadPicture($bookId: ID!, $file: Upload!) {
+#	setBookImage(bookId: $bookId, file: $file) {
+#		...BookInfo
+#	}
+#}
+
 fragment BookInfo on Book {
 	id
 	title

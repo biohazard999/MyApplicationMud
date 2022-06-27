@@ -4,6 +4,9 @@
   subscription: Subscriptions
 }
 
+"The `Upload` scalar type represents a file upload."
+scalar Upload
+
 enum ApplyPolicy {
   BEFORE_RESOLVER
   AFTER_RESOLVER
@@ -21,6 +24,7 @@ type Mutations {
   editBook(bookId: ID! book: BookModelInput!): Book!
   addBook(book: BookModelInput!): Book!
   deleteBook(bookId: ID!): Boolean!
+  setBookImage(bookId: ID! file: Upload!): Book!
 }
 
 type Subscriptions {

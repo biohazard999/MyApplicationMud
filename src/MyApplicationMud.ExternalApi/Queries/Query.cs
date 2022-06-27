@@ -33,6 +33,7 @@ public record BookModel(string Title, [ID(nameof(Author))]int AuthorId);
 public record ServerInfo([GraphQLDescription("Returns the server time in UTC")] DateTime ServerTime);
 
 public record Book([ID] int Id, string Title, string Image, Author Author);
+
 public record Author([ID] int Id, string Name);
 
 public record UserInfo(string Name, IList<UserClaim> Claims);

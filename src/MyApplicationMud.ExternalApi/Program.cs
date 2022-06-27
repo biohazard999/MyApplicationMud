@@ -37,6 +37,7 @@ services
     .AddFiltering()
     .AddSorting()
     .AddQueryType<Query>()
+    .AddType<UploadType>()
     .AddMutationType<Mutations>()
     .AddSubscriptionType<Subscriptions>()
 
