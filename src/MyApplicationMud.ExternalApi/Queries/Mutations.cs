@@ -4,6 +4,7 @@ namespace MyApplicationMud.ExternalApi.Queries;
 
 public class Mutations
 {
+
     public async Task<Book> EditBook([ID(nameof(Book))] int bookId, BookModel book, [Service] ITopicEventSender sender)
     {
         var b = FakeData.books.First(m => m.Id == bookId);

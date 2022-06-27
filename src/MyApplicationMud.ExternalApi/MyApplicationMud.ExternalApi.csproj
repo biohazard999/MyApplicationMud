@@ -17,4 +17,8 @@
 	<PackageReference Include="HotChocolate.AspNetCore" Version="12.11.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
