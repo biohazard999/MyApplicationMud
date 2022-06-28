@@ -40,7 +40,7 @@ public class Mutations
 
         FakeData.books.Remove(bookDeleted);
 
-        await sender.SendAsync(nameof(Subscriptions.BookChanged), new BookChangedPayload(bookDeleted, ChangeType.Modified));
+        await sender.SendAsync(nameof(Subscriptions.BookChanged), new BookChangedPayload(bookDeleted, ChangeType.Deleted));
 
         return true;
     }
