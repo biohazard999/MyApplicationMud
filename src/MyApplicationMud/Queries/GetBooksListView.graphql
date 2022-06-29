@@ -1,5 +1,5 @@
-﻿query GetBooksListView {
-	items: books {
+﻿query GetBooksListView($where: BookFilterInput!) {
+	items: books(where: $where) {
 		...BookListInfo
 	}
 }

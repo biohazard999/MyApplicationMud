@@ -60,7 +60,17 @@ public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
 
         var result = await Client
            .GetBooksListView
-           .ExecuteAsync();
+           .ExecuteAsync(new BookFilterInput
+           {
+               Title = new StringOperationFilterInput
+               {
+                   StartsWith = "Use"
+               },
+               Id = new()
+               {
+                   Gt = 50,
+               }
+           });
 
         dispatcher.Dispatch(new BooksLoadedWithClientErrorsAction(result.Errors));
         if (result.Data is not null)

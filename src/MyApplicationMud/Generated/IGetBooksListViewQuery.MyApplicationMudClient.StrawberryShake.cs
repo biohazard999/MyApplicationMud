@@ -6,8 +6,8 @@ namespace MyApplicationMud.GraphQL
     /// <summary>
     /// Represents the operation service of the GetBooksListView GraphQL operation
     /// <code>
-    /// query GetBooksListView {
-    ///   items: books {
+    /// query GetBooksListView($where: BookFilterInput!) {
+    ///   items: books(where: $where) {
     ///     __typename
     ///     ... BookListInfo
     ///     ... on Book {
@@ -33,7 +33,7 @@ namespace MyApplicationMud.GraphQL
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
     public partial interface IGetBooksListViewQuery : global::StrawberryShake.IOperationRequestFactory
     {
-        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IGetBooksListViewResult>> ExecuteAsync(global::System.Threading.CancellationToken cancellationToken = default);
-        global::System.IObservable<global::StrawberryShake.IOperationResult<IGetBooksListViewResult>> Watch(global::StrawberryShake.ExecutionStrategy? strategy = null);
+        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IGetBooksListViewResult>> ExecuteAsync(global::MyApplicationMud.GraphQL.BookFilterInput @where, global::System.Threading.CancellationToken cancellationToken = default);
+        global::System.IObservable<global::StrawberryShake.IOperationResult<IGetBooksListViewResult>> Watch(global::MyApplicationMud.GraphQL.BookFilterInput @where, global::StrawberryShake.ExecutionStrategy? strategy = null);
     }
 }
