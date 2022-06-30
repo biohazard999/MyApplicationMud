@@ -1,4 +1,10 @@
+﻿using Blazored.LocalStorage;
+
+using Fluxor.Persist.Middleware;
+using Fluxor.Persist.Storage;
+
 using Microsoft.AspNetCore.Components.Authorization;
+
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -6,16 +12,19 @@ using MudBlazor.Services;
 
 using MyApplicationMud;
 using MyApplicationMud.Services;
-using MyApplicationMud.GraphQL;
-using StrawberryShake;
-using Fluxor;
-using MyApplicationMud.Store;
+using MyApplicationMud.Services.Storage;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+builder.Services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
+builder.Services.AddScoped<IStringStateStorage, LocalStateStorage>();
+builder.Services.AddScoped<IStoreHandler, JsonStoreHandler>();
 
 builder.Services.AddFluxor(configuration =>
 {
     configuration.ScanAssemblies(typeof(CounterState).Assembly);
+    configuration.UseRouting();
+    configuration.UsePersist(o => o.UseInclusionApproach());
 
 #if DEBUG
     configuration.UseReduxDevTools(devtools =>
@@ -23,6 +32,7 @@ builder.Services.AddFluxor(configuration =>
         devtools.EnableStackTrace();
     });
 #endif
+
 });
 
 builder.RootComponents.Add<App>("#app");
