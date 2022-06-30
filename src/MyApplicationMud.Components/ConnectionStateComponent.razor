@@ -1,0 +1,30 @@
+﻿@inject IJSRuntime _jsRuntime;
+@inject IDispatcher Dispatcher;
+@implements IAsyncDisposable
+
+@code {
+    public bool IsOnline { get; set; }
+
+    [JSInvokable("Connection.StatusChanged")]
+    public void OnConnectionStatusChanged(bool isOnline)
+    {
+        if (IsOnline != isOnline)
+        {
+            IsOnline = isOnline;
+        }
+
+        Dispatcher.DispatchConnectionStatusChanged(isOnline);
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        await _jsRuntime.InvokeVoidAsync("Connection.Initialize", DotNetObjectReference.Create(this));
+    }
+
+    public async ValueTask DisposeAsync()
+        => await _jsRuntime.InvokeVoidAsync("Connection.Dispose");
+}

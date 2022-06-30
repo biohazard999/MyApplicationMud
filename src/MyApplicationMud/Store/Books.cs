@@ -58,6 +58,7 @@ public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
     {
         Dispose();
 
+
         var result = await Client
            .GetBooksListView
            .ExecuteAsync(new BookFilterInput
