@@ -1,12 +1,40 @@
-﻿using HotChocolate.Subscriptions;
+﻿using FluentValidation;
+using HotChocolate.Subscriptions;
+using MyApplicationMud.Shared.Validation;
 
 namespace MyApplicationMud.ExternalApi.Queries;
 
+public abstract record ValidationPayload<T>(T? Value = default)
+{
+    public IEnumerable<ValidationError> Errors { get; init; } = Enumerable.Empty<ValidationError>();
+}
+
+public record ValidationError(string PropertyName, string Message);
+
+public record BookValidationPayload(Book? Value = default) : ValidationPayload<Book>(Value);
+
 public class Mutations
 {
-
-    public async Task<Book> EditBook([ID(nameof(Book))] int bookId, BookModel book, [Service] ITopicEventSender sender)
+    public class ServerBookInputModelValidator : BookInputModelValidator
     {
+        public ServerBookInputModelValidator()
+        {
+            RuleFor(x => x.Title).MinimumLength(5);
+            RuleFor(x => x.AuthorId).GreaterThanOrEqualTo(5);
+        }
+    }
+
+    public async Task<BookValidationPayload> EditBook([ID(nameof(Book))] int bookId, BookModel book, [Service] ITopicEventSender sender)
+    {
+        var validator = new ServerBookInputModelValidator();
+        var result = await validator.ValidateAsync(book);
+        if (!result.IsValid)
+        {
+            var errors = result.Errors.Select(m => new ValidationError(m.PropertyName, m.ErrorMessage)).ToList();
+
+            return new BookValidationPayload { Errors = errors };
+        }
+
         var b = FakeData.books.First(m => m.Id == bookId);
 
         var index = FakeData.books.IndexOf(b);
@@ -16,7 +44,7 @@ public class Mutations
 
         await sender.SendAsync(nameof(Subscriptions.BookChanged), new BookChangedPayload(editBook, ChangeType.Modified));
 
-        return editBook;
+        return new BookValidationPayload(editBook);
     }
 
     public async Task<Book> AddBook(BookModel book, [Service] ITopicEventSender sender)

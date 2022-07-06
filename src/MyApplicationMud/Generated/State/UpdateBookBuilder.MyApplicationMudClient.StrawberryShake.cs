@@ -67,21 +67,79 @@ namespace MyApplicationMud.GraphQL.State
         {
             var entityIds = new global::System.Collections.Generic.HashSet<global::StrawberryShake.EntityId>();
             global::StrawberryShake.IEntityStoreSnapshot snapshot = default !;
-            global::StrawberryShake.EntityId editBookId = default !;
+            global::MyApplicationMud.GraphQL.State.BookValidationPayloadData editBookId = default !;
             _entityStore.Update(session =>
             {
-                editBookId = UpdateNonNullableIUpdateBook_EditBookEntity(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "editBook"), entityIds);
+                editBookId = DeserializeNonNullableIUpdateBook_EditBook(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "editBook"), entityIds);
                 snapshot = session.CurrentSnapshot;
             });
             var resultInfo = new UpdateBookResultInfo(editBookId, entityIds, snapshot.Version);
             return (_resultDataFactory.Create(resultInfo), resultInfo);
         }
 
-        private global::StrawberryShake.EntityId UpdateNonNullableIUpdateBook_EditBookEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
+        private global::MyApplicationMud.GraphQL.State.BookValidationPayloadData DeserializeNonNullableIUpdateBook_EditBook(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
         {
             if (!obj.HasValue)
             {
                 throw new global::System.ArgumentNullException();
+            }
+
+            var typename = obj.Value.GetProperty("__typename").GetString();
+            if (typename?.Equals("BookValidationPayload", global::System.StringComparison.Ordinal) ?? false)
+            {
+                return new global::MyApplicationMud.GraphQL.State.BookValidationPayloadData(typename, errors: DeserializeNonNullableIUpdateBook_EditBook_ErrorsNonNullableArray(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "errors")), @value: UpdateIUpdateBook_EditBook_ValueEntity(session, global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "value"), entityIds));
+            }
+
+            throw new global::System.NotSupportedException();
+        }
+
+        private global::System.Collections.Generic.IReadOnlyList<global::MyApplicationMud.GraphQL.State.ValidationErrorData> DeserializeNonNullableIUpdateBook_EditBook_ErrorsNonNullableArray(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            var validationErrors = new global::System.Collections.Generic.List<global::MyApplicationMud.GraphQL.State.ValidationErrorData>();
+            foreach (global::System.Text.Json.JsonElement child in obj.Value.EnumerateArray())
+            {
+                validationErrors.Add(DeserializeNonNullableIUpdateBook_EditBook_Errors(child));
+            }
+
+            return validationErrors;
+        }
+
+        private global::MyApplicationMud.GraphQL.State.ValidationErrorData DeserializeNonNullableIUpdateBook_EditBook_Errors(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            var typename = obj.Value.GetProperty("__typename").GetString();
+            if (typename?.Equals("ValidationError", global::System.StringComparison.Ordinal) ?? false)
+            {
+                return new global::MyApplicationMud.GraphQL.State.ValidationErrorData(typename, propertyName: DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "propertyName")), message: DeserializeNonNullableString(global::StrawberryShake.Json.JsonElementExtensions.GetPropertyOrNull(obj, "message")));
+            }
+
+            throw new global::System.NotSupportedException();
+        }
+
+        private global::System.String DeserializeNonNullableString(global::System.Text.Json.JsonElement? obj)
+        {
+            if (!obj.HasValue)
+            {
+                throw new global::System.ArgumentNullException();
+            }
+
+            return _stringParser.Parse(obj.Value.GetString()!);
+        }
+
+        private global::StrawberryShake.EntityId? UpdateIUpdateBook_EditBook_ValueEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)
+        {
+            if (!obj.HasValue)
+            {
+                return null;
             }
 
             global::StrawberryShake.EntityId entityId = _idSerializer.Parse(obj.Value);
@@ -111,16 +169,6 @@ namespace MyApplicationMud.GraphQL.State
             }
 
             return _intParser.Parse(obj.Value.GetInt32()!);
-        }
-
-        private global::System.String DeserializeNonNullableString(global::System.Text.Json.JsonElement? obj)
-        {
-            if (!obj.HasValue)
-            {
-                throw new global::System.ArgumentNullException();
-            }
-
-            return _stringParser.Parse(obj.Value.GetString()!);
         }
 
         private global::StrawberryShake.EntityId UpdateNonNullableIGetBooksDetailView_Details_AuthorEntity(global::StrawberryShake.IEntityStoreUpdateSession session, global::System.Text.Json.JsonElement? obj, global::System.Collections.Generic.ISet<global::StrawberryShake.EntityId> entityIds)

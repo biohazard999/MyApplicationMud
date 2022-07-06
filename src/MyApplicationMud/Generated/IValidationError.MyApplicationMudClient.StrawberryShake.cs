@@ -4,7 +4,10 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial interface IUpdateBook_EditBook_Author_Author : IUpdateBook_EditBook_Author
+    public partial interface IValidationError
     {
+        public global::System.String PropertyName { get; }
+
+        public global::System.String Message { get; }
     }
 }

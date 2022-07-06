@@ -12,11 +12,6 @@ enum ApplyPolicy {
   AFTER_RESOLVER
 }
 
-interface IBookInputModel {
-  title: String!
-  authorId: ID!
-}
-
 type Query {
   serverInfo: ServerInfo!
   user: UserInfo!
@@ -26,7 +21,7 @@ type Query {
 }
 
 type Mutations {
-  editBook(bookId: ID! book: BookModelInput!): Book!
+  editBook(bookId: ID! book: BookModelInput!): BookValidationPayload!
   addBook(book: BookModelInput!): Book!
   deleteBook(bookId: ID!): Boolean!
   setBookImage(bookId: ID! file: Upload!): Book!
@@ -99,11 +94,6 @@ input AuthorSortInput {
   name: SortEnumType
 }
 
-type Author {
-  id: Int!
-  name: String!
-}
-
 type Book {
   id: Int!
   title: String!
@@ -120,6 +110,16 @@ type ServerInfo {
   serverTime: DateTime!
 }
 
+type Author {
+  id: Int!
+  name: String!
+}
+
+type BookValidationPayload {
+  value: Book
+  errors: [ValidationError!]!
+}
+
 input BookModelInput {
   title: String!
   authorId: Int!
@@ -134,6 +134,11 @@ enum ChangeType {
   ADDED
   MODIFIED
   DELETED
+}
+
+type ValidationError {
+  propertyName: String!
+  message: String!
 }
 
 "The `DateTime` scalar represents an ISO-8601 compliant date time type."

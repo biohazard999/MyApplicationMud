@@ -6,14 +6,26 @@ namespace MyApplicationMud.GraphQL
     /// <summary>
     /// Represents the operation service of the UpdateBook GraphQL operation
     /// <code>
-    /// mutation UpdateBook($bookId: ID!, $book: BookModelInput!) {
-    ///   editBook(bookId: $bookId, book: $book) {
+    /// mutation UpdateBook($id: ID!, $book: BookModelInput!) {
+    ///   editBook(bookId: $id, book: $book) {
     ///     __typename
-    ///     ... BookInfo
-    ///     ... on Book {
-    ///       id
+    ///     errors {
+    ///       __typename
+    ///       ... ValidationError
+    ///     }
+    ///     value {
+    ///       __typename
+    ///       ... BookInfo
+    ///       ... on Book {
+    ///         id
+    ///       }
     ///     }
     ///   }
+    /// }
+    /// 
+    /// fragment ValidationError on ValidationError {
+    ///   propertyName
+    ///   message
     /// }
     /// 
     /// fragment BookInfo on Book {
@@ -38,7 +50,7 @@ namespace MyApplicationMud.GraphQL
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
     public partial interface IUpdateBookMutation : global::StrawberryShake.IOperationRequestFactory
     {
-        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IUpdateBookResult>> ExecuteAsync(global::System.String bookId, global::MyApplicationMud.GraphQL.BookModelInput book, global::System.Threading.CancellationToken cancellationToken = default);
-        global::System.IObservable<global::StrawberryShake.IOperationResult<IUpdateBookResult>> Watch(global::System.String bookId, global::MyApplicationMud.GraphQL.BookModelInput book, global::StrawberryShake.ExecutionStrategy? strategy = null);
+        global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IUpdateBookResult>> ExecuteAsync(global::System.String id, global::MyApplicationMud.GraphQL.BookModelInput book, global::System.Threading.CancellationToken cancellationToken = default);
+        global::System.IObservable<global::StrawberryShake.IOperationResult<IUpdateBookResult>> Watch(global::System.String id, global::MyApplicationMud.GraphQL.BookModelInput book, global::StrawberryShake.ExecutionStrategy? strategy = null);
     }
 }

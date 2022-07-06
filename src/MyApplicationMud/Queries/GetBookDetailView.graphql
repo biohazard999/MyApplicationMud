@@ -13,10 +13,15 @@ query GetBookAuthors {
 	}
 }
 
-mutation UpdateBook($bookId: ID!, $book: BookModelInput!) {
-	editBook(bookId: $bookId, book: $book) {
-		...BookInfo
-	}
+mutation updateBook($id: ID!, $book: BookModelInput!){
+  editBook(bookId: $id, book:  $book) {
+    errors {
+      ...ValidationError
+    }
+    value {
+        ...BookInfo
+    }
+  }
 }
 
 mutation AddBook($book: BookModelInput!) {
@@ -37,6 +42,12 @@ mutation DeleteBook($bookId: ID!) {
 #		...BookInfo
 #	}
 #}
+
+fragment ValidationError on ValidationError
+{
+    propertyName
+    message
+}
 
 fragment BookInfo on Book {
 	id

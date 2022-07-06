@@ -6,14 +6,26 @@ namespace MyApplicationMud.GraphQL
     /// <summary>
     /// Represents the operation service of the UpdateBook GraphQL operation
     /// <code>
-    /// mutation UpdateBook($bookId: ID!, $book: BookModelInput!) {
-    ///   editBook(bookId: $bookId, book: $book) {
+    /// mutation UpdateBook($id: ID!, $book: BookModelInput!) {
+    ///   editBook(bookId: $id, book: $book) {
     ///     __typename
-    ///     ... BookInfo
-    ///     ... on Book {
-    ///       id
+    ///     errors {
+    ///       __typename
+    ///       ... ValidationError
+    ///     }
+    ///     value {
+    ///       __typename
+    ///       ... BookInfo
+    ///       ... on Book {
+    ///         id
+    ///       }
     ///     }
     ///   }
+    /// }
+    /// 
+    /// fragment ValidationError on ValidationError {
+    ///   propertyName
+    ///   message
     /// }
     /// 
     /// fragment BookInfo on Book {
@@ -49,22 +61,22 @@ namespace MyApplicationMud.GraphQL
         }
 
         global::System.Type global::StrawberryShake.IOperationRequestFactory.ResultType => typeof(IUpdateBookResult);
-        public async global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IUpdateBookResult>> ExecuteAsync(global::System.String bookId, global::MyApplicationMud.GraphQL.BookModelInput book, global::System.Threading.CancellationToken cancellationToken = default)
+        public async global::System.Threading.Tasks.Task<global::StrawberryShake.IOperationResult<IUpdateBookResult>> ExecuteAsync(global::System.String id, global::MyApplicationMud.GraphQL.BookModelInput book, global::System.Threading.CancellationToken cancellationToken = default)
         {
-            var request = CreateRequest(bookId, book);
+            var request = CreateRequest(id, book);
             return await _operationExecutor.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
-        public global::System.IObservable<global::StrawberryShake.IOperationResult<IUpdateBookResult>> Watch(global::System.String bookId, global::MyApplicationMud.GraphQL.BookModelInput book, global::StrawberryShake.ExecutionStrategy? strategy = null)
+        public global::System.IObservable<global::StrawberryShake.IOperationResult<IUpdateBookResult>> Watch(global::System.String id, global::MyApplicationMud.GraphQL.BookModelInput book, global::StrawberryShake.ExecutionStrategy? strategy = null)
         {
-            var request = CreateRequest(bookId, book);
+            var request = CreateRequest(id, book);
             return _operationExecutor.Watch(request, strategy);
         }
 
-        private global::StrawberryShake.OperationRequest CreateRequest(global::System.String bookId, global::MyApplicationMud.GraphQL.BookModelInput book)
+        private global::StrawberryShake.OperationRequest CreateRequest(global::System.String id, global::MyApplicationMud.GraphQL.BookModelInput book)
         {
             var variables = new global::System.Collections.Generic.Dictionary<global::System.String, global::System.Object?>();
-            variables.Add("bookId", FormatBookId(bookId));
+            variables.Add("id", FormatId(id));
             variables.Add("book", FormatBook(book));
             return CreateRequest(variables);
         }
@@ -74,7 +86,7 @@ namespace MyApplicationMud.GraphQL
             return new global::StrawberryShake.OperationRequest(id: UpdateBookMutationDocument.Instance.Hash.Value, name: "UpdateBook", document: UpdateBookMutationDocument.Instance, strategy: global::StrawberryShake.RequestStrategy.Default, variables: variables);
         }
 
-        private global::System.Object? FormatBookId(global::System.String value)
+        private global::System.Object? FormatId(global::System.String value)
         {
             if (value is null)
             {

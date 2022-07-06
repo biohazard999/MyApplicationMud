@@ -4,9 +4,9 @@
 namespace MyApplicationMud.GraphQL
 {
     [global::System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "12.11.1.0")]
-    public partial class UpdateBook_EditBook_Author_Author : global::System.IEquatable<UpdateBook_EditBook_Author_Author>, IUpdateBook_EditBook_Author_Author
+    public partial class UpdateBook_EditBook_Value_Author_Author : global::System.IEquatable<UpdateBook_EditBook_Value_Author_Author>, IUpdateBook_EditBook_Value_Author_Author
     {
-        public UpdateBook_EditBook_Author_Author(global::System.Int32 id, global::System.String name)
+        public UpdateBook_EditBook_Value_Author_Author(global::System.Int32 id, global::System.String name)
         {
             Id = id;
             Name = name;
@@ -16,7 +16,7 @@ namespace MyApplicationMud.GraphQL
 
         public global::System.String Name { get; }
 
-        public virtual global::System.Boolean Equals(UpdateBook_EditBook_Author_Author? other)
+        public virtual global::System.Boolean Equals(UpdateBook_EditBook_Value_Author_Author? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -53,7 +53,7 @@ namespace MyApplicationMud.GraphQL
                 return false;
             }
 
-            return Equals((UpdateBook_EditBook_Author_Author)obj);
+            return Equals((UpdateBook_EditBook_Value_Author_Author)obj);
         }
 
         public override global::System.Int32 GetHashCode()

@@ -315,6 +315,14 @@ public record BookEffects(
             try
             {
                 result.EnsureNoErrors();
+                if (result.Data is not null)
+                {
+                    if (result.Data.EditBook.Errors.Any())
+                    {
+                        dispatcher.DispatchSetValidationErrors(result.Data.EditBook.Errors.Select(m => new KeyValuePair<string, string>(m.PropertyName, m.Message)));
+                        return;
+                    }
+                }
             }
             catch (Exception ex)
             {
