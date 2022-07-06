@@ -12,6 +12,11 @@ enum ApplyPolicy {
   AFTER_RESOLVER
 }
 
+interface IBookInputModel {
+  title: String!
+  authorId: ID!
+}
+
 type Query {
   serverInfo: ServerInfo!
   user: UserInfo!
@@ -94,6 +99,11 @@ input AuthorSortInput {
   name: SortEnumType
 }
 
+type Author {
+  id: Int!
+  name: String!
+}
+
 type Book {
   id: Int!
   title: String!
@@ -108,11 +118,6 @@ type UserInfo {
 
 type ServerInfo {
   serverTime: DateTime!
-}
-
-type Author {
-  id: Int!
-  name: String!
 }
 
 input BookModelInput {

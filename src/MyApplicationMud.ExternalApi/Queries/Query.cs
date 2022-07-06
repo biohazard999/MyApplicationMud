@@ -1,4 +1,7 @@
 ﻿using HotChocolate.AspNetCore.Authorization;
+
+using MyApplicationMud.Shared.Validation;
+
 using System.Security.Claims;
 
 namespace MyApplicationMud.ExternalApi.Queries;
@@ -28,7 +31,7 @@ public class Query
         => FakeData.authors.AsQueryable();
 }
 
-public record BookModel(string Title, [ID(nameof(Author))]int AuthorId);
+public record BookModel(string Title, [ID(nameof(Author))] int AuthorId) : IBookInputModel;
 
 public record ServerInfo([GraphQLDescription("Returns the server time in UTC")] DateTime ServerTime);
 

@@ -1,13 +1,14 @@
 ﻿@using FluentValidation
+@using MyApplicationMud.Shared.Validation
 @inject IState<BooksState> State
 @inject IDispatcher Dispatcher
 @inject ISnackbar Snackbar
 
 <MudDialog>
     <DialogContent>
-        <MudForm Model="@State.Value.EditBook">
-            <MudTextField @bind-Value="State.Value.EditBook!.Title" Label="Title" Required="true" Immediate="true" RequiredError="Title is required!" />
-            <MudSelect @bind-Value="State.Value.EditBook!.AuthorId" Immediate="true" Label="Author" AnchorOrigin="Origin.BottomCenter" RequiredError="Author is required">
+        <MudForm Model="@model" Validation="validator.ValidateValue" ValidationDelay="0">
+            <MudTextField @bind-Value="model.Title" For="() => model.Title" Label="Title" Immediate="true" />
+            <MudSelect @bind-Value="model.AuthorId" For="() => model.AuthorId" Immediate="true" Label="Author" AnchorOrigin="Origin.BottomCenter">
                 @foreach (var author in State.Value.Authors)
                 {
                     <MudSelectItem Value="@author.Id">@author.Name</MudSelectItem>
@@ -44,7 +45,9 @@
 </MudDialog>
 
 @code {
+    private BookModelInput model => State.Value.EditBook ?? default!;
 
+    private BookInputModelValidator validator = new BookInputModelValidator();
     private bool Clearing = false;
     private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
     private string DragClass = DefaultDragClass;

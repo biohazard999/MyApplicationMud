@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 using MyApplicationMud.ExternalApi.Queries;
@@ -40,10 +40,10 @@ services
     .AddType<UploadType>()
     .AddMutationType<Mutations>()
     .AddSubscriptionType<Subscriptions>()
+//TODO: Relay
+//.AddGlobalObjectIdentification()
+//.AddQueryFieldToMutationPayloads()
 
-    //TODO: Relay
-    //.AddGlobalObjectIdentification()
-    //.AddQueryFieldToMutationPayloads()
 ;
 
 var app = builder.Build();

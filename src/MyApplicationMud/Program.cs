@@ -1,4 +1,8 @@
-﻿using Blazored.LocalStorage;
+﻿using System.Globalization;
+
+using Blazored.LocalStorage;
+
+using FluentValidation;
 
 using Fluxor.Persist.Middleware;
 using Fluxor.Persist.Storage;
@@ -14,8 +18,10 @@ using MyApplicationMud;
 using MyApplicationMud.Services;
 using MyApplicationMud.Services.Storage;
 
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
+builder.Services.AddLocalization();
 builder.Services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
 builder.Services.AddScoped<IStringStateStorage, LocalStateStorage>();
 builder.Services.AddScoped<IStoreHandler, JsonStoreHandler>();
@@ -68,4 +74,14 @@ builder.Services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+
+CultureInfo cultureInfo = new("de-AT");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+CultureInfo.CurrentUICulture = cultureInfo;
+CultureInfo.CurrentCulture = cultureInfo;
+ValidatorOptions.Global.LanguageManager.Enabled = true;
+ValidatorOptions.Global.LanguageManager.Culture = cultureInfo;
+
+await host.RunAsync();

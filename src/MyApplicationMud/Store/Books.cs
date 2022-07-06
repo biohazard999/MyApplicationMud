@@ -1,4 +1,6 @@
 ﻿using MyApplicationMud.Shared;
+using MyApplicationMud.Shared.Validation;
+
 using System.Reactive.Linq;
 
 namespace MyApplicationMud.Store;
@@ -115,6 +117,7 @@ public record AddBookAction();
 public record EditBookAction(int BookId);
 public record EditBookFetchedAction(int BookId, BookModelInput BookModel, string? BookImage = null);
 
+
 public record AuthorsFetchedAction(IEnumerable<IAuthorInfo> Authors);
 public record ShowDialogAction(DialogReference DialogReference);
 public record CloseDialogAction(DialogReference DialogReference);
@@ -201,7 +204,7 @@ public static class BooksReducer
     }
 
     [ReducerMethod]
-    public static BooksState AuthorsFetechedReducer(BooksState state, AuthorsFetchedAction action)
+    public static BooksState AuthorsFetchedReducer(BooksState state, AuthorsFetchedAction action)
         => state with { Authors = action.Authors };
 
     [ReducerMethod]
@@ -296,6 +299,14 @@ public record BookEffects(
     [EffectMethod]
     public async Task HandleSaveBookAction(SaveBookAction action, IDispatcher dispatcher)
     {
+        var validationResult = new BookInputModelValidator().Validate(action.BookModel);
+        if (validationResult is not null)
+        {
+            //validationResult.IsValid
+            //validationResult.Errors.ForEach(a => a.)
+        }
+
+
         int? bookId = action.BookId;
 
         if (action.BookId.HasValue)
