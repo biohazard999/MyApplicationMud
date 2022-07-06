@@ -29,7 +29,11 @@
     <PackageReference Include="StrawberryShake.Transport.Http" Version="12.11.1" />
     <PackageReference Include="StrawberryShake.Transport.WebSockets" Version="12.11.1" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
-
+    <PackageReference Include="Fluxor.Generators" Version="0.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Fluxor.Generators.Attributes" Version="0.0.2" />
   </ItemGroup>
 
   <ItemGroup>
