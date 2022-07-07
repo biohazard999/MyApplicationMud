@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj" />
-    <ProjectReference Include="..\MyApplicationMud\MyApplicationMud.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
 	<PackageReference Include="Duende.BFF" Version="1.2.3" />
 	<PackageReference Include="Duende.BFF.Yarp" Version="1.2.3" />
 	<PackageReference Include="IdentityModel" Version="6.0.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.5" />
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Client\Applications\MyApplicationMud\MyApplicationMud.csproj" />
+    <ProjectReference Include="..\..\Shared\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj" />
   </ItemGroup>
 
 </Project>

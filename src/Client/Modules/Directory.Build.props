@@ -1,0 +1,16 @@
+﻿<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    
+  </PropertyGroup>
+
+  <ItemGroup>
+    
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(GITHUB_ACTIONS)' != ''">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+  </ItemGroup>
+
+</Project>
