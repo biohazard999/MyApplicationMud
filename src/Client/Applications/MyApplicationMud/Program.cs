@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 
 using MyApplicationMud;
+using MyApplicationMud.Stores;
 using MyApplicationMud.Services;
 using MyApplicationMud.Services.Storage;
 
@@ -29,9 +30,11 @@ builder.Services.AddScoped<IStoreHandler, JsonStoreHandler>();
 builder.Services.AddFluxor(configuration =>
 {
     configuration.ScanAssemblies(
+        typeof(AppState).Assembly,
         typeof(CounterState).Assembly,
         typeof(BooksState).Assembly,
-        typeof(ValidationState).Assembly
+        typeof(ValidationState).Assembly,
+        typeof(WeatherState).Assembly
     );
 
     configuration.UseRouting();

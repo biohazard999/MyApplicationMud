@@ -3,12 +3,24 @@
 
   <PropertyGroup>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <SupportedPlatform Include="browser" />
+    <Using Include="System.Diagnostics"/>
+    <Using Include="System.Security.Claims" />
+    <Using Include="System.Net.Http.Json" />
+    <Using Include="System.Reactive.Linq" />
+    <Using Include="System.Text.Json.Serialization" />
+    <Using Include="Fluxor" />
+    <Using Include="Fluxor.Persist.Storage" />
+    <Using Include="StrawberryShake" />
+    <Using Include="MudBlazor" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.6" />
     <PackageReference Include="StrawberryShake.CodeGeneration.CSharp.Analyzers" Version="12.11.1" />
     <PackageReference Include="StrawberryShake.Transport.Http" Version="12.11.1" />
     <PackageReference Include="StrawberryShake.Transport.WebSockets" Version="12.11.1" />

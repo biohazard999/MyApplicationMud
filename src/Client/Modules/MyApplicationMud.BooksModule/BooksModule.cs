@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyApplicationMud.BooksModule;
-public class BookModule
+namespace MyApplicationMud;
+
+public class BooksModule
 {
 }

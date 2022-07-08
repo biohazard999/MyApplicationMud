@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using MyApplicationMud.Shared;
+﻿using MyApplicationMud.Components;
 
-namespace MyApplicationMud.Store;
+namespace MyApplicationMud.Stores;
+
+[Dispatchable]
+public record UnexpectedExceptionAction(Exception Exception);
+[Dispatchable]
+public record ClearUnexpectedExceptionAction();
 
 public record AppState
 {
@@ -17,9 +21,6 @@ public class AppFeature : Feature<AppState>
     protected override AppState GetInitialState()
         => new();
 }
-
-public record UnexpectedExceptionAction(Exception Exception);
-public record ClearUnexpectedExceptionAction();
 
 public static class AppReducer
 {

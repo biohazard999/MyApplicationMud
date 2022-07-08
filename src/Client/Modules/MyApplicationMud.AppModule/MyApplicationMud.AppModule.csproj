@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
+    <RootNamespace>MyApplicationMud</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MudBlazor.Markdown" Version="0.0.10" />
   </ItemGroup>
 
 </Project>

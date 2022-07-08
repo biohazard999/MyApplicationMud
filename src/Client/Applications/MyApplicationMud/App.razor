@@ -1,8 +1,8 @@
-﻿@using MyApplicationMud.BooksModule;
+﻿@using MyApplicationMud;
 
 <Fluxor.Blazor.Web.StoreInitializer />
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new []{ typeof(BookModule).Assembly }">
+    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new []{ typeof(BooksModule).Assembly, typeof(AppModule).Assembly, typeof(WeatherModule).Assembly,typeof(ValidationModule).Assembly, typeof(CountersModule).Assembly, typeof(WeatherModule).Assembly }">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>

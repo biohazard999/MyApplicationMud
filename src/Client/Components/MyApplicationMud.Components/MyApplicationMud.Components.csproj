@@ -1,9 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
   
   <PropertyGroup>
+    <RootNamespace>MyApplicationMud</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-  </ItemGroup>
 
 </Project>

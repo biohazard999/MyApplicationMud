@@ -1,15 +1,51 @@
-﻿using MyApplicationMud.BooksModule.BooksFeature.Components;
-using MyApplicationMud.BooksModule.GraphQL;
+﻿using MyApplicationMud.Components;
+using MyApplicationMud.GraphQL;
 using MyApplicationMud.Shared;
 using MyApplicationMud.Shared.Validation;
 
-using System.Reactive.Linq;
+namespace MyApplicationMud.Stores;
 
-namespace MyApplicationMud.Store;
+[Dispatchable]
+public record BooksLoadingAction();
+[Dispatchable]
+public record BookChangedAction(IBookListInfo Book);
+[Dispatchable]
+public record BookAddedAction(IBookListInfo Book);
+[Dispatchable]
+public record BookDeletedAction(int BookId);
+[Dispatchable]
+public record RefreshBooksAction();
+[Dispatchable]
+public record BooksLoadedAction(IEnumerable<IBookListInfo> Items);
+[Dispatchable]
+public record BooksLoadedWithClientErrorsAction(IEnumerable<IClientError> Errors);
+[Dispatchable]
+public record SaveBookAction(int? BookId, BookModelInput BookModel, Stream? PictureStream = null);
+[Dispatchable]
+public record DeleteBookAction(int BookId);
+[Dispatchable]
+public record AddBookAction();
+[Dispatchable]
+public record EditBookAction(int BookId);
+[Dispatchable]
+public record EditBookFetchedAction(int BookId, BookModelInput BookModel, string? BookImage = null);
+[Dispatchable]
+public record AuthorsFetchedAction(IEnumerable<IAuthorInfo> Authors);
+[Dispatchable]
+public record ShowDialogAction(DialogReference DialogReference);
+[Dispatchable]
+public record CloseDialogAction(DialogReference DialogReference);
+[Dispatchable]
+public record RemoveDialogAction();
+[Dispatchable]
+public record SetBookImageAction(string? BookImage);
 
+[PersistState]
 public record BooksState
 {
+    [JsonIgnore]
     public bool IsLoading { get; init; }
+    [JsonIgnore]
     public bool HasErrors => Errors.Any();
     public IList<IBookListInfo> Items { get; init; } = new List<IBookListInfo>();
     public IEnumerable<IClientError> Errors { get; init; } = Enumerable.Empty<IClientError>();
@@ -34,20 +70,6 @@ public class BooksFeature : Feature<BooksState>
             IsLoading = true
         };
 }
-
-public record BooksLoadingAction();
-public record BookChangedAction(IBookListInfo Book);
-public record BookAddedAction(IBookListInfo Book);
-public record BookDeletedAction(int BookId);
-
-public record RefreshBooksAction();
-
-public record BooksLoadedAction(IEnumerable<IBookListInfo> Items);
-
-public record BooksLoadedWithClientErrorsAction(IEnumerable<IClientError> Errors);
-
-public record SaveBookAction(int? BookId, BookModelInput BookModel, Stream? PictureStream = null);
-public record DeleteBookAction(int BookId);
 
 public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
 {
@@ -113,16 +135,6 @@ public class RefreshBooksEffect : Effect<RefreshBooksAction>, IDisposable
     public void Dispose()
         => Subscription?.Dispose();
 }
-
-public record AddBookAction();
-public record EditBookAction(int BookId);
-public record EditBookFetchedAction(int BookId, BookModelInput BookModel, string? BookImage = null);
-
-
-public record AuthorsFetchedAction(IEnumerable<IAuthorInfo> Authors);
-public record ShowDialogAction(DialogReference DialogReference);
-public record CloseDialogAction(DialogReference DialogReference);
-public record RemoveDialogAction();
 
 public static class BooksReducer
 {
@@ -228,8 +240,6 @@ public static class BooksReducer
     public static BooksState SetBookImageReducer(BooksState state, SetBookImageAction action)
         => state with { BookImage = action.BookImage };
 }
-
-public record SetBookImageAction(string? BookImage);
 
 public record BookEffects(
     IMyApplicationMudBooksClient Client,

@@ -1,4 +1,4 @@
-﻿namespace MyApplicationMud.Store;
+﻿namespace MyApplicationMud.Stores;
 
 public record ValidationState
 {

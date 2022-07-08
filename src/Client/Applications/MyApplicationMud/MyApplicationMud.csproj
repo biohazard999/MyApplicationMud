@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.1.1" />
-    <PackageReference Include="MudBlazor.Markdown" Version="0.0.10" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +20,12 @@
     <ProjectReference Include="..\..\Components\MyApplicationMud.Components\MyApplicationMud.Components.csproj" />
     <ProjectReference Include="..\..\Modules\MyApplicationMud.AppModule\MyApplicationMud.AppModule.csproj" />
     <ProjectReference Include="..\..\Modules\MyApplicationMud.BooksModule\MyApplicationMud.BooksModule.csproj" />
+    <ProjectReference Include="..\..\Modules\MyApplicationMud.CountersModule\MyApplicationMud.CountersModule.csproj" />
+    <ProjectReference Include="..\..\Modules\MyApplicationMud.WeatherModule\MyApplicationMud.WeatherModule.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Store\" />
   </ItemGroup>
 
 </Project>

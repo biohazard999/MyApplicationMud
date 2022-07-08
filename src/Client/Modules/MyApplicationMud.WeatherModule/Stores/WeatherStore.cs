@@ -1,6 +1,9 @@
-﻿using static MyApplicationMud.Pages.FetchData;
+﻿namespace MyApplicationMud.Stores;
 
-namespace MyApplicationMud.Store;
+[Dispatchable]
+public record FetchDataAction();
+[Dispatchable]
+public record FetchDataResultAction(IEnumerable<WeatherForecast> Forecasts);
 
 [FeatureState]
 public record WeatherState
@@ -8,10 +11,6 @@ public record WeatherState
     public bool IsLoading { get; init; }
     public IEnumerable<WeatherForecast> Forecasts { get; init; } = Array.Empty<WeatherForecast>();
 }
-
-public record FetchDataAction();
-
-public record FetchDataResultAction(IEnumerable<WeatherForecast> Forecasts);
 
 public static class Reducers
 {

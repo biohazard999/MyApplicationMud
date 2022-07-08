@@ -1,5 +1,5 @@
 ﻿using MyApplicationMud.Shared.Validation;
 
-namespace MyApplicationMud.BooksModule.GraphQL;
+namespace MyApplicationMud.GraphQL;
 
 public partial class BookModelInput : IBookInputModel { }

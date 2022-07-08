@@ -1,12 +1,15 @@
-﻿using Fluxor;
-using Fluxor.Persist.Storage;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FairWebBlazor.Components.States;
+using Fluxor;
+using Fluxor.Persist.Storage;
+
+namespace MyApplicationMud.Stores;
+
+[Dispatchable]
+public record ConnectionStatusChanged(bool IsOnline);
+
+
 
 [SkipPersistState]
 public record ConnectionState(bool IsOnline);
@@ -19,8 +22,6 @@ public class ConnectionStatusFeature : Feature<ConnectionState>
         => new ConnectionState(true);
 }
 
-[Dispatchable]
-public record ConnectionStatusChanged(bool IsOnline);
 
 public static class ConnectionStatusReducers
 {

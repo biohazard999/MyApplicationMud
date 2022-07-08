@@ -1,13 +1,13 @@
-﻿using Fluxor;
+﻿namespace MyApplicationMud.Stores;
 
-namespace MyApplicationMud.Store;
+[Dispatchable]
+public record IncrementCounterAction();
 
+[PersistState]
 public record CounterState
 {
     public int Count { get; init; }
 }
-
-public record IncrementCounterAction();
 
 public class CounterFeature : Feature<CounterState>
 {
