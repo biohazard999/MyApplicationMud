@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <RootNamespace>MyApplicationMud</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+    <Using Include="System.Diagnostics"/>
+    <Using Include="System.Security.Claims" />
+    <Using Include="System.Net.Http.Json" />
+    <Using Include="System.Reactive.Linq" />
+    <Using Include="System.Text.Json.Serialization" />
+    <Using Include="Fluxor" />
+    <Using Include="Fluxor.Persist.Storage" />
+    <Using Include="StrawberryShake" />
+    <Using Include="MudBlazor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.4.0" />
+    <PackageReference Include="Blazored.LocalStorage" Version="4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj" />
+    <ProjectReference Include="..\..\Components\MyApplicationMud.Components\MyApplicationMud.Components.csproj" />
+    <ProjectReference Include="..\..\Modules\MyApplicationMud.AppModule\MyApplicationMud.AppModule.csproj" />
+    <ProjectReference Include="..\..\Modules\MyApplicationMud.BooksModule\MyApplicationMud.BooksModule.csproj" />
+    <ProjectReference Include="..\..\Modules\MyApplicationMud.CountersModule\MyApplicationMud.CountersModule.csproj" />
+    <ProjectReference Include="..\..\Modules\MyApplicationMud.WeatherModule\MyApplicationMud.WeatherModule.csproj" />
+  </ItemGroup>
+  
+</Project>

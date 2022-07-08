@@ -8,25 +8,10 @@
 
   <ItemGroup Condition="'$(Configuration)' != 'Release'">
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.4" PrivateAssets="all" />
-    <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazored.LocalStorage" Version="4.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj" />
-    <ProjectReference Include="..\..\Components\MyApplicationMud.Components\MyApplicationMud.Components.csproj" />
-    <ProjectReference Include="..\..\Modules\MyApplicationMud.AppModule\MyApplicationMud.AppModule.csproj" />
-    <ProjectReference Include="..\..\Modules\MyApplicationMud.BooksModule\MyApplicationMud.BooksModule.csproj" />
-    <ProjectReference Include="..\..\Modules\MyApplicationMud.CountersModule\MyApplicationMud.CountersModule.csproj" />
-    <ProjectReference Include="..\..\Modules\MyApplicationMud.WeatherModule\MyApplicationMud.WeatherModule.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\" />
-    <Folder Include="Store\" />
+    <ProjectReference Include="..\MyApplicationMud.Shell\MyApplicationMud.Shell.csproj" />
   </ItemGroup>
 
 </Project>

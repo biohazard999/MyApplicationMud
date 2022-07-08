@@ -76,7 +76,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{13BB752E-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Core", "src\Client\Core\MyApplicationMud.Core\MyApplicationMud.Core.csproj", "{999E0A4F-534B-4762-B5FF-5DD94294E026}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.Mobile", "src\Client\Applications\MyApplicationMud.Mobile\MyApplicationMud.Mobile.csproj", "{A61D3FC8-B1C3-42B8-8DD8-0F4D99D4CD26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Mobile", "src\Client\Applications\MyApplicationMud.Mobile\MyApplicationMud.Mobile.csproj", "{A61D3FC8-B1C3-42B8-8DD8-0F4D99D4CD26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.Shell", "src\Client\Applications\MyApplicationMud.Shell\MyApplicationMud.Shell.csproj", "{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -250,6 +252,18 @@ Global
 		{A61D3FC8-B1C3-42B8-8DD8-0F4D99D4CD26}.Release|x86.ActiveCfg = Release|Any CPU
 		{A61D3FC8-B1C3-42B8-8DD8-0F4D99D4CD26}.Release|x86.Build.0 = Release|Any CPU
 		{A61D3FC8-B1C3-42B8-8DD8-0F4D99D4CD26}.Release|x86.Deploy.0 = Release|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Debug|x64.Build.0 = Debug|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Debug|x86.Build.0 = Debug|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Release|x64.ActiveCfg = Release|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Release|x64.Build.0 = Release|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Release|x86.ActiveCfg = Release|Any CPU
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -275,6 +289,7 @@ Global
 		{13BB752E-A75C-4194-8FBC-198C578DE6B0} = {A19DBF08-6774-48F3-92F1-E0081E9AE6BE}
 		{999E0A4F-534B-4762-B5FF-5DD94294E026} = {13BB752E-A75C-4194-8FBC-198C578DE6B0}
 		{A61D3FC8-B1C3-42B8-8DD8-0F4D99D4CD26} = {CA3F0855-7BCD-40E6-A4D7-2DAAD8B0DC70}
+		{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64} = {CA3F0855-7BCD-40E6-A4D7-2DAAD8B0DC70}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFBA01CC-6D31-4408-9E29-AFF8AF28CE38}

@@ -7,7 +7,7 @@
 
     <BlazorWebView HostPage="wwwroot/index-maui.html">
         <BlazorWebView.RootComponents>
-            <RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
+            <RootComponent Selector="#app" ComponentType="{x:Type local:MainMaui}" />
         </BlazorWebView.RootComponents>
     </BlazorWebView>
 

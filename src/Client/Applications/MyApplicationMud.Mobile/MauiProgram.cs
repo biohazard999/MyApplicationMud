@@ -19,9 +19,7 @@ public static class MauiProgram
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
-
-        builder.Services.AddSingleton<WeatherForecastService>();
-
+        builder.Services.AddMyApplicationMud("https://localhost:5001");
         return builder.Build();
     }
 }

@@ -15,35 +15,14 @@ public static class AssemblyScanning
     {
         var allAssemblies = new List<Assembly>();
 
-        //https://www.techiediaries.com/check-blazor-app-running-webassembly-ijsinprocessruntime/
-        if (jsRuntime is IJSInProcessRuntime)
+        var refs = AppDomain.CurrentDomain.GetAssemblies();
+
+        foreach (var reference in refs.Where(x => !x.IsDynamic))
         {
-            var refs = AppDomain.CurrentDomain.GetAssemblies();
-
-            foreach (var reference in refs.Where(x => !x.IsDynamic))
+            var name = reference.GetName().Name;
+            if (name is not null && name.StartsWith(startsWith) && name.EndsWith(endsWith))
             {
-                var name = reference.GetName().Name;
-                if (name is not null && name.StartsWith(startsWith) && name.EndsWith(endsWith))
-                {
-                    allAssemblies.Add(reference);
-                }
-            }
-        }
-        else
-        {
-            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            if (path is not null)
-            {
-                var files = Directory.GetFiles(path, "*.dll");
-
-                foreach (var dll in files
-                    .Select(x => Path.GetFileName(x))
-                    .Where(x => x.StartsWith(startsWith) && x.EndsWith(endsWith))
-                )
-                {
-                    allAssemblies.Add(Assembly.LoadFile(dll));
-                }
+                allAssemblies.Add(reference);
             }
         }
 
