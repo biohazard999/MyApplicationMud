@@ -8,6 +8,9 @@
 
 <MudLink Href="/Profile">Profile</MudLink>
 
+<MudText>Is Browser?: @System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Create("BROWSER"))</MudText>
+<MudText>@System.Environment.OSVersion.ToString()</MudText>
+
 @code {
     protected override void OnInitialized()
     {
