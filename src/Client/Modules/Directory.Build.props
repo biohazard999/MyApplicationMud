@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\MyApplicationMud.Core\MyApplicationMud.Core.csproj" />
     <ProjectReference Include="..\..\Components\MyApplicationMud.Components\MyApplicationMud.Components.csproj" />
     <ProjectReference Include="..\..\..\Shared\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj" />
   </ItemGroup>

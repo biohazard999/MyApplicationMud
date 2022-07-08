@@ -1,8 +1,11 @@
 ﻿@using MyApplicationMud;
+@using MyApplicationMud.Services
+@using System.Reflection
+@inject IJSRuntime JSRuntime
 
 <Fluxor.Blazor.Web.StoreInitializer />
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new []{ typeof(BooksModule).Assembly, typeof(AppModule).Assembly, typeof(WeatherModule).Assembly,typeof(ValidationModule).Assembly, typeof(CountersModule).Assembly, typeof(WeatherModule).Assembly }">
+    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="ModuleAssemblies">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
@@ -21,3 +24,9 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code {
+
+    private IEnumerable<Assembly> ModuleAssemblies =>
+        AssemblyScanning.GetAssemblies(JSRuntime, "MyApplicationMud", "Module").ToArray();
+}

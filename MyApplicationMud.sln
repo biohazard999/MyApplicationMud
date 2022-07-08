@@ -47,8 +47,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.AppModule"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.BooksModule", "src\Client\Modules\MyApplicationMud.BooksModule\MyApplicationMud.BooksModule.csproj", "{EABC1993-1835-4C11-9391-C1524B1F3D14}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Core", "src\Client\Modules\MyApplicationMud.Core\MyApplicationMud.Core.csproj", "{BEB80C3A-0D91-4A11-8E83-8646035C0D03}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{F3FC030A-1252-4470-8E75-5329AD03332E}"
 	ProjectSection(SolutionItems) = preProject
 		src\Server\Directory.Build.props = src\Server\Directory.Build.props
@@ -67,9 +65,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Shared", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.ValidationModule", "src\Client\Modules\MyApplicationMud.ValidationModule\MyApplicationMud.ValidationModule.csproj", "{1AF2C892-F033-4B9A-B007-7089D7ABFBDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.CountersModule", "src\Client\Modules\MyApplicationMud.CountersModule\MyApplicationMud.CountersModule.csproj", "{D7EEB92B-4152-4C4F-8D79-0997C26C13E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.CountersModule", "src\Client\Modules\MyApplicationMud.CountersModule\MyApplicationMud.CountersModule.csproj", "{D7EEB92B-4152-4C4F-8D79-0997C26C13E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.WeatherModule", "src\Client\Modules\MyApplicationMud.WeatherModule\MyApplicationMud.WeatherModule.csproj", "{C87A078A-E33F-416B-B627-237D4D021C40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.WeatherModule", "src\Client\Modules\MyApplicationMud.WeatherModule\MyApplicationMud.WeatherModule.csproj", "{C87A078A-E33F-416B-B627-237D4D021C40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{13BB752E-A75C-4194-8FBC-198C578DE6B0}"
+	ProjectSection(SolutionItems) = preProject
+		src\Client\Core\Directory.Build.props = src\Client\Core\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Core", "src\Client\Core\MyApplicationMud.Core\MyApplicationMud.Core.csproj", "{999E0A4F-534B-4762-B5FF-5DD94294E026}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,18 +146,6 @@ Global
 		{EABC1993-1835-4C11-9391-C1524B1F3D14}.Release|x64.Build.0 = Release|Any CPU
 		{EABC1993-1835-4C11-9391-C1524B1F3D14}.Release|x86.ActiveCfg = Release|Any CPU
 		{EABC1993-1835-4C11-9391-C1524B1F3D14}.Release|x86.Build.0 = Release|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Debug|x64.Build.0 = Debug|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Debug|x86.Build.0 = Debug|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Release|x64.ActiveCfg = Release|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Release|x64.Build.0 = Release|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Release|x86.ActiveCfg = Release|Any CPU
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03}.Release|x86.Build.0 = Release|Any CPU
 		{5C601BB0-715D-4FB6-906B-63EB982CC46C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C601BB0-715D-4FB6-906B-63EB982CC46C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C601BB0-715D-4FB6-906B-63EB982CC46C}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -225,6 +218,18 @@ Global
 		{C87A078A-E33F-416B-B627-237D4D021C40}.Release|x64.Build.0 = Release|Any CPU
 		{C87A078A-E33F-416B-B627-237D4D021C40}.Release|x86.ActiveCfg = Release|Any CPU
 		{C87A078A-E33F-416B-B627-237D4D021C40}.Release|x86.Build.0 = Release|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Debug|x64.Build.0 = Debug|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Debug|x86.Build.0 = Debug|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Release|Any CPU.Build.0 = Release|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Release|x64.ActiveCfg = Release|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Release|x64.Build.0 = Release|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Release|x86.ActiveCfg = Release|Any CPU
+		{999E0A4F-534B-4762-B5FF-5DD94294E026}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,7 +244,6 @@ Global
 		{A72C8A0E-0765-41AD-AB4D-46CA0D8823FE} = {A19DBF08-6774-48F3-92F1-E0081E9AE6BE}
 		{F4A06811-2803-4118-A26A-604CD9A92C34} = {A72C8A0E-0765-41AD-AB4D-46CA0D8823FE}
 		{EABC1993-1835-4C11-9391-C1524B1F3D14} = {A72C8A0E-0765-41AD-AB4D-46CA0D8823FE}
-		{BEB80C3A-0D91-4A11-8E83-8646035C0D03} = {A72C8A0E-0765-41AD-AB4D-46CA0D8823FE}
 		{F3FC030A-1252-4470-8E75-5329AD03332E} = {C1116BC6-A421-4D6D-8A25-FD1A0D7F6B54}
 		{5C601BB0-715D-4FB6-906B-63EB982CC46C} = {F3FC030A-1252-4470-8E75-5329AD03332E}
 		{AC4206C0-51BB-4F06-9709-F097E7C2D74E} = {F3FC030A-1252-4470-8E75-5329AD03332E}
@@ -248,6 +252,8 @@ Global
 		{1AF2C892-F033-4B9A-B007-7089D7ABFBDC} = {A72C8A0E-0765-41AD-AB4D-46CA0D8823FE}
 		{D7EEB92B-4152-4C4F-8D79-0997C26C13E0} = {A72C8A0E-0765-41AD-AB4D-46CA0D8823FE}
 		{C87A078A-E33F-416B-B627-237D4D021C40} = {A72C8A0E-0765-41AD-AB4D-46CA0D8823FE}
+		{13BB752E-A75C-4194-8FBC-198C578DE6B0} = {A19DBF08-6774-48F3-92F1-E0081E9AE6BE}
+		{999E0A4F-534B-4762-B5FF-5DD94294E026} = {13BB752E-A75C-4194-8FBC-198C578DE6B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFBA01CC-6D31-4408-9E29-AFF8AF28CE38}
