@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 
-using MyApplicationMud.Mobile.Data;
+using MyApplicationMud.Data;
 
-namespace MyApplicationMud.Mobile;
+namespace MyApplicationMud;
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()

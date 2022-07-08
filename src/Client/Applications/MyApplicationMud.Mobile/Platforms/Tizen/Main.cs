@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace MyApplicationMud.Mobile;
+namespace MyApplicationMud;
 
 internal class Program : MauiApplication
 {

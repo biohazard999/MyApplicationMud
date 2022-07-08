@@ -2,7 +2,7 @@
 
 using UIKit;
 
-namespace MyApplicationMud.Mobile;
+namespace MyApplicationMud;
 public class Program
 {
     // This is the main entry point of the application.

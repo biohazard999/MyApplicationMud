@@ -1,4 +1,4 @@
-namespace MyApplicationMud.Mobile.Data;
+﻿namespace MyApplicationMud.Data;
 
 public class WeatherForecast
 {

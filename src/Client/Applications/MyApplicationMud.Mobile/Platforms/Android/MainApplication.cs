@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace MyApplicationMud.Mobile;
+namespace MyApplicationMud;
 [Application]
 public class MainApplication : MauiApplication
 {

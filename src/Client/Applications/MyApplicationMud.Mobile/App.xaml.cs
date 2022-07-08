@@ -1,4 +1,4 @@
-﻿namespace MyApplicationMud.Mobile;
+﻿namespace MyApplicationMud;
 
 public partial class App : Application
 {
