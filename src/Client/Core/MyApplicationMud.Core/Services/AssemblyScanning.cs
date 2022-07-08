@@ -57,7 +57,7 @@ public static class AssemblyScanning
         => GetAssemblies(jsRuntime, startsWith, endsWith)
         .SelectMany(a => a.DefinedTypes.Where(x => x.GetInterfaces().Contains(typeof(T))));
 
-    public static IEnumerable<T> GetInstances<T>(IServiceProvider serviceProvider, IJSRuntime jsRuntime, string startsWith = "", string endsWith = "")
+    public static IEnumerable<T> GetInstances<T>(IJSRuntime jsRuntime, string startsWith = "", string endsWith = "")
     {
         var instances = new List<T>();
 
@@ -65,7 +65,7 @@ public static class AssemblyScanning
         {
             if (!implementation.GetTypeInfo().IsAbstract)
             {
-                var instance = serviceProvider.GetService(implementation);
+                var instance = Activator.CreateInstance(implementation);
                 if (instance is T tInstance)
                 {
                     instances.Add(tInstance);

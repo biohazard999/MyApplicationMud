@@ -1,6 +1,23 @@
-﻿<MudNavMenu>
-    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavLink Href="books" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Book">Books</MudNavLink>
-    <MudNavLink Href="counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Counter</MudNavLink>
-    <MudNavLink Href="fetchdata" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Fetch data</MudNavLink>
+﻿@using MyApplicationMud.Services
+@inject IJSRuntime JSRuntime
+
+<MudNavMenu>
+    @foreach (var navItem in Modules.SelectMany(m => m.NavItems))
+    {
+        <MudNavLink Href="@navItem.Url" Match="@navItem.NavLinkMatch" Icon="@navItem.Icon">@navItem.Name</MudNavLink>
+    }
 </MudNavMenu>
+
+
+@code
+{
+    private IEnumerable<IModule> Modules = Enumerable.Empty<IModule>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Modules = AssemblyScanning
+            .GetInstances<IModule>(JSRuntime, "MyApplicationMud", "Module");
+
+        await base.OnInitializedAsync();
+    }
+}
