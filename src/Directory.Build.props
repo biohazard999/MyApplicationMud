@@ -2,11 +2,13 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
-    
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    
+    <PackageReference Include="FluentValidation" Version="11.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(GITHUB_ACTIONS)' != ''">

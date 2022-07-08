@@ -28,7 +28,12 @@ builder.Services.AddScoped<IStoreHandler, JsonStoreHandler>();
 
 builder.Services.AddFluxor(configuration =>
 {
-    configuration.ScanAssemblies(typeof(CounterState).Assembly);
+    configuration.ScanAssemblies(
+        typeof(CounterState).Assembly,
+        typeof(BooksState).Assembly,
+        typeof(ValidationState).Assembly
+    );
+
     configuration.UseRouting();
     configuration.UsePersist(o => o.UseInclusionApproach());
 
@@ -56,7 +61,7 @@ builder.Services
     .AddHttpMessageHandler<AntiforgeryHandler>();
 
 builder.Services
-    .AddMyApplicationMudClient(ExecutionStrategy.CacheFirst)
+    .AddMyApplicationMudBooksClient(ExecutionStrategy.CacheFirst)
     .ConfigureHttpClient(client =>
     {
         client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}external-graphql");

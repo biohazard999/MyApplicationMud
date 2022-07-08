@@ -2,15 +2,22 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
-    
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
 
   <ItemGroup>
-    
   </ItemGroup>
 
-  <ItemGroup Condition="'$(GITHUB_ACTIONS)' != ''">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+  <ItemGroup>
+    <PackageReference Include="StrawberryShake.CodeGeneration.CSharp.Analyzers" Version="12.11.1" />
+    <PackageReference Include="StrawberryShake.Transport.Http" Version="12.11.1" />
+    <PackageReference Include="StrawberryShake.Transport.WebSockets" Version="12.11.1" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Components\MyApplicationMud.Components\MyApplicationMud.Components.csproj" />
+    <ProjectReference Include="..\..\..\Shared\MyApplicationMud.Shared\MyApplicationMud.Shared.csproj" />
   </ItemGroup>
 
 </Project>

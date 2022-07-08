@@ -1,0 +1,140 @@
+﻿@using FluentValidation
+@using MyApplicationMud.Shared.Validation
+@inherits FluxorComponent
+@inject IState<BooksState> State
+@inject IState<ValidationState> ValidationState
+@inject IDispatcher Dispatcher
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        @if (model is not null)
+        {
+            <MudForm @ref="form" Model="@model" Validation="this.Validate" ValidationDelay="0">
+                <MudTextField @bind-Value="model.Title" For="() => model.Title" Label="Title" Immediate="true" />
+                <MudSelect @bind-Value="model.AuthorId" For="() => model.AuthorId" Immediate="true" Label="Author" AnchorOrigin="Origin.BottomCenter">
+                    @foreach (var author in State.Value.Authors)
+                    {
+                        <MudSelectItem Value="@author.Id">@author.Name</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudPaper @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass" Height="300px" Outlined="true" Class="@DragClass">
+                    @if (!Clearing)
+                    {
+                        <InputFile id="fileInput" OnChange="OnInputFileChanged" class="absolute mud-width-full mud-height-full overflow-hidden z-2" style="opacity:0;" />
+                    }
+                    @if (@State.Value.BookImage is not null)
+                    {
+                        <MudImage ObjectFit="ObjectFit.Contain" Height="200" Width="400" Src="@State.Value.BookImage" />
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.h6">Drag and drop files here or click</MudText>
+                    }
+                </MudPaper>
+                <MudToolBar DisableGutters="true" Class="gap-4">
+                    <MudIconButton HtmlTag="label"
+                               Color="Color.Info"
+                               Icon="@Icons.Filled.PhotoCamera"
+                               for="fileInput">
+                    </MudIconButton>
+                    <MudButton OnClick="Clear" Disabled="file == null" Color="Color.Error" Variant="Variant.Filled">Clear</MudButton>
+                </MudToolBar>
+            </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Abbrechen</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Speichern</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private MudForm? form;
+
+    private BookModelInput? model => State.Value.EditBook;
+
+    private BookInputModelValidator validator = new BookInputModelValidator();
+    private bool Clearing = false;
+    private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
+    private string DragClass = DefaultDragClass;
+    private IBrowserFile? file;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.SubscribeToAction<ClearValidation>(async _ => await (form?.Validate() ?? Task.CompletedTask));
+        this.SubscribeToAction<SetValidationErrors>(async _ => await (form?.Validate() ?? Task.CompletedTask));
+    }
+
+    async Task<IEnumerable<string>> Validate(object model, string propertyName)
+    {
+        var errors = await validator.ValidateValue(model, propertyName);
+
+        errors = errors
+            .Concat(ValidationState.Value.Errors
+                .Where(m => m.Key == propertyName)
+                .Select(m => m.Value)
+        );
+
+        return errors;
+    }
+
+    private async void OnInputFileChanged(InputFileChangeEventArgs e)
+    {
+        ClearDragClass();
+        file = e.File;
+        using var ms = new MemoryStream();
+        using var stream = file.OpenReadStream();
+        await stream.CopyToAsync(ms);
+        var format = "image/png";
+        var imageDataUrl = $"data:{format};base64,{Convert.ToBase64String(ms.ToArray())}";
+        Dispatcher.Dispatch(new SetBookImageAction(imageDataUrl));
+        StateHasChanged();
+    }
+
+    private async Task Clear()
+    {
+        Clearing = true;
+        file = null;
+        ClearDragClass();
+        await Task.Delay(100);
+        Clearing = false;
+    }
+
+    private void Upload()
+    {
+        //Upload the files here
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Add("TODO: Upload your files!", MudBlazor.Severity.Normal);
+    }
+
+    private void SetDragClass()
+    {
+        DragClass = $"{DefaultDragClass} mud-border-primary";
+    }
+
+    private void ClearDragClass()
+    {
+        DragClass = DefaultDragClass;
+    }
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; } = default!;
+
+    async Task Submit()
+    {
+        Dispatcher.DispatchClearValidation();
+        await (form?.Validate() ?? Task.CompletedTask);
+        if (form?.IsValid ?? false)
+        {
+            Dispatcher.Dispatch(new SaveBookAction(State.Value.BookId, State.Value.EditBook!, file?.OpenReadStream()));
+        }
+    }
+
+    void Cancel()
+    {
+        Dispatcher.DispatchClearValidation();
+        Dispatcher.Dispatch(new CloseDialogAction(State.Value.CurrentDialog!));
+    }
+}

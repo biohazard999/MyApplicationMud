@@ -1,0 +1,30 @@
+﻿{
+  "schema": "schema.graphql",
+  "documents": "**/*.graphql",
+  "extensions": {
+    "strawberryShake": {
+      "name": "MyApplicationMudBooksClient",
+      "namespace": "MyApplicationMud.BooksModule.GraphQL",
+      "url": "https://localhost:7222/graphql/",
+      "dependencyInjection": true,
+      "strictSchemaValidation": false,
+      "hashAlgorithm": "md5",
+      "useSingleFile": false,
+      "requestStrategy": "Default",
+      "outputDirectoryName": "Generated",
+      "noStore": false,
+      "emitGeneratedCode": true,
+      "razorComponents": false,
+      "records": {
+        "inputs": false,
+        "entities": true
+      },
+      "transportProfiles": [
+        {
+          "default": "Http",
+          "subscription": "WebSocket"
+        }
+      ]
+    }
+  }
+}

@@ -2,10 +2,10 @@
   "projects": [
     {
       "schema": [
-        "src/MyApplicationMud/schema.graphql"
+        "src/Client/Modules/MyApplicationMud.BooksModule/schema.graphql"
       ],
       "documents": [
-        "src/MyApplicationMud/**/*.graphql"
+        "src/Client/Modules/MyApplicationMud.BooksModule/**/*.graphql"
       ]
     }
   ]
