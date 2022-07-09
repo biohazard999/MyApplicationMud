@@ -1,26 +1,27 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
 using System.Security.Claims;
+
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace MyApplicationMud.Services;
 
 public class BffAuthenticationStateProvider : AuthenticationStateProvider
 {
-    private static readonly TimeSpan UserCacheRefreshInterval = TimeSpan.FromSeconds(60);
+    private static readonly TimeSpan userCacheRefreshInterval = TimeSpan.FromSeconds(60);
 
-    private readonly HttpClient _client;
-    private readonly ILogger<BffAuthenticationStateProvider> _logger;
+    private readonly HttpClient client;
+    private readonly ILogger<BffAuthenticationStateProvider> logger;
 
-    private DateTimeOffset _userLastCheck = DateTimeOffset.FromUnixTimeSeconds(0);
-    private ClaimsPrincipal _cachedUser = new(new ClaimsIdentity());
+    private DateTimeOffset userLastCheck = DateTimeOffset.FromUnixTimeSeconds(0);
+    private ClaimsPrincipal cachedUser = new(new ClaimsIdentity());
 
     public BffAuthenticationStateProvider(
         HttpClient client,
         ILogger<BffAuthenticationStateProvider> logger)
     {
-        _client = client;
-        _logger = logger;
+        this.client = client;
+        this.logger = logger;
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -33,15 +34,15 @@ public class BffAuthenticationStateProvider : AuthenticationStateProvider
         // adjust the period accordingly if that feature is needed
         if (user.Identity?.IsAuthenticated == true)
         {
-            _logger.LogInformation("starting background check..");
+            logger.LogInformation("starting background check..");
             Timer? timer = null;
-            
+
             timer = new Timer(async _ =>
             {
                 var currentUser = await GetUser(false);
                 if (currentUser.Identity?.IsAuthenticated == false)
                 {
-                    _logger.LogInformation("user logged out");
+                    logger.LogInformation("user logged out");
                     NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(currentUser)));
                     if (timer is not null)
                     {
@@ -57,17 +58,17 @@ public class BffAuthenticationStateProvider : AuthenticationStateProvider
     private async ValueTask<ClaimsPrincipal> GetUser(bool useCache = true)
     {
         var now = DateTimeOffset.Now;
-        if (useCache && now < _userLastCheck + UserCacheRefreshInterval)
+        if (useCache && now < userLastCheck + userCacheRefreshInterval)
         {
-            _logger.LogDebug("Taking user from cache");
-            return _cachedUser;
+            logger.LogDebug("Taking user from cache");
+            return cachedUser;
         }
 
-        _logger.LogDebug("Fetching user");
-        _cachedUser = await FetchUser();
-        _userLastCheck = now;
+        logger.LogDebug("Fetching user");
+        cachedUser = await FetchUser();
+        userLastCheck = now;
 
-        return _cachedUser;
+        return cachedUser;
     }
 
     record ClaimRecord(string Type, object Value);
@@ -76,8 +77,8 @@ public class BffAuthenticationStateProvider : AuthenticationStateProvider
     {
         try
         {
-            _logger.LogInformation("Fetching user information.");
-            var response = await _client.GetAsync("bff/user?slide=false");
+            logger.LogInformation("Fetching user information.");
+            var response = await client.GetAsync("bff/user?slide=false");
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -98,7 +99,7 @@ public class BffAuthenticationStateProvider : AuthenticationStateProvider
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Fetching user failed.");
+            logger.LogWarning(ex, "Fetching user failed.");
         }
 
         return new ClaimsPrincipal(new ClaimsIdentity());

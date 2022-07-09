@@ -25,7 +25,10 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<Main>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddMyApplicationMud(builder.HostEnvironment.BaseAddress);
+builder.Services
+    .AddMyApplicationMud<
+        AntiforgeryHandler
+    >(builder.HostEnvironment.BaseAddress);
 
 var host = builder.Build();
 

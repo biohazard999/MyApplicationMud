@@ -3,6 +3,7 @@
 using Fluxor.Persist.Middleware;
 
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using MudBlazor.Services;
 
@@ -13,7 +14,8 @@ namespace MyApplicationMud;
 
 public static class Startup
 {
-    public static void AddMyApplicationMud(this IServiceCollection services, string baseUri)
+    public static void AddMyApplicationMud<TDelegatingHandler>(this IServiceCollection services, string baseUri)
+        where TDelegatingHandler : DelegatingHandler
     {
         services.AddLocalization();
         services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
@@ -46,12 +48,15 @@ public static class Startup
         services.AddAuthorizationCore();
         services.AddScoped<AuthenticationStateProvider, BffAuthenticationStateProvider>();
 
+        services.TryAddTransient<IRedirectToLoginHandler, RedirectToLoginHandler>();
+
         // HTTP client configuration
-        services.AddTransient<AntiforgeryHandler>();
+        services
+            .AddTransient<TDelegatingHandler>();
 
         services
             .AddHttpClient("backend", client => client.BaseAddress = new Uri(baseUri))
-            .AddHttpMessageHandler<AntiforgeryHandler>();
+            .AddHttpMessageHandler<TDelegatingHandler>();
 
         services
             .AddMyApplicationMudBooksClient(ExecutionStrategy.CacheFirst)

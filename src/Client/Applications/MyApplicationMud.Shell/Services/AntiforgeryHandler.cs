@@ -1,10 +1,20 @@
-
+﻿
 using StrawberryShake.Transport.WebSockets;
 
 namespace MyApplicationMud.Services;
 
 public class AntiforgeryHandler : DelegatingHandler
 {
+    public AntiforgeryHandler()
+    {
+
+    }
+
+    public AntiforgeryHandler(DelegatingHandler delegatingHandler) : base(delegatingHandler)
+    {
+
+    }
+
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         request.Headers.Add("X-CSRF", "1");

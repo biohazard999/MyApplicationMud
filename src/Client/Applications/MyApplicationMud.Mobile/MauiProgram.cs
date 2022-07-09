@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Maui;
+﻿using IdentityModel.OidcClient;
 
-using MyApplicationMud.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
+
+using MyApplicationMud.Services;
+
+using System.Reflection;
 
 namespace MyApplicationMud;
+
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -15,11 +21,65 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
 
+        ConfigureConfiguration(builder);
+
         builder.Services.AddMauiBlazorWebView();
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
-        builder.Services.AddMyApplicationMud("https://localhost:5001");
+
+        builder.Services
+            .AddTransient<IRedirectToLoginHandler, MauiRedirectToLoginHandler>();
+
+        builder.Services
+            .AddTransient<WebAuthenticatorBrowser>();
+
+        builder.Services
+            .AddTransient<AccessTokenHandler>();
+
+        static HttpClient GetInsecureHttpClient()
+        {
+#if ANDROID
+            var handler = new Platforms.Android.CustomAndroidMessageHandler();
+#else
+            var handler = new HttpClientHandler();
+#endif
+            handler.ServerCertificateCustomValidationCallback
+                = (message, cert, chain, errors) => true;
+
+            var client = new HttpClient(handler);
+            return client;
+        }
+
+        builder.Services.AddTransient(sp =>
+        {
+            var options = new OidcClientOptions();
+            var section = builder.Configuration.GetSection("Oidc:Options");
+            section.Bind(options);
+
+            options.HttpClientFactory = _ => GetInsecureHttpClient();
+
+            options.Browser = sp.GetRequiredService<WebAuthenticatorBrowser>();
+            var client = new OidcClient(options);
+            return client;
+        });
+
+        var baseUrl = builder.Configuration
+            .GetRequiredSection("RemoteServices")
+            .GetRequiredSection("Default")
+            .GetValue<string>("BaseUrl");
+
+        builder.Services.AddMyApplicationMud<
+            AccessTokenHandler
+            >(baseUrl);
+
         return builder.Build();
+    }
+
+    private static void ConfigureConfiguration(MauiAppBuilder builder)
+    {
+        var assembly = typeof(App).GetTypeInfo().Assembly;
+
+        builder.Configuration.AddJsonFile(new EmbeddedFileProvider(assembly, "MyApplicationMud"), "appsettings.json", optional: false, false);
     }
 }

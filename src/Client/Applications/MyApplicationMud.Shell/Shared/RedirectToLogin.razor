@@ -1,11 +1,23 @@
-﻿@inject NavigationManager Navigation
+﻿@using MyApplicationMud.Services
+@inject IRedirectToLoginHandler RedirectToLoginHandler
 
 <AuthorizingInfo />
 
 @code {
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        var returnUrl = Uri.EscapeDataString("/" + Navigation.ToBaseRelativePath(Navigation.Uri));
-        Navigation.NavigateTo($"bff/login?returnUrl={returnUrl}", forceLoad: true);
+        await base.OnInitializedAsync();
+
+        //TODO: Url
+        await RedirectToLoginHandler.Redirect();
+
+        //var returnUrl = Uri.EscapeDataString("/" + Navigation.ToBaseRelativePath(Navigation.Uri));
+        ////Navigation.NavigateTo($"bff/login?returnUrl={returnUrl}", forceLoad: true);
+
+        //var result = await OidcClient.LoginAsync(new LoginRequest
+        //{
+        //    BrowserDisplayMode = IdentityModel.OidcClient.Browser.DisplayMode.Visible
+        //    //TODO: Return Url
+        //});
     }
 }
