@@ -10,7 +10,7 @@
     <DialogContent>
         @if (model is not null)
         {
-            <MudForm @ref="form" Model="@model" Validation="this.Validate" ValidationDelay="0">
+            <MudForm @ref="form" Model="@model" Validation="(object m, string p) => this.Validate(m,p)" ValidationDelay="0">
                 <MudTextField @bind-Value="model.Title" For="() => model.Title" Label="Title" Immediate="true" />
                 <MudSelect @bind-Value="model.AuthorId" For="() => model.AuthorId" Immediate="true" Label="Author" AnchorOrigin="Origin.BottomCenter">
                     @foreach (var author in State.Value.Authors)
