@@ -27,7 +27,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services
     .AddMyApplicationMud<
-        AntiforgeryHandler
+        AntiforgeryHandler,
+        BffAuthenticationStateProvider
     >(builder.HostEnvironment.BaseAddress);
 
 var host = builder.Build();

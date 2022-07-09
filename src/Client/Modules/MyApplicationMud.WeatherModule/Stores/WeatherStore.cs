@@ -41,11 +41,18 @@ public class FetchDataActionEffect : Effect<FetchDataAction>
 
     public override async Task HandleAsync(FetchDataAction action, IDispatcher dispatcher)
     {
-        var httpClient = HttpClientFactory.CreateClient("backend");
-        var forecasts = await httpClient.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-        if (forecasts is not null)
+        try
         {
-            dispatcher.Dispatch(new FetchDataResultAction(forecasts));
+            var httpClient = HttpClientFactory.CreateClient("backend");
+            var forecasts = await httpClient.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+            if (forecasts is not null)
+            {
+                dispatcher.Dispatch(new FetchDataResultAction(forecasts));
+            }
+        }
+        catch (Exception ex)
+        {
+
         }
     }
 }

@@ -18,7 +18,12 @@ internal class WebAuthenticatorBrowser : IBrowser
 #else
 
             var authResult =
-                await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(options.EndUrl));
+                await WebAuthenticator.AuthenticateAsync(new WebAuthenticatorOptions()
+                {
+                    Url = new Uri(options.StartUrl),
+                    CallbackUrl = new Uri(options.EndUrl),
+                    PrefersEphemeralWebBrowserSession = true
+                });
 #endif
             var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
 

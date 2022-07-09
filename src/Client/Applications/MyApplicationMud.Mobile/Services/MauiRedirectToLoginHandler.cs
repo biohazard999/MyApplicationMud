@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 using IdentityModel.OidcClient;
 
+using Microsoft.AspNetCore.Components.Authorization;
+
 namespace MyApplicationMud.Services;
 
-public record MauiRedirectToLoginHandler(OidcClient OidcClient) : IRedirectToLoginHandler
+public record MauiRedirectToLoginHandler : IRedirectToLoginHandler
 {
-    public async Task Redirect()
-    {
-        var result = await OidcClient.LoginAsync(new LoginRequest());
-
-    }
+    public Task Redirect() => Task.CompletedTask;
 }

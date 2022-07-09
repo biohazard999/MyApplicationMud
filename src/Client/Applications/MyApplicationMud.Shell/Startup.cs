@@ -14,8 +14,13 @@ namespace MyApplicationMud;
 
 public static class Startup
 {
-    public static void AddMyApplicationMud<TDelegatingHandler>(this IServiceCollection services, string baseUri)
+    public static void AddMyApplicationMud<
+        TDelegatingHandler,
+        TAuthenticationStateProvider
+    >
+    (this IServiceCollection services, string baseUri)
         where TDelegatingHandler : DelegatingHandler
+        where TAuthenticationStateProvider : AuthenticationStateProvider
     {
         services.AddLocalization();
         services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
@@ -46,7 +51,7 @@ public static class Startup
 
         // authentication state plumbing
         services.AddAuthorizationCore();
-        services.AddScoped<AuthenticationStateProvider, BffAuthenticationStateProvider>();
+        services.AddScoped<AuthenticationStateProvider, TAuthenticationStateProvider>();
 
         services.TryAddTransient<IRedirectToLoginHandler, RedirectToLoginHandler>();
 

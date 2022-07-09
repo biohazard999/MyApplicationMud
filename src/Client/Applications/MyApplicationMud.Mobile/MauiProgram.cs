@@ -70,7 +70,8 @@ public static class MauiProgram
             .GetValue<string>("BaseUrl");
 
         builder.Services.AddMyApplicationMud<
-            AccessTokenHandler
+            AccessTokenHandler,
+            MauiAuthenticationStateProvider
             >(baseUrl);
 
         return builder.Build();
