@@ -67,7 +67,7 @@ public static class Startup
             .AddMyApplicationMudBooksClient(ExecutionStrategy.CacheFirst)
             .ConfigureHttpClient(client =>
             {
-                client.BaseAddress = new Uri($"{baseUri}external-graphql");
+                client.BaseAddress = new Uri($"{new Uri(baseUri)}external-graphql");
             })
             .ConfigureWebSocketClient(client =>
             {
