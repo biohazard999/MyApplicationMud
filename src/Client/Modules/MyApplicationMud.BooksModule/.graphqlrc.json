@@ -1,10 +1,10 @@
-{
+﻿{
   "schema": "schema.graphql",
   "documents": "**/*.graphql",
   "extensions": {
     "strawberryShake": {
-      "name": "MyApplicationMudBooks",
-      "namepsace": "MyApplication.GraphQL",
+      "name": "MyApplicationMudBooksClient",
+      "namespace": "MyApplicationMud.GraphQL",
       "url": "https://localhost:7222/graphql/",
       "dependencyInjection": true,
       "strictSchemaValidation": true,
