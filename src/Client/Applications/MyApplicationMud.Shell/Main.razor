@@ -4,7 +4,7 @@
 @inject IJSRuntime JSRuntime
 @inject IDispatcher Dispatcher
 
-<Fluxor.Blazor.Web.StoreInitializer UnhandledException="(e) => HandleUnhandledException(e)" />
+<StoreInitializer UnhandledException="(e) => HandleUnhandledException(e)" />
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Main).Assembly" AdditionalAssemblies="ModuleAssemblies">
         <Found Context="routeData">
