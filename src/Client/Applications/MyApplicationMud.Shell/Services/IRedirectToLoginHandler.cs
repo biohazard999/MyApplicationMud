@@ -10,14 +10,13 @@ namespace MyApplicationMud.Services;
 
 public interface IRedirectToLoginHandler
 {
-    Task Redirect();
+    Task Redirect(string? returnUrl = null);
 }
 
 public record RedirectToLoginHandler(NavigationManager Navigation) : IRedirectToLoginHandler
 {
-    public Task Redirect()
+    public Task Redirect(string? returnUrl = null)
     {
-        var returnUrl = Uri.EscapeDataString("/" + Navigation.ToBaseRelativePath(Navigation.Uri));
         Navigation.NavigateTo($"bff/login?returnUrl={returnUrl}", forceLoad: true);
         return Task.CompletedTask;
     }

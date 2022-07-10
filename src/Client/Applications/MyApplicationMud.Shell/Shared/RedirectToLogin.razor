@@ -1,5 +1,6 @@
 ﻿@using MyApplicationMud.Services
 @inject IRedirectToLoginHandler RedirectToLoginHandler
+@inject NavigationManager Navigation
 
 <AuthorizingInfo />
 
@@ -8,10 +9,10 @@
     {
         await base.OnInitializedAsync();
 
+        var returnUrl = Uri.EscapeDataString("/" + Navigation.ToBaseRelativePath(Navigation.Uri));
         //TODO: Url
-        await RedirectToLoginHandler.Redirect();
+        await RedirectToLoginHandler.Redirect(returnUrl);
 
-        //var returnUrl = Uri.EscapeDataString("/" + Navigation.ToBaseRelativePath(Navigation.Uri));
         ////Navigation.NavigateTo($"bff/login?returnUrl={returnUrl}", forceLoad: true);
 
         //var result = await OidcClient.LoginAsync(new LoginRequest
