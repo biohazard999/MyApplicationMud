@@ -1,0 +1,35 @@
+﻿@using Fluxor.Persist.Middleware
+@inherits FluxorComponent
+@attribute [AllowAnonymous]
+
+@if (StateRestored)
+{
+    @ChildContent
+}
+else
+{
+    @ProgressIndicator
+}
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment ProgressIndicator { get; set; } = @<MudProgressCircular Color="Color.Primary" Indeterminate="true" />;
+
+    public bool StateRestored { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        SubscribeToAction<InitializePersistMiddlewareResultSuccessAction>(a => StateHydrated());
+        SubscribeToAction<InitializePersistMiddlewareResultFailAction>(a => StateHydrated());
+    }
+
+    void StateHydrated()
+    {
+        StateRestored = true;
+        StateHasChanged();
+    }
+}

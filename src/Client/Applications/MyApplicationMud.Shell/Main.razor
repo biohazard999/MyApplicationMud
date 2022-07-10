@@ -5,26 +5,29 @@
 @inject IDispatcher Dispatcher
 
 <StoreInitializer UnhandledException="(e) => HandleUnhandledException(e)" />
-<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Main).Assembly" AdditionalAssemblies="ModuleAssemblies">
-        <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <NotAuthorized>
-                    <RedirectToLogin />
-                </NotAuthorized>
-                <Authorizing>
-                    <AuthorizingInfo />
-                </Authorizing>
-            </AuthorizeRouteView>
-        </Found>
-        <NotFound>
-            <PageTitle>Seite nicht gefunden</PageTitle>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <MudText Color="Color.Error" Typo="Typo.h4" Align="Align.Center" GutterBottom="true"><MudIcon Icon="@Icons.Filled.GppBad" Size="Size.Large" /> Die angeforderte Seite existiert nicht.</MudText>
-            </LayoutView>
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
+<ConnectionStateComponent />
+<StateRestoredComponent>
+    <CascadingAuthenticationState>
+        <Router AppAssembly="@typeof(Main).Assembly" AdditionalAssemblies="ModuleAssemblies">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                    <NotAuthorized>
+                        <RedirectToLogin />
+                    </NotAuthorized>
+                    <Authorizing>
+                        <AuthorizingInfo />
+                    </Authorizing>
+                </AuthorizeRouteView>
+            </Found>
+            <NotFound>
+                <PageTitle>Seite nicht gefunden</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <MudText Color="Color.Error" Typo="Typo.h4" Align="Align.Center" GutterBottom="true"><MudIcon Icon="@Icons.Filled.GppBad" Size="Size.Large" /> Die angeforderte Seite existiert nicht.</MudText>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingAuthenticationState>
+</StateRestoredComponent>
 
 @code {
 
@@ -33,7 +36,7 @@
 
     private void HandleUnhandledException(Fluxor.Exceptions.UnhandledExceptionEventArgs args)
     {
-        if(!args.WasHandled)
+        if (!args.WasHandled)
         {
             Dispatcher.Dispatch(new UnexpectedExceptionAction(args.Exception));
         }

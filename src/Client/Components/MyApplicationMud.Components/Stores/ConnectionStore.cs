@@ -9,8 +9,6 @@ namespace MyApplicationMud.Stores;
 [Dispatchable]
 public record ConnectionStatusChanged(bool IsOnline);
 
-
-
 [SkipPersistState]
 public record ConnectionState(bool IsOnline);
 
@@ -21,7 +19,6 @@ public class ConnectionStatusFeature : Feature<ConnectionState>
     protected override ConnectionState GetInitialState()
         => new ConnectionState(true);
 }
-
 
 public static class ConnectionStatusReducers
 {

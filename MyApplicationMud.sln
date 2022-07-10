@@ -78,7 +78,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Core", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Mobile", "src\Client\Applications\MyApplicationMud.Mobile\MyApplicationMud.Mobile.csproj", "{A61D3FC8-B1C3-42B8-8DD8-0F4D99D4CD26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.Shell", "src\Client\Applications\MyApplicationMud.Shell\MyApplicationMud.Shell.csproj", "{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Shell", "src\Client\Applications\MyApplicationMud.Shell\MyApplicationMud.Shell.csproj", "{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
