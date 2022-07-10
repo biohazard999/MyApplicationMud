@@ -2,8 +2,9 @@
 @using MyApplicationMud.Services
 @using System.Reflection
 @inject IJSRuntime JSRuntime
+@inject IDispatcher Dispatcher
 
-<Fluxor.Blazor.Web.StoreInitializer />
+<Fluxor.Blazor.Web.StoreInitializer UnhandledException="(e) => HandleUnhandledException(e)" />
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Main).Assembly" AdditionalAssemblies="ModuleAssemblies">
         <Found Context="routeData">
@@ -29,4 +30,12 @@
 
     private IEnumerable<Assembly> ModuleAssemblies =>
         AssemblyScanning.GetAssemblies(JSRuntime, "MyApplicationMud", "Module").ToArray();
+
+    private void HandleUnhandledException(Fluxor.Exceptions.UnhandledExceptionEventArgs args)
+    {
+        if(!args.WasHandled)
+        {
+            Dispatcher.Dispatch(new UnexpectedExceptionAction(args.Exception));
+        }
+    }
 }
