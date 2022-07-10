@@ -3,7 +3,8 @@
   "documents": "**/*.graphql",
   "extensions": {
     "strawberryShake": {
-      "name": "MyApplicationMud.BooksModule",
+      "name": "MyApplicationMudBooks",
+      "namepsace": "MyApplication.GraphQL",
       "url": "https://localhost:7222/graphql/",
       "dependencyInjection": true,
       "strictSchemaValidation": true,
@@ -16,7 +17,7 @@
       "razorComponents": false,
       "records": {
         "inputs": false,
-        "entities": false
+        "entities": true
       },
       "transportProfiles": [
         {
