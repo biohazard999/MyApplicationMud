@@ -1,9 +1,7 @@
 ﻿<MudDialog>
     <DialogContent>
-        <MudPaper Class="pa-16 ma-2" Elevation="3">
-            <MudText Typo="Typo.h6">@Exception.Message</MudText>
-            <MudMarkdown Value="@Details" />
-        </MudPaper>
+        <MudText Typo="Typo.h6">@Exception.Message</MudText>
+@*        <MudMarkdown Value="@Details" />*@
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Primary" OnClick="Close">Schließen</MudButton>

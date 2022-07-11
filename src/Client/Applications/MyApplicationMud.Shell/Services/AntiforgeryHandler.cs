@@ -10,7 +10,7 @@ public class AntiforgeryHandler : DelegatingHandler
 
     }
 
-    public AntiforgeryHandler(DelegatingHandler delegatingHandler) : base(delegatingHandler)
+    public AntiforgeryHandler(HttpMessageHandler delegatingHandler) : base(delegatingHandler)
     {
 
     }

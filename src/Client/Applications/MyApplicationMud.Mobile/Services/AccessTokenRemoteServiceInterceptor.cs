@@ -12,6 +12,9 @@ public class AccessTokenHandler : AntiforgeryHandler
     public AccessTokenHandler(OidcClient oidcClient)
         => OidcClient = oidcClient;
 
+    public AccessTokenHandler(OidcClient oidcClient, HttpMessageHandler handler) : base(handler)
+        => OidcClient = oidcClient;
+
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var currentAccessToken = await SecureStorage.GetAsync(OidcConsts.AccessTokenKeyName);

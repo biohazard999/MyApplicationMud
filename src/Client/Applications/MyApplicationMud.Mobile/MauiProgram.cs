@@ -35,7 +35,18 @@ public static class MauiProgram
             .AddTransient<WebAuthenticatorBrowser>();
 
         builder.Services
-            .AddTransient<AccessTokenHandler>();
+            .AddTransient(sp =>
+            {
+#if ANDROID
+                var handler = new Platforms.Android.CustomAndroidMessageHandler();
+#else
+                var handler = new HttpClientHandler();
+#endif
+                handler.ServerCertificateCustomValidationCallback
+                    = (message, cert, chain, errors) => true;
+
+                return new AccessTokenHandler(sp.GetRequiredService<OidcClient>(), handler);
+            });
 
         static HttpClient GetInsecureHttpClient()
         {
@@ -69,10 +80,24 @@ public static class MauiProgram
             .GetRequiredSection("Default")
             .GetValue<string>("BaseUrl");
 
-        builder.Services.AddMyApplicationMud<
-            AccessTokenHandler,
-            MauiAuthenticationStateProvider
-            >(baseUrl);
+        builder.Services.AddTransient<MauiAuthenticationStateProvider>();
+        builder.Services.AddMyApplicationMud(new(_ => baseUrl)
+        {
+            AuthenticationStateProvider = sp => sp.GetRequiredService<MauiAuthenticationStateProvider>(),
+            BackendDelegatingHandler = sp => sp.GetRequiredService<AccessTokenHandler>(),
+            GraphQLPrimaryHandler = _ =>
+            {
+#if ANDROID
+                var handler = new Platforms.Android.CustomAndroidMessageHandler();
+#else
+                var handler = new HttpClientHandler();
+#endif
+                handler.ServerCertificateCustomValidationCallback
+                    = (message, cert, chain, errors) => true;
+
+                return handler;
+            }
+        });
 
         return builder.Build();
     }

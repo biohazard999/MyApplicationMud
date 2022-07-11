@@ -26,10 +26,11 @@ builder.RootComponents.Add<Main>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services
-    .AddMyApplicationMud<
-        AntiforgeryHandler,
-        BffAuthenticationStateProvider
-    >(builder.HostEnvironment.BaseAddress);
+    .AddMyApplicationMud(new(_ => builder.HostEnvironment.BaseAddress)
+    {
+        BackendDelegatingHandler = s => s.GetRequiredService<AntiforgeryHandler>(),
+        AuthenticationStateProvider = s => s.GetRequiredService<BffAuthenticationStateProvider>()
+    });
 
 var host = builder.Build();
 

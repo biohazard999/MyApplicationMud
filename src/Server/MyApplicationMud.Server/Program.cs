@@ -1,13 +1,11 @@
-﻿using Duende.Bff.Yarp;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
-using Yarp.ReverseProxy.Configuration;
+using MyApplicationMud.Services;
+using MyApplicationMud;
+using Duende.Bff.Yarp;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 
 builder.Services.AddBff();
 
@@ -50,29 +48,33 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
     });
 
+// Add services to the container.
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+
+builder.Services
+    .AddMyApplicationMud(new(_ => "https://localhost:7212")
+    {
+        UseReduxDevTools = false,
+        BackendDelegatingHandler = s => s.GetRequiredService<AntiforgeryHandler>(),
+        AuthenticationStateProvider = s => s.GetRequiredService<ServerAuthenticationStateProvider>()
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseWebAssemblyDebugging();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseWebSockets();
-app.UseHttpLogging();
-
 app.UseHttpsRedirection();
 
-app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
-
 app.UseRouting();
+app.MapBlazorHub();
 
 app.UseAuthentication();
 app.UseBff();
@@ -88,6 +90,6 @@ app.MapControllers()
     .RequireAuthorization()
     .AsBffApiEndpoint();
 
-app.MapFallbackToFile("index.html");
+app.MapFallbackToPage("/_Host");
 
 app.Run();

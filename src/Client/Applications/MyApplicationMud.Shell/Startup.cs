@@ -7,20 +7,45 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using MudBlazor.Services;
 
+using MyApplicationMud.GraphQL;
 using MyApplicationMud.Services;
 using MyApplicationMud.Services.Storage;
 
 namespace MyApplicationMud;
 
+public record MyApplicationMudConfiguration(Func<IServiceProvider, string> BaseUri)
+{
+    public bool UseReduxDevTools { get; init; } = true;
+
+    public Func<IServiceProvider, HttpMessageHandler> BackendDelegatingHandler { get; init; } = _ => new EmptyDelegatingHandler();
+    public Func<IServiceProvider, HttpMessageHandler> BackendPrimaryHandler { get; init; } = _ => new HttpClientHandler();
+    public Func<IServiceProvider, HttpMessageHandler> GraphQLDelegatingHandler { get; init; } = _ => new EmptyDelegatingHandler();
+    public Func<IServiceProvider, HttpMessageHandler> GraphQLPrimaryHandler { get; init; } = _ => new HttpClientHandler();
+
+    public Func<IServiceProvider, AuthenticationStateProvider> AuthenticationStateProvider { get; init; } = _ => new EmptyAuthenticationStateProvider();
+
+    internal class EmptyDelegatingHandler : DelegatingHandler { }
+
+    internal class EmptyAuthenticationStateProvider : AuthenticationStateProvider
+    {
+        public override Task<AuthenticationState> GetAuthenticationStateAsync() => Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
+    }
+}
+
+
+public class DelegatingHandlerProxy : DelegatingHandler
+{
+    public DelegatingHandlerProxy() { }
+
+    public DelegatingHandlerProxy(HttpMessageHandler innerHandler) : base(innerHandler)
+    {
+    }
+}
+
 public static class Startup
 {
-    public static void AddMyApplicationMud<
-        TDelegatingHandler,
-        TAuthenticationStateProvider
-    >
-    (this IServiceCollection services, string baseUri)
-        where TDelegatingHandler : DelegatingHandler
-        where TAuthenticationStateProvider : AuthenticationStateProvider
+    public static void AddMyApplicationMud(
+        this IServiceCollection services, MyApplicationMudConfiguration appConfiguration)
     {
         services.AddLocalization();
         services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
@@ -40,38 +65,53 @@ public static class Startup
             configuration.UseRouting();
             configuration.UsePersist(o => o.UseInclusionApproach());
 
-#if DEBUG
-            configuration.UseReduxDevTools(devtools =>
+            if (appConfiguration.UseReduxDevTools)
             {
-                devtools.EnableStackTrace();
-            });
-#endif
-
+                configuration.UseReduxDevTools(devtools =>
+                {
+                    devtools.EnableStackTrace();
+                });
+            }
         });
 
         // authentication state plumbing
         services.AddAuthorizationCore();
-        services.AddScoped<AuthenticationStateProvider, TAuthenticationStateProvider>();
+        services.AddScoped(s => appConfiguration.AuthenticationStateProvider(s));
 
         services.TryAddTransient<IRedirectToLoginHandler, RedirectToLoginHandler>();
 
         // HTTP client configuration
         services
-            .AddTransient<TDelegatingHandler>();
+            .AddHttpClient("backend", (sp, client) => client.BaseAddress = new Uri(appConfiguration.BaseUri(sp)))
+            .ConfigurePrimaryHttpMessageHandler((sp) => appConfiguration.BackendPrimaryHandler(sp))
+            .AddHttpMessageHandler(sp =>
+            {
+                var handler = appConfiguration.BackendDelegatingHandler(sp);
+                if (handler is DelegatingHandler delegatingHandler)
+                {
+                    return delegatingHandler;
+                }
+                return new DelegatingHandlerProxy(handler);
+            });
 
         services
-            .AddHttpClient("backend", client => client.BaseAddress = new Uri(baseUri))
-            .AddHttpMessageHandler<TDelegatingHandler>();
+            .AddHttpClient(nameof(MyApplicationMudBooksClient), (sp, client) => client.BaseAddress = new Uri($"{new Uri(appConfiguration.BaseUri(sp))}external-graphql"))
+            .ConfigurePrimaryHttpMessageHandler((sp) => appConfiguration.GraphQLPrimaryHandler(sp))
+            .AddHttpMessageHandler(sp =>
+            {
+                var handler = appConfiguration.GraphQLDelegatingHandler(sp);
+                if (handler is DelegatingHandler delegatingHandler)
+                {
+                    return delegatingHandler;
+                }
+                return new DelegatingHandlerProxy(handler);
+            });
 
         services
             .AddMyApplicationMudBooksClient(ExecutionStrategy.CacheFirst)
-            .ConfigureHttpClient(client =>
+            .ConfigureWebSocketClient((sp, client) =>
             {
-                client.BaseAddress = new Uri($"{new Uri(baseUri)}external-graphql");
-            })
-            .ConfigureWebSocketClient(client =>
-            {
-                var uri = new Uri(baseUri);
+                var uri = new Uri(appConfiguration.BaseUri(sp));
                 var websocketUri = $"wss://{uri.Authority}/ws-external-graphql";
                 client.Uri = new Uri(websocketUri);
                 client.ConnectionInterceptor = new AntiforgeryWebsocketConnectionInterceptor();
