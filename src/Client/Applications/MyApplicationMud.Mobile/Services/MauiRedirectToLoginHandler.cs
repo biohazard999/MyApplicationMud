@@ -21,6 +21,22 @@ public record MauiRedirectToLoginHandler(
         }
 
         var result = await OidcClient.LoginAsync(new LoginRequest());
+
+#if WINDOWS //Bring window to front on windows after logon
+        if (Application.Current is not null)
+        {
+            var currentWindow = Application.Current.Windows[0].Handler.PlatformView;
+            var nativeWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(currentWindow);
+            var win32WindowsId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(nativeWindowHandle);
+            var winuiAppWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(win32WindowsId);
+            if (winuiAppWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter p)
+            {
+                p.IsAlwaysOnTop = true;
+                p.IsAlwaysOnTop = false;
+            }
+        }
+#endif
+
         if (result.IsError)
         {
             //TODO: Error handling
