@@ -80,7 +80,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Mobile", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Shell", "src\Client\Applications\MyApplicationMud.Shell\MyApplicationMud.Shell.csproj", "{7C0E3A8F-5961-4F6A-9CFC-018CB5B56C64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApplicationMud.Server", "src\Server\MyApplicationMud.Server\MyApplicationMud.Server.csproj", "{62CE1654-EF9A-4B90-B5DF-7C09B751FFA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApplicationMud.Server", "src\Server\MyApplicationMud.Server\MyApplicationMud.Server.csproj", "{62CE1654-EF9A-4B90-B5DF-7C09B751FFA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
