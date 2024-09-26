@@ -5,39 +5,39 @@ using MyApplicationMud.Shared.Validation;
 
 namespace MyApplicationMud.Stores;
 
-[Dispatchable]
+
 public record BooksLoadingAction();
-[Dispatchable]
+
 public record BookChangedAction(IBookListInfo Book);
-[Dispatchable]
+
 public record BookAddedAction(IBookListInfo Book);
-[Dispatchable]
+
 public record BookDeletedAction(int BookId);
-[Dispatchable]
+
 public record RefreshBooksAction();
-[Dispatchable]
+
 public record BooksLoadedAction(IEnumerable<IBookListInfo> Items);
-[Dispatchable]
+
 public record BooksLoadedWithClientErrorsAction(IEnumerable<IClientError> Errors);
-[Dispatchable]
+
 public record SaveBookAction(int? BookId, BookModelInput BookModel, Stream? PictureStream = null);
-[Dispatchable]
+
 public record DeleteBookAction(int BookId);
-[Dispatchable]
+
 public record AddBookAction();
-[Dispatchable]
+
 public record EditBookAction(int BookId);
-[Dispatchable]
+
 public record EditBookFetchedAction(int BookId, BookModelInput BookModel, string? BookImage = null);
-[Dispatchable]
+
 public record AuthorsFetchedAction(IEnumerable<IAuthorInfo> Authors);
-[Dispatchable]
+
 public record ShowDialogAction(DialogReference DialogReference);
-[Dispatchable]
+
 public record CloseDialogAction(DialogReference DialogReference);
-[Dispatchable]
+
 public record RemoveDialogAction();
-[Dispatchable]
+
 public record SetBookImageAction(string? BookImage);
 
 [PersistState]
@@ -316,7 +316,7 @@ public record BookEffects(
             {
                 if (result.Data.EditBook.Errors.Any())
                 {
-                    dispatcher.DispatchSetValidationErrors(result.Data.EditBook.Errors.Select(m => new KeyValuePair<string, string>(m.PropertyName, m.Message)));
+                    dispatcher.Dispatch(new SetValidationErrors(result.Data.EditBook.Errors.Select(m => new KeyValuePair<string, string>(m.PropertyName, m.Message))));
                     return;
                 }
             }

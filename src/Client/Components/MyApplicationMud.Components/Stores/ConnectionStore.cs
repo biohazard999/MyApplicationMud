@@ -6,7 +6,7 @@ using Fluxor.Persist.Storage;
 
 namespace MyApplicationMud.Stores;
 
-[Dispatchable]
+
 public record ConnectionStatusChanged(bool IsOnline);
 
 [SkipPersistState]

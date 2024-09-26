@@ -2,9 +2,9 @@
 
 namespace MyApplicationMud.Stores;
 
-[Dispatchable]
+
 public record UserLoggedIn(User User);
-[Dispatchable]
+
 public record UserLoggedOut();
 
 

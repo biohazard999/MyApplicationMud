@@ -1,4 +1,5 @@
-﻿@inject IJSRuntime _jsRuntime;
+﻿@using MyApplicationMud.Stores
+@inject IJSRuntime _jsRuntime;
 @inject IDispatcher Dispatcher;
 @implements IAsyncDisposable
 
@@ -13,7 +14,7 @@
             IsOnline = isOnline;
         }
 
-        Dispatcher.DispatchConnectionStatusChanged(isOnline);
+        Dispatcher.Dispatch(new ConnectionStatusChanged(isOnline));
 
         StateHasChanged();
     }

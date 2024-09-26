@@ -2,9 +2,9 @@
 
 namespace MyApplicationMud.Stores;
 
-[Dispatchable]
+
 public record UnexpectedExceptionAction(Exception Exception);
-[Dispatchable]
+
 public record ClearUnexpectedExceptionAction();
 
 public record AppState

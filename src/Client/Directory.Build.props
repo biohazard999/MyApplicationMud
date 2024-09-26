@@ -18,12 +18,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.8" />
-
-    <PackageReference Include="Fluxor.Generators" Version="0.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Fluxor.Generators.Attributes" Version="0.0.2" />
   </ItemGroup>
 
 </Project>

@@ -13,9 +13,9 @@ public class ValidationStateFeature : Feature<ValidationState>
         => new();
 }
 
-[Dispatchable]
+
 public record ClearValidation();
-[Dispatchable]
+
 public record SetValidationErrors(IEnumerable<KeyValuePair<string, string>> Errors);
 
 public static class ValidationStateReducers

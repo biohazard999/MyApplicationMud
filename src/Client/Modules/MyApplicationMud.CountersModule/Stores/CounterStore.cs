@@ -1,6 +1,6 @@
 ﻿namespace MyApplicationMud.Stores;
 
-[Dispatchable]
+
 public record IncrementCounterAction();
 
 [PersistState]

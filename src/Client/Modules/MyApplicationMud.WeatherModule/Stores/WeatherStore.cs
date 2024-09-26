@@ -1,8 +1,8 @@
 ﻿namespace MyApplicationMud.Stores;
 
-[Dispatchable]
+
 public record FetchDataAction();
-[Dispatchable]
+
 public record FetchDataResultAction(IEnumerable<WeatherForecast> Forecasts);
 
 [FeatureState]
