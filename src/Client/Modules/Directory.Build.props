@@ -20,11 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.6" />
-    <PackageReference Include="StrawberryShake.CodeGeneration.CSharp.Analyzers" Version="12.11.1" />
-    <PackageReference Include="StrawberryShake.Transport.Http" Version="12.11.1" />
-    <PackageReference Include="StrawberryShake.Transport.WebSockets" Version="12.11.1" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="StrawberryShake.CodeGeneration.CSharp.Analyzers" Version="12.22.4" />
+    <PackageReference Include="StrawberryShake.Transport.Http" Version="13.9.12" />
+    <PackageReference Include="StrawberryShake.Transport.WebSockets" Version="13.9.12" />
+    <PackageReference Include="System.Reactive" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
